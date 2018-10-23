@@ -59,6 +59,7 @@ export default {
   },
   externals: {
     '@antv/data-set': 'DataSet',
+    jquery: 'jQuery.noConflict()',
   },
   // proxy: {
   //   '/server/api/': {

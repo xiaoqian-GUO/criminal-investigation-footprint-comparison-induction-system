@@ -5,6 +5,9 @@ import styles from './index.less';
 
 const FormItem = Form.Item;
 
+/* 
+提交按钮
+*/
 const LoginSubmit = ({ className, ...rest }) => {
   const clsString = classNames(styles.submit, className);
   return (
