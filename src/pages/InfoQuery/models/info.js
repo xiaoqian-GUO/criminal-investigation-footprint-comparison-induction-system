@@ -12,6 +12,15 @@ export default {
       history.listen(location => {
         console.log('location');
         console.log(location);
+        //通过localStorage来存储用户信息
+        if(location.query.name){
+          if(localStorage.getItem('username')){
+            localStorage.setItem('username',location.query.name);
+          }
+          else{
+            localStorage.setItem('username',location.query.name);
+          }
+        }
       });
     },
   },

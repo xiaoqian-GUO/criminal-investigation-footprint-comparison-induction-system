@@ -8,7 +8,6 @@ import './BasicInfo.less';
   info,
   loading: loading.models.info,
 }))
-@Form.create()
 class BasicInfo extends React.Component {
   render() {
     const {
@@ -39,6 +38,7 @@ class BasicInfo extends React.Component {
         >
           点击携带参数跳转
         </button>
+        <br/>
         <button
           onClick={() => {
             var ele = document.getElementsByClassName('ant-avatar')[0];
