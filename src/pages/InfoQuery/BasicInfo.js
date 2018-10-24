@@ -42,7 +42,8 @@ class BasicInfo extends React.Component {
         <button
           onClick={() => {
             var ele = document.getElementsByClassName('ant-avatar')[0];
-            alert(ele.innerHTML);
+            var target=ele.nextSibling;
+            alert(target.innerHTML);
           }}
         >
           点击alert
