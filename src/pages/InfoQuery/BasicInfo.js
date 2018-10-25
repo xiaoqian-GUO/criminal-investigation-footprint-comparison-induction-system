@@ -49,9 +49,13 @@ class BasicInfo extends React.Component {
               <Breadcrumb.Item>查询页</Breadcrumb.Item>
             </Breadcrumb>
           </div>
+          <div className={styles.headerH}>
+            <h2>足迹查询</h2>
+          </div>
         </div>
         <div className={styles.contentBody}>
           <h1>other</h1>
+          {/* <h1>other</h1>
           <h3>BasicInfo</h3>
             <button
               onClick={() => {
@@ -92,7 +96,7 @@ class BasicInfo extends React.Component {
                 </div>
               ):null
             }
-            {/*下面是输入框*/}
+          
             <div className={styles.alertStyle}>
               <Input.Group size="large">
                 <Input
@@ -104,8 +108,8 @@ class BasicInfo extends React.Component {
                   ref={node=>this.userNameNode=node}
                 />
               </Input.Group>
-            </div>
-        </div>
+            </div>*/}
+        </div> 
       </div>
     );
   }
