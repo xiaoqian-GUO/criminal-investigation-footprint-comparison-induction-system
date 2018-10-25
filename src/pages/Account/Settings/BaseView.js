@@ -20,7 +20,10 @@ class BaseView extends Component {
 
   setBaseInfo = () => {
     const { currentUser, form } = this.props;
-    Object.keys(form.getFieldsValue()).forEach(key => {
+    const formValue = form.getFieldsValue();
+    console.log(currentUser);
+
+    Object.keys(formValue).forEach(key => {
       const obj = {};
       obj[key] = currentUser[key] || null;
       form.setFieldsValue(obj);
@@ -44,8 +47,8 @@ class BaseView extends Component {
               {getFieldDecorator('email', {
                 rules: [
                   {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.email-message' }, {}),
+                    required: true, // 是否必选
+                    message: formatMessage({ id: 'app.settings.basic.email-message' }, {}), // 校验提示信息
                   },
                 ],
               })(<Input />)}
@@ -53,7 +56,7 @@ class BaseView extends Component {
 
             {/* 用户名 */}
             <FormItem label={formatMessage({ id: 'app.settings.basic.username' })}>
-              {getFieldDecorator('name', {
+              {getFieldDecorator('username', {
                 rules: [
                   {
                     required: true,
@@ -65,7 +68,7 @@ class BaseView extends Component {
 
             {/* 用户姓名 */}
             <FormItem label={formatMessage({ id: 'app.settings.basic.name' })}>
-              {getFieldDecorator('profile', {
+              {getFieldDecorator('name', {
                 rules: [
                   {
                     required: true,
@@ -77,7 +80,7 @@ class BaseView extends Component {
 
             {/* 工号 */}
             <FormItem label={formatMessage({ id: 'app.settings.basic.userId' })}>
-              {getFieldDecorator('profile', {
+              {getFieldDecorator('userId', {
                 rules: [
                   {
                     required: true,
@@ -86,7 +89,7 @@ class BaseView extends Component {
                 ],
               })(<Input />)}
             </FormItem>
-            {/*  */}
+            {/* 所属单位 */}
             <FormItem label={formatMessage({ id: 'app.settings.basic.address' })}>
               {getFieldDecorator('address', {
                 rules: [
