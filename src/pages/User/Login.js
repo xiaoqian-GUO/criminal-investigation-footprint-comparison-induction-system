@@ -5,6 +5,7 @@ import Link from 'umi/link';
 import { Checkbox, Alert, Icon } from 'antd';
 import Login from '@/components/Login';
 import styles from './Login.less';
+import WrappedNormalLoginForm from './LoginItem';
 
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
 
@@ -81,12 +82,14 @@ class LoginPage extends Component {
               login.type === 'account' &&
               !submitting &&
               this.renderMessage(formatMessage({ id: 'app.login.message-invalid-credentials' }))}
+            
             <UserName name="userName" placeholder="admin/user" />
             <Password
               name="password"
               placeholder="888888/123456"
               onPressEnter={() => this.loginForm.validateFields(this.handleSubmit)}
             />
+            <WrappedNormalLoginForm />
           </Tab>
           {/* <Tab key="mobile" tab={formatMessage({ id: 'app.login.tab-login-mobile' })}>
             {login.status === 'error' &&
