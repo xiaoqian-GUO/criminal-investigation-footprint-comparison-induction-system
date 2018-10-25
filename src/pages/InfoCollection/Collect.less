@@ -1,3 +1,4 @@
+@import '~antd/lib/style/themes/default.less';
 .content {
     background: white;
     margin: -24px -24px 0px;
@@ -16,10 +17,37 @@
     background: white;
     margin-top: 24px;
     height:1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.contentMain{
+    background: white;
+    margin: 0 auto;
+    width: 400px;
+    padding-top: 40px;
+}
+.normalStyle{
+    margin:0 0 24px;
+    height: 40px;
+}
+.leftSide{
+    font-size:15px;
+    color:rgba(0,0,0,0.85);
+    float:left;
+    line-height: 32px;
+}
+.leftContent{
+    float:right;
+    width: 300px;
+    margin-left: -10px;
 }
 .upload {
+    margin:0 auto 24px 148px;
     img {
         width: 200px;
         height: 200px;
+    }
+    .ant-upload{
+        margin:0 auto;
     }
 }

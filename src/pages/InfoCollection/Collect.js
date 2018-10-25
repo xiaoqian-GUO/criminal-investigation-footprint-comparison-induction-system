@@ -1,10 +1,15 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Form, Breadcrumb, Alert,Input, Icon, Upload, message, Button} from 'antd';
+import { Form, Breadcrumb, Alert,Input, Icon, Upload, message, Button,DatePicker} from 'antd';
 import styles from './Collect.less';
 import Avatar from './Avatar';
 import './Avatar.less';
+
+const { TextArea } = Input;
+function onChange(date, dateString) {
+  console.log(date.format(), dateString);
+}
 
 class Collect extends React.Component {
   constructor(){
@@ -43,32 +48,36 @@ class Collect extends React.Component {
           </div>
         </div>
         <div className={styles.contentBody}>
-          <h1>other</h1>
+          <div className={styles.contentMain}>
+              <div className={styles.upload}>
+                <Avatar id="upload" />
+              </div>
+              <div className={styles.normalStyle}>
+                  <div className={styles.leftSide}>详细案情：</div>
+                  <div className={styles.leftContent}>
+                      <TextArea placeholder="请描述案件详情" autosize />
+                  </div>
+              </div>
+              <div className={styles.normalStyle}>
+                  <div className={styles.leftSide}>时间: </div>
+                  <div className={styles.leftContent}>
+                    <DatePicker onChange={onChange} />
+                  </div>
+              </div>
+              <br/>
+              <button onClick={()=>{
+                  var ele=document.getElementById('upload');
+                  var img=ele.getElementsByTagName('img');
+                  if(img.length>0){
+                      alert(img[0].getAttribute('src'));
+                      var im=document.getElementById('test');
+                      im.src=img[0].getAttribute('src');
+                  }
 
-          <Upload {...props1}>
-            <Button>
-              <Icon type="upload" /> 点击上传足迹照片
-            </Button>
-          </Upload>
-          <br />
-          <div className={styles.upload}>
-            <Avatar id="upload" />
+              }}>点击输出图片的base64编码</button>
+              <br/>
+              <img id='test' style={{width:200,height:200}} />
           </div>
-          
-          <br/>
-          <button onClick={()=>{
-              var ele=document.getElementById('upload');
-              var img=ele.getElementsByTagName('img');
-              if(img.length>0){
-                  alert(img[0].getAttribute('src'));
-                  var im=document.getElementById('test');
-                  im.src=img[0].getAttribute('src');
-              }
-
-          }}>点击输出图片的base64编码</button>
-          <br/>
-          <br/>
-          <img id='test' style={{width:200,height:200}} />
         </div> 
       </div>
     );
