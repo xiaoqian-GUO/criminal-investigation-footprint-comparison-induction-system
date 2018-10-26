@@ -134,9 +134,6 @@ export default () => (
       <Result
         type="success"
         title={formatMessage({ id: 'app.result.success.title' })}
-        description={formatMessage({ id: 'app.result.success.description' })}
-        extra={extra}
-        actions={actions}
         style={{ marginTop: 48, marginBottom: 16 }}
       />
     </Card>

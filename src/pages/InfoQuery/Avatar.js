@@ -1,5 +1,4 @@
 import { Upload, Icon, message } from 'antd';
-import './Avatar.less';
 
 function getBase64(img, callback) {
   const reader = new FileReader();
@@ -50,7 +49,6 @@ class Avatar extends React.Component {
     const imageUrl = this.state.imageUrl;
     return (
         <div id={this.props.id}>
-            {imageUrl ? <img src={imageUrl} alt="&nbsp;&nbsp;请重新上传图片" /> : null}
             <Upload
                 name="avatar"
                 listType="picture-card"
@@ -60,7 +58,7 @@ class Avatar extends React.Component {
                 beforeUpload={beforeUpload}
                 onChange={this.handleChange}
             >
-                {uploadButton}
+               {imageUrl ? <img src={imageUrl} alt="&nbsp;&nbsp;请重新上传图片" /> : uploadButton}
             </Upload>
         </div>
     );

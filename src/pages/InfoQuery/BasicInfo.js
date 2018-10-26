@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Form, Breadcrumb, Alert,Input, Icon} from 'antd';
+import { Form, Breadcrumb, Alert,Input, Icon,Button} from 'antd';
 import styles from './BasicInfo.less';
+import Avatar from './Avatar';
 
 @connect(({ info, loading }) => ({
   info,
@@ -54,62 +55,38 @@ class BasicInfo extends React.Component {
           </div>
         </div>
         <div className={styles.contentBody}>
-          <h1>other</h1>
-          {/* <h1>other</h1>
-          <h3>BasicInfo</h3>
-            <button
-              onClick={() => {
-                window.location.href = '/user/login';
-              }}
-            >
-              点击跳转
-            </button>
-            <br />
-            <button
-              onClick={() => {
-                this.props.dispatch(
-                  routerRedux.push({
-                    pathname: '/infoquery/basic-result',
-                    state: { id: 10 },
-                    query: { name: 'xiaoqian' },
-                  })
-                );
-              }}
-            >
-              点击携带参数跳转
-            </button>
-            <br/>
-            <button
-              onClick={() => {
-                var ele = document.getElementsByClassName('ant-avatar')[0];
-                var target=ele.nextSibling;
-                alert(target.innerHTML);
-                target.innerHTML="xiaoqian";
-              }}
-            >
-              点击alert，并修改name
-            </button>
-            {
-              this.state.visible?(
-                <div className={styles.alertStyle}>
-                  <Alert  type="error" message="alert message text" closable afterClose={this.handlerClose} showIcon />
-                </div>
-              ):null
-            }
-          
-            <div className={styles.alertStyle}>
-              <Input.Group size="large">
-                <Input
-                  placeholder="Username"
-                  prefix={<Icon type="user" style={{color:'rgba(0,0,0,0.5)'}} />}
-                  suffix={suffix}
-                  value={this.state.userName}
-                  onChange={this.onChange}
-                  ref={node=>this.userNameNode=node}
-                />
-              </Input.Group>
-            </div>*/}
-        </div> 
+            <div className={styles.flexBody}>
+              <div className={styles.upload}>
+                  <div>
+                    <div>
+                      <Avatar id="upload" />
+                    </div>
+                    <br/>
+                    <div>
+                      <div className={styles.marginAuto}>
+                          <Button type="primary">开始查询</Button>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              <div className={styles.centerContent}>
+                  <div><Icon type="arrow-right"/></div>
+              </div>
+              <div className={styles.rightContent}>
+                  <div className={styles.marginRightAuto}>
+                      <Button type="primary">开始归纳比对</Button>
+                  </div>
+                  <div id="result" className={styles.result}>
+                      <img className={styles.imgStyle} src="/hgd.png" style={{width:50,height:50}}/>
+                      <img className={styles.imgStyle} src="/hgd.png" style={{width:50,height:50}}/>
+                      <img className={styles.imgStyle} src="/hgd.png" style={{width:50,height:50}}/>
+                  </div>
+                   
+              </div>
+
+            </div>
+        </div>
+        <br/>
       </div>
     );
   }

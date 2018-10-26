@@ -4,6 +4,7 @@ import { routerRedux } from 'dva/router';
 import { Form, Breadcrumb, Alert,Input, Icon, Upload, message, Button,DatePicker} from 'antd';
 import styles from './Collect.less';
 import Avatar from './Avatar';
+import moment from 'moment';
 import './Avatar.less';
 
 const { TextArea } = Input;
@@ -14,6 +15,55 @@ function onChange(date, dateString) {
 class Collect extends React.Component {
   constructor(){
     super();
+    this.state={
+        picture:false,
+        details:false,
+        detailsText:'',
+        time:false,
+        timeText:null,
+        location:false,
+        locationText:'',
+        collectType:false,
+        collectTypeText:'',
+        leaveType:false,
+        leaveTypeText:'',
+        buttonText:"提交足迹信息",
+        result:false,
+        resultStatus:true
+    };
+  }
+  onDetailsChange=(e)=>{
+    var bol=e.target.value==""?true:false;
+    this.setState({
+      detailsText:e.target.value,
+      details:bol,
+    });
+  }
+  onTimeChange=(e)=>{
+    this.setState({
+      timeText:e,
+    });
+  }
+  onLocationChange=(e)=>{
+    var bol=e.target.value==""?true:false;
+    this.setState({
+      locationText:e.target.value,
+      location:bol,
+    });
+  }
+  onCollectTypeChange=(e)=>{
+    var bol=e.target.value==""?true:false;
+    this.setState({
+      collectTypeText:e.target.value,
+      collectType:bol,
+    });
+  }
+  onLeaveTypeChange=(e)=>{
+    var bol=e.target.value==""?true:false;
+    this.setState({
+      leaveTypeText:e.target.value,
+      leaveType:bol,
+    });
   }
   onChange=(info)=> {
     if (info.file.status !== 'uploading') {
@@ -52,31 +102,205 @@ class Collect extends React.Component {
               <div className={styles.upload}>
                 <Avatar id="upload" />
               </div>
-              <div className={styles.normalStyle}>
+
+              {this.state.picture?(
+                <div className={styles.alertStyle}>
+                    <Alert message="请上传图片" type="error" showIcon />
+                </div>
+              ):null}
+                
+              <div className={styles.textareaStyle}>
                   <div className={styles.leftSide}>详细案情：</div>
                   <div className={styles.leftContent}>
-                      <TextArea placeholder="请描述案件详情" autosize />
+                      <TextArea rows={4} placeholder="请描述案件详情" value={this.state.detailsText} onChange={this.onDetailsChange} />
                   </div>
               </div>
+
+              {this.state.details?(
+                <div className={styles.alertStyle}>
+                    <Alert message="请填写案件详情" type="error" showIcon />
+                </div>
+              ):null}
+              
               <div className={styles.normalStyle}>
                   <div className={styles.leftSide}>时间: </div>
                   <div className={styles.leftContent}>
-                    <DatePicker onChange={onChange} />
+                    <DatePicker onChange={this.onTimeChange} format='YYYY-MM-DD' value={this.state.timeText} />
+                  </div>
+              </div>
+
+              {this.state.time?(
+                <div className={styles.alertStyle}>
+                    <Alert message="请选择时间" type="error" showIcon />
+                </div>
+              ):null}
+
+              <div className={styles.normalStyle}>
+                  <div className={styles.leftSide}>地点: </div>
+                  <div className={styles.leftContent}>
+                      <Input placeholder="请输入作案地点" value={this.state.locationText} onChange={this.onLocationChange}/>
+                  </div>
+              </div>
+
+              {this.state.location?(
+                <div className={styles.alertStyle}>
+                    <Alert message="请填写地点" type="error" showIcon />
+                </div>
+              ):null}
+
+              <div className={styles.normalStyle}>
+                  <div className={styles.leftSide}>足迹采集方式: </div>
+                  <div className={styles.leftContent}>
+                      <Input placeholder="请输入足迹采集方式" value={this.state.collectTypeText} onChange={this.onCollectTypeChange} />
+                  </div>
+              </div>
+
+              {this.state.collectType?(
+                <div className={styles.alertStyle}>
+                    <Alert message="请填写足迹采集方式" type="error" showIcon />
+                </div>
+              ):null}
+
+              <div className={styles.normalStyle}>
+                  <div className={styles.leftSide}>足迹遗留方式: </div>
+                  <div className={styles.leftContent}>
+                      <Input placeholder="请输入足迹遗留方式" value={this.state.leaveTypeText} onChange={this.onLeaveTypeChange} />
+                  </div>
+              </div>
+
+              {this.state.leaveType?(
+                <div className={styles.alertStyle}>
+                    <Alert message="请填写足迹遗留方式" type="error" showIcon />
+                </div>
+              ):null}
+
+              {this.state.result?(
+                this.state.resultStatus?(
+                <div className={styles.alertStyle}>
+                    <div className={styles.leftSide}></div>
+                    <div className={styles.leftContent}>
+                      <Alert message="足迹信息上传成功" type="success" showIcon banner/>
+                    </div>
+                </div>):(
+                  <div className={styles.alertStyle}>
+                    <div className={styles.leftSide}></div>
+                    <div className={styles.leftContent}>
+                      <Alert message="足迹信息上传失败，请重新点击上传" type="error" showIcon banner/>
+                    </div>
+                  </div>)
+              ):null}
+
+              <div className={styles.normalStyle}>
+                  <div className={styles.leftSide}></div>
+                  <div className={styles.leftContent}>
+                      <Button type="primary" onClick={()=>{
+                            const rsu=this.state.result;
+                            if(rsu){
+                              if(this.state.resultStatus){
+                                  // 如果是信息提交成功，则再次点击按钮就是清除图片
+                                  var ele=document.getElementById('upload');
+                                  var img=ele.getElementsByTagName('img');
+                                  if(img.length>=0){
+                                      var ele=img[0];
+                                      var par=ele.parentNode;
+                                      //par.removeChild(ele);
+                                      ele.src="";
+                                  }
+                                  this.setState({
+                                    picture:false,
+                                    details:false,
+                                    detailsText:'',
+                                    time:false,
+                                    timeText:null,
+                                    location:false,
+                                    locationText:'',
+                                    collectType:false,
+                                    collectTypeText:'',
+                                    leaveType:false,
+                                    leaveTypeText:'',
+                                    result:false,
+                                    buttonText:"提交足迹信息",
+                                    resultStatus:true,
+                                  });
+                              }
+                              else{
+                                  // 如果为false，则表示上传失败，可以点击重新上传
+
+                              }
+                              
+                            }
+                            else{
+                              //首先判断是否信息输入完整
+                              console.log(this.state);
+                              var bolPic=false,bolDetils=false,bolTime=false,bolLoc=false,bolCol=false,bolLeave=false;
+                              var ele=document.getElementById('upload');
+                              var img=ele.getElementsByTagName('img');
+                              if(img.length==0){
+                                  bolPic=true;
+                                  // var ele=img[0];
+                                  // var par=ele.parentNode;
+                                  // par.removeChild(ele);
+                              }
+                              var {detailsText,timeText,locationText,leaveTypeText,collectTypeText}=this.state;
+                              if(!detailsText){
+                                  bolDetils=true;
+                              }
+                              if(!timeText){
+                                  bolTime=true;
+                              }
+                              if(!locationText){
+                                  bolLoc=true;
+                              }
+                              if(!collectTypeText){
+                                  bolCol=true;
+                              }
+                              if(!leaveTypeText){
+                                  bolLeave=true;
+                              }
+                              if(bolPic||bolDetils||bolTime||bolLoc||bolCol||bolLeave){
+                                  this.setState({
+                                      picture:bolPic,
+                                      details:bolDetils,
+                                      time:bolTime,
+                                      location:bolLoc,
+                                      collectType:bolCol,
+                                      leaveType:bolLeave,
+                                      result:false,
+                                      buttonText:"提交足迹信息",
+                                      resultStatus:true,
+                                  });
+                              }
+                              else{
+                                  //如果信息输入完整，再去上传信息，若信息也上传保存成功，则清空表单，再次上传
+                                  if(true){
+                                    this.setState({
+                                        picture:false,
+                                        details:false,
+                                        time:false,
+                                        location:false,
+                                        collectType:false,
+                                        leaveType:false,
+                                        result:true,
+                                        buttonText:"再次采集足迹",
+                                        resultStatus:true,
+                                    });
+                                  }
+                                  else{
+                                    this.setState({
+                                        result:true,
+                                        buttonText:"再次点击上传",
+                                        resultStatus:false,
+                                    });
+                                  }
+                                // end:信息上传失败 
+                              }
+                            }
+
+                      }}>{this.state.buttonText}</Button>
                   </div>
               </div>
               <br/>
-              <button onClick={()=>{
-                  var ele=document.getElementById('upload');
-                  var img=ele.getElementsByTagName('img');
-                  if(img.length>0){
-                      alert(img[0].getAttribute('src'));
-                      var im=document.getElementById('test');
-                      im.src=img[0].getAttribute('src');
-                  }
-
-              }}>点击输出图片的base64编码</button>
               <br/>
-              <img id='test' style={{width:200,height:200}} />
           </div>
         </div> 
       </div>
