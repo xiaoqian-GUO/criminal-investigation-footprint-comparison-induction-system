@@ -24,7 +24,27 @@ class Conclude extends React.Component {
           </div>
         </div>
         <div className={styles.contentBody}>
-          <h1>other</h1>
+            <div className={styles.flexBody}>
+              <div className={styles.rightContent}>
+                  <img src="/hgd.png"/>
+              </div>
+
+              <div className={styles.centerContent}>
+                  <div><Icon type="swap"/></div>
+              </div>
+
+              <div className={styles.rightContent}>
+                 test
+              </div>
+
+            </div>
+            
+            <div className={styles.concludeResult}>
+                  <div className={styles.concludeText}>对比归纳结果: </div>
+                  <div className={styles.conclude}>
+                        test
+                  </div>
+            </div>
         </div> 
       </div>
     );

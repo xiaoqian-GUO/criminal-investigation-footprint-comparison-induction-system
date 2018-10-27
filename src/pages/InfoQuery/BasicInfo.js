@@ -73,13 +73,14 @@ class BasicInfo extends React.Component {
                   <div><Icon type="arrow-right"/></div>
               </div>
               <div className={styles.rightContent}>
-                  <div className={styles.marginRightAuto}>
-                      <Button type="primary">开始归纳比对</Button>
-                  </div>
+                  
                   <div id="result" className={styles.result}>
                       <img className={styles.imgStyle} src="/hgd.png" style={{width:50,height:50}}/>
                       <img className={styles.imgStyle} src="/hgd.png" style={{width:50,height:50}}/>
                       <img className={styles.imgStyle} src="/hgd.png" style={{width:50,height:50}}/>
+                  </div>
+                  <div className={styles.marginRightAuto}>
+                      <Button type="primary">开始归纳比对</Button>
                   </div>
                    
               </div>
