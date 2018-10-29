@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Alert } from 'antd';
 import { connect } from 'dva';
+import { query as queryUsers, queryCurrent, getAllUserinfo } from '@/services/user';
 import styles from './BaseView.less';
 // import GeographicView from './GeographicView';
 // import PhoneView from './PhoneView';
@@ -11,21 +12,51 @@ const FormItem = Form.Item;
 
 @connect(({ user }) => ({
   currentUser: user.currentUser,
+  users:user.users,
+  allInfo:user.allInfo,
 }))
 @Form.create()
 class BaseView extends Component {
+  constructor(){
+    super();
+    this.state={
+      result:false,
+    };
+  }
   componentDidMount() {
-    this.setBaseInfo();
+    console.log(this.props);
+    var {users} = this.props;
+    if(Object.keys(users).length>0){
+      // 如果是普通用户，不允许查看当前的所有用户，即系统管理功能
+      if(users.status==1){
+        var ele=document.getElementsByClassName("ant-menu-submenu")[3];
+        ele.style.display="none";
+      }
+      var rsu=getAllUserinfo(users);
+      rsu.then((response)=>{
+        console.log('显示当前用户的所有个人信息');
+        console.log(response);
+        this.setBaseInfo(response);
+        var tgt=document.getElementsByClassName("antd-pro\\components\\-global-header\\index-name")[0];
+        console.log(tgt);
+        tgt.innerHTML=response.username;
+      });
+    }
+    else{
+        this.setBaseInfo({});
+        var tgt=document.getElementsByClassName("antd-pro\\components\\-global-header\\index-name")[0];
+        tgt.innerHTML="";
+    }
+       
   }
 
-  setBaseInfo = () => {
-    const { currentUser, form } = this.props;
+  setBaseInfo = (res) => {
+    const { form } = this.props;
     const formValue = form.getFieldsValue();
-    console.log(currentUser);
-
+    
     Object.keys(formValue).forEach(key => {
       const obj = {};
-      obj[key] = currentUser[key] || null;
+      obj[key] = res[key] || null;
       form.setFieldsValue(obj);
     });
   };
@@ -33,8 +64,35 @@ class BaseView extends Component {
   getViewDom = ref => {
     this.view = ref;
   };
-
+  handleSubmit=()=>{
+    const { form } = this.props;
+    const formValue = form.getFieldsValue();
+    console.log(formValue);
+    var bol=true;
+    Object.keys(formValue).forEach(key => {
+      if(!formValue[key]){
+        bol=false;
+      }
+    });
+    if(bol){
+      // 如果bol为true的话，就可以提交数据，否则不允许提交
+      if(true){
+        // 如果信息更新成功，则提示信息修改成功
+        this.setState({
+          result:true,
+        });
+      }
+      else{
+  
+      }
+    }
+    else{
+      // 信息不完整 不允许提交
+      
+    }
+  }
   render() {
+    console.log(this.props);
     const {
       form: { getFieldDecorator },
     } = this.props;
@@ -42,18 +100,6 @@ class BaseView extends Component {
       <div className={styles.baseView} ref={this.getViewDom}>
         <div className={styles.left}>
           <Form layout="vertical" onSubmit={this.handleSubmit} hideRequiredMark>
-            {/* 邮箱 */}
-            <FormItem label={formatMessage({ id: 'app.settings.basic.email' })}>
-              {getFieldDecorator('email', {
-                rules: [
-                  {
-                    required: true, // 是否必选
-                    message: formatMessage({ id: 'app.settings.basic.email-message' }, {}), // 校验提示信息
-                  },
-                ],
-              })(<Input />)}
-            </FormItem>
-
             {/* 用户名 */}
             <FormItem label={formatMessage({ id: 'app.settings.basic.username' })}>
               {getFieldDecorator('username', {
@@ -63,7 +109,8 @@ class BaseView extends Component {
                     message: formatMessage({ id: 'app.settings.basic.username-message' }, {}),
                   },
                 ],
-              })(<Input />)}
+              })(<Input readOnly/>)}
+              <span className={styles.spanWarn}>（注意:不可修改）</span>
             </FormItem>
 
             {/* 用户姓名 */}
@@ -89,9 +136,20 @@ class BaseView extends Component {
                 ],
               })(<Input />)}
             </FormItem>
+             {/* 邮箱 */}
+             <FormItem label={formatMessage({ id: 'app.settings.basic.email' })}>
+              {getFieldDecorator('email', {
+                rules: [
+                  {
+                    required: true, // 是否必选
+                    message: formatMessage({ id: 'app.settings.basic.email-message' }, {}), // 校验提示信息
+                  },
+                ],
+              })(<Input />)}
+            </FormItem>
             {/* 所属单位 */}
             <FormItem label={formatMessage({ id: 'app.settings.basic.address' })}>
-              {getFieldDecorator('address', {
+              {getFieldDecorator('insitution', {
                 rules: [
                   {
                     required: true,
@@ -109,10 +167,17 @@ class BaseView extends Component {
                     message: formatMessage({ id: 'app.settings.basic.phone-message' }, {}),
                   },
                 ],
-              })(<Input />)}
+              })(<Input placeholder="请输入手机号码" />)}
             </FormItem>
+            {
+              this.state.result?(
+                <div className={styles.resultText}>
+                    <Alert type="success" message="信息更新成功" banner showIcon/>
+                </div>
+              ):null
+            }
 
-            <Button type="primary">
+            <Button type="primary" onClick={this.handleSubmit}>
               <FormattedMessage
                 id="app.settings.basic.update"
                 defaultMessage="Update Information"

@@ -48,22 +48,25 @@ export default {
     },
 
     *logout(_, { put }) {
-      yield put({
-        type: 'changeLoginStatus',
-        payload: {
-          status: false,
-          currentAuthority: 'guest',
-        },
-      });
-      reloadAuthorized();
-      yield put(
-        routerRedux.push({
-          pathname: '/user/login',
-          search: stringify({
-            redirect: window.location.href,
-          }),
-        })
-      );
+      // yield put({
+      //   type: 'changeLoginStatus',
+      //   payload: {
+      //     status: false,
+      //     currentAuthority: 'guest',
+      //   },
+      // });
+      // reloadAuthorized();
+      // yield put(
+      //   routerRedux.push({
+      //     pathname: '/user/login',
+      //     search: stringify({
+      //       redirect: "/infocollection/collect",
+      //     }),
+      //   })
+      // );
+      console.log('退出');
+      window.location.href="/user/login";
+
     },
   },
 

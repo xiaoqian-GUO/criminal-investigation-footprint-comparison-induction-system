@@ -75,9 +75,9 @@ class BasicInfo extends React.Component {
               <div className={styles.rightContent}>
                   
                   <div id="result" className={styles.result}>
-                      <img className={styles.imgStyle} src="/hgd.png" style={{width:50,height:50}}/>
-                      <img className={styles.imgStyle} src="/hgd.png" style={{width:50,height:50}}/>
-                      <img className={styles.imgStyle} src="/hgd.png" style={{width:50,height:50}}/>
+                      <img className={styles.imgStyle} src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png" style={{width:50,height:50}}/>
+                      <img className={styles.imgStyle} src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png" style={{width:50,height:50}}/>
+                      <img className={styles.imgStyle}src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png" style={{width:50,height:50}}/>
                   </div>
                   <div className={styles.marginRightAuto}>
                       <Button type="primary">开始归纳比对</Button>

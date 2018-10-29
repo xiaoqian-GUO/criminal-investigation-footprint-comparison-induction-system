@@ -2,7 +2,7 @@
 export default {
   // 支持值为 Object 和 Array
   'GET /api/currentUser': {
-    name: 'testName',
+    name: 'gxq',
     username: 'userName',
     address: '西安电子科技大学',
     phone: '18392089875',
@@ -79,11 +79,10 @@ export default {
     },
   ],
   'POST /api/login/account': (req, res) => {
-    const { password, userName, type } = req.body;
+    const { password, userName } = req.body;
     if (password === '888888' && userName === 'admin') {
       res.send({
         status: 'ok',
-        type,
         currentAuthority: 'admin',
       });
       return;
@@ -91,17 +90,39 @@ export default {
     if (password === '123456' && userName === 'user') {
       res.send({
         status: 'ok',
-        type,
         currentAuthority: 'user',
       });
       return;
     }
     res.send({
       status: 'error',
-      type,
       currentAuthority: 'guest',
     });
   },
+
+  'POST /api/login/accountlogin': (req, res) => {
+    const { password, userName } = req.body;
+    if (password === '888888' && userName === 'admin') {
+      res.send({
+        status: '0',
+        currentAuthority: 'admin',
+      });
+      return;
+    }
+    if (password === '123456' && userName === 'user') {
+      res.send({
+        status: '1',
+        currentAuthority: 'user',
+      });
+      return;
+    }
+    res.send({
+      status: 'error',
+      currentAuthority: 'guest',
+    });
+  },
+
+
   'POST /api/register': (req, res) => {
     res.send({ status: 'ok', currentAuthority: 'user' });
   },
@@ -141,4 +162,37 @@ export default {
       path: '/base/category/list',
     });
   },
+  'POST /api/getCurrentUser': (req, res) => {
+    const { currentAuthority, status } = req.body;
+    if (currentAuthority=="admin") {
+      res.send({
+        name: 'daipeng',
+        username: 'admin',
+        insitution: '西安电子科技大学',
+        phone: '18392089875',
+        userId: '1610122398',
+        email: '1843887878@163.com',
+        // name: 'Serati Ma',
+        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
+        userid: '00000001',
+        // email: 'antdesign@alipay.com',
+      });
+      return;
+    }
+    else{
+      res.send({
+        name: 'user',
+        username: 'xiaoqian',
+        insitution: '西安电子科技大学',
+        phone: '18392089875',
+        userId: '1610122604',
+        email: '18392089875@163.com',
+        // name: 'Serati Ma',
+        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
+        userid: '00000001',
+        // email: 'antdesign@alipay.com',
+      });
+      return;
+    }
+  }
 };
