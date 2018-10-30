@@ -26,7 +26,7 @@ class Conclude extends React.Component {
         <div className={styles.contentBody}>
             <div className={styles.flexBody}>
               <div className={styles.rightContent}>
-                  <img src="/hgd.png"/>
+                  <img src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png"/>
               </div>
 
               <div className={styles.centerContent}>

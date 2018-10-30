@@ -26,6 +26,13 @@ export default {
   },
 
   reducers: {
+    addMethod(state, action) {
+      return {
+        ...state,
+        users: action.payload,
+        allInfo:{},
+      };
+    },
     save(state, action) {
       return {
         ...state,
@@ -46,6 +53,21 @@ export default {
           notifyCount: action.payload,
         },
       };
+    },
+  },
+  subscriptions:{
+    setup({dispatch, history}){
+      history.listen((location)=>{
+        console.log('location:');
+        console.log(location);
+        if(Object.keys(location.query).length>0){
+          dispatch({
+            type:'addMethod',
+            payload:location.query,
+          });
+        }
+        
+      });
     },
   },
 };
