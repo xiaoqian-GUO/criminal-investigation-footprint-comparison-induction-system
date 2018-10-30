@@ -83,7 +83,7 @@ class BaseView extends Component {
         });
       }
       else{
-  
+        
       }
     }
     else{

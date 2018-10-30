@@ -14,3 +14,9 @@ export function getAllUserinfo(params) {
     body: params,
   });
 }
+export function updateUserInfo(params) {
+  return request('/api/updateUserInfo',{
+    method: 'POST',
+    body: params,
+  });
+}
