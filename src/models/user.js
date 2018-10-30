@@ -6,6 +6,8 @@ export default {
   state: {
     list: [],
     currentUser: {},
+    users:{},
+    allInfo:{},
   },
 
   effects: {
@@ -63,7 +65,7 @@ export default {
         if(Object.keys(location.query).length>0){
           dispatch({
             type:'addMethod',
-            payload:location.query,
+            payload:location.query||{},
           });
         }
         

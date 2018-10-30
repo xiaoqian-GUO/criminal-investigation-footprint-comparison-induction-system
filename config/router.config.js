@@ -18,7 +18,7 @@ export default [
     authority: ['admin', 'user'],
     routes: [
       // dashboard
-      { path: '/', redirect: '/account/settings/base' },
+      { path: '/', redirect: '/user/login' },
       // infocollection
       {
         name: 'infocollection',
