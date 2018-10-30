@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Form, Input, Button, Alert } from 'antd';
 import { connect } from 'dva';
-import { query as queryUsers, queryCurrent, getAllUserinfo } from '@/services/user';
+import { getAllUserinfo } from '@/services/user';
 import styles from './BaseView.less';
 // import GeographicView from './GeographicView';
 // import PhoneView from './PhoneView';
@@ -12,48 +12,52 @@ const FormItem = Form.Item;
 
 @connect(({ user }) => ({
   currentUser: user.currentUser,
-  users:user.users,
-  allInfo:user.allInfo,
+  users: user.users,
+  allInfo: user.allInfo,
 }))
 @Form.create()
 class BaseView extends Component {
-  constructor(){
+  constructor() {
     super();
-    this.state={
-      result:false,
+    this.state = {
+      result: false,
     };
   }
+
   componentDidMount() {
-    console.log(this.props);
-    var {users} = this.props;
-    if(Object.keys(users).length>0){
+    const { users } = this.props;
+    const ele = document.getElementsByClassName('ant-menu-submenu')[3];
+    const rsu = getAllUserinfo(users);
+    const tgt = document.getElementsByClassName(
+      'antd-pro\\components\\-global-header\\index-name'
+    )[0];
+    if (Object.keys(users).length > 0) {
       // 如果是普通用户，不允许查看当前的所有用户，即系统管理功能
-      if(users.status==1){
-        var ele=document.getElementsByClassName("ant-menu-submenu")[3];
-        ele.style.display="none";
+      if (users.status === 1) {
+        ele.style.display = 'none';
       }
-      var rsu=getAllUserinfo(users);
-      rsu.then((response)=>{
-        console.log('显示当前用户的所有个人信息');
-        console.log(response);
+
+      rsu.then(response => {
+        // console.log('显示当前用户的所有个人信息');
+        // console.log(response);
         this.setBaseInfo(response);
-        var tgt=document.getElementsByClassName("antd-pro\\components\\-global-header\\index-name")[0];
-        console.log(tgt);
-        tgt.innerHTML=response.username;
+
+        // console.log(tgt);
+        tgt.innerHTML = response.username;
       });
+    } else {
+      this.setBaseInfo({});
+      // var tgt = document.getElementsByClassName(
+      //   'antd-pro\\components\\-global-header\\index-name'
+      // )[0];
+      tgt.innerHTML = '';
     }
-    else{
-        this.setBaseInfo({});
-        var tgt=document.getElementsByClassName("antd-pro\\components\\-global-header\\index-name")[0];
-        tgt.innerHTML="";
-    }
-       
   }
 
-  setBaseInfo = (res) => {
+  setBaseInfo = res => {
     const { form } = this.props;
     const formValue = form.getFieldsValue();
-    
+
     Object.keys(formValue).forEach(key => {
       const obj = {};
       obj[key] = res[key] || null;
@@ -64,38 +68,38 @@ class BaseView extends Component {
   getViewDom = ref => {
     this.view = ref;
   };
-  handleSubmit=()=>{
+
+  handleSubmit = () => {
     const { form } = this.props;
     const formValue = form.getFieldsValue();
-    console.log(formValue);
-    var bol=true;
+    // console.log(formValue);
+    let bol = true;
     Object.keys(formValue).forEach(key => {
-      if(!formValue[key]){
-        bol=false;
+      if (!formValue[key]) {
+        bol = false;
       }
     });
-    if(bol){
+    if (bol) {
       // 如果bol为true的话，就可以提交数据，否则不允许提交
-      if(true){
+      if (true) {
         // 如果信息更新成功，则提示信息修改成功
         this.setState({
-          result:true,
+          result: true,
         });
+      } else {
+        // ??
       }
-      else{
-        
-      }
-    }
-    else{
+    } else {
       // 信息不完整 不允许提交
-      
     }
-  }
+  };
+
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     const {
       form: { getFieldDecorator },
     } = this.props;
+    const { result } = this.state;
     return (
       <div className={styles.baseView} ref={this.getViewDom}>
         <div className={styles.left}>
@@ -109,7 +113,7 @@ class BaseView extends Component {
                     message: formatMessage({ id: 'app.settings.basic.username-message' }, {}),
                   },
                 ],
-              })(<Input readOnly/>)}
+              })(<Input readOnly />)}
               <span className={styles.spanWarn}>（注意:不可修改）</span>
             </FormItem>
 
@@ -136,8 +140,8 @@ class BaseView extends Component {
                 ],
               })(<Input />)}
             </FormItem>
-             {/* 邮箱 */}
-             <FormItem label={formatMessage({ id: 'app.settings.basic.email' })}>
+            {/* 邮箱 */}
+            <FormItem label={formatMessage({ id: 'app.settings.basic.email' })}>
               {getFieldDecorator('email', {
                 rules: [
                   {
@@ -169,13 +173,11 @@ class BaseView extends Component {
                 ],
               })(<Input placeholder="请输入手机号码" />)}
             </FormItem>
-            {
-              this.state.result?(
-                <div className={styles.resultText}>
-                    <Alert type="success" message="信息更新成功" banner showIcon/>
-                </div>
-              ):null
-            }
+            {result ? (
+              <div className={styles.resultText}>
+                <Alert type="success" message="信息更新成功" banner showIcon />
+              </div>
+            ) : null}
 
             <Button type="primary" onClick={this.handleSubmit}>
               <FormattedMessage
