@@ -4,6 +4,7 @@ import { Form, Input, Button, Alert } from 'antd';
 import { connect } from 'dva';
 import { query as queryUsers, queryCurrent, getAllUserinfo } from '@/services/user';
 import styles from './BaseView.less';
+import { updateUserInfo} from '@/services/user';
 // import GeographicView from './GeographicView';
 // import PhoneView from './PhoneView';
 // import { getTimeDistance } from '@/utils/utils';
@@ -21,30 +22,33 @@ class BaseView extends Component {
     super();
     this.state={
       result:false,
+      errorResult:false,
     };
   }
   componentDidMount() {
-    console.log(this.props);
-    var {users} = this.props;
+    const {users} = this.props;
     if(Object.keys(users).length>0){
       // 如果是普通用户，不允许查看当前的所有用户，即系统管理功能
       if(users.status==1){
-        var ele=document.getElementsByClassName("ant-menu-submenu")[3];
+        const ele=document.getElementsByClassName("ant-menu-submenu")[3];
         ele.style.display="none";
       }
-      var rsu=getAllUserinfo(users);
+      const rsu=getAllUserinfo(users);
       rsu.then((response)=>{
+        const tgt=document.getElementsByClassName("antd-pro\\components\\-global-header\\index-name")[0];
         console.log('显示当前用户的所有个人信息');
         console.log(response);
         this.setBaseInfo(response);
-        var tgt=document.getElementsByClassName("antd-pro\\components\\-global-header\\index-name")[0];
-        console.log(tgt);
+        this.props.dispatch({
+          type:'user/modifyUserInfo',
+          payload:response,
+        });
         tgt.innerHTML=response.username;
       });
     }
     else{
+        const tgt=document.getElementsByClassName("antd-pro\\components\\-global-header\\index-name")[0];
         this.setBaseInfo({});
-        var tgt=document.getElementsByClassName("antd-pro\\components\\-global-header\\index-name")[0];
         tgt.innerHTML="";
     }
        
@@ -65,26 +69,45 @@ class BaseView extends Component {
     this.view = ref;
   };
   handleSubmit=()=>{
+    this.setState({
+      result:false,
+      errorResult:false,
+    });
     const { form } = this.props;
     const formValue = form.getFieldsValue();
     console.log(formValue);
-    var bol=true;
+    const bol=true;
     Object.keys(formValue).forEach(key => {
       if(!formValue[key]){
         bol=false;
       }
     });
+    
     if(bol){
       // 如果bol为true的话，就可以提交数据，否则不允许提交
-      if(true){
-        // 如果信息更新成功，则提示信息修改成功
-        this.setState({
-          result:true,
-        });
-      }
-      else{
-        
-      }
+      const rsu=updateUserInfo(formValue);
+      rsu.then((response)=>{
+        console.log(response);
+        if(response.status=="ok"){
+          // 如果信息更新成功，则提示信息修改成功
+          this.setState({
+            result:true,
+            errorResult:false
+          });
+          setTimeout(()=>{
+            this.setState({
+              result:false,
+              errorResult:false
+            });
+          },3000);
+        }
+        else if(response.status=="error"){
+          this.setState({
+            result:false,
+            errorResult:true
+          });
+        }
+      });
     }
     else{
       // 信息不完整 不允许提交
@@ -92,7 +115,6 @@ class BaseView extends Component {
     }
   }
   render() {
-    console.log(this.props);
     const {
       form: { getFieldDecorator },
     } = this.props;
@@ -172,11 +194,17 @@ class BaseView extends Component {
             {
               this.state.result?(
                 <div className={styles.resultText}>
-                    <Alert type="success" message="信息更新成功" banner showIcon/>
+                    <Alert type="success" message="信息更新成功, 3秒后自动消失..." banner showIcon/>
                 </div>
               ):null
             }
-
+            {
+              this.state.errorResult?(
+                <div className={styles.resultText}>
+                    <Alert type="error" message="信息提交失败，请重新提交" banner showIcon/>
+                </div>
+              ):null
+            }
             <Button type="primary" onClick={this.handleSubmit}>
               <FormattedMessage
                 id="app.settings.basic.update"

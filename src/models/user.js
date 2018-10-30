@@ -35,6 +35,12 @@ export default {
         allInfo:{},
       };
     },
+    modifyUserInfo(state,action){
+      return {
+        ...state,
+        allInfo: action.payload,
+      };
+    },
     save(state, action) {
       return {
         ...state,

@@ -146,5 +146,21 @@ export default {
       });
       return;
     }
-  }
+  },
+  'POST /api/updateUserInfo': (req, res) => {
+    const {name, username, insitution, phone, userId,email} = req.body;
+    if(username){
+      res.send({
+        status:'ok'
+      });
+    }
+    else{
+      res.send({
+        status:'error'
+      });
+    }
+  },
+
+
+
 };
