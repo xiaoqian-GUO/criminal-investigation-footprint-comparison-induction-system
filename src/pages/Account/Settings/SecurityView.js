@@ -38,16 +38,17 @@ class SecurityView extends Component {
     };
   }
   componentDidMount() {
-    
+    console.log(this.props);
+    this.setBaseInfo();
   }
 
-  setBaseInfo = (res) => {
-    const { form } = this.props;
+  setBaseInfo = () => {
+    const { form, currentUsers } = this.props;
     const formValue = form.getFieldsValue();
     
     Object.keys(formValue).forEach(key => {
       const obj = {};
-      obj[key] = res[key] || null;
+      obj[key] = currentUsers[key] || null;
       form.setFieldsValue(obj);
     });
   };
@@ -119,64 +120,41 @@ class SecurityView extends Component {
                   },
                 ],
               })(<Input readOnly/>)}
-              <span className={styles.spanWarn}>（注意:不可修改）</span>
             </FormItem>
 
-            {/* 用户姓名 */}
-            <FormItem label={formatMessage({ id: 'app.settings.basic.name' })}>
-              {getFieldDecorator('name', {
+            {/* 旧密码 */}
+            <FormItem label={formatMessage({ id: 'app.settings.basic.oldpwd' })}>
+              {getFieldDecorator('oldpwd', {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'app.settings.basic.name-message' }, {}),
+                    message: formatMessage({ id: 'app.settings.basic.oldpwd-message' }, {}),
                   },
                 ],
               })(<Input />)}
             </FormItem>
 
-            {/* 工号 */}
-            <FormItem label={formatMessage({ id: 'app.settings.basic.userId' })}>
-              {getFieldDecorator('userId', {
+            {/* 新密码 */}
+            <FormItem label={formatMessage({ id: 'app.settings.basic.newpwd' })}>
+              {getFieldDecorator('newpwd', {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'app.settings.basic.userId-message' }, {}),
+                    message: formatMessage({ id: 'app.settings.basic.newpwd-message' }, {}),
                   },
                 ],
               })(<Input />)}
             </FormItem>
-             {/* 邮箱 */}
-             <FormItem label={formatMessage({ id: 'app.settings.basic.email' })}>
-              {getFieldDecorator('email', {
+             {/* 再次输入新密码 */}
+             <FormItem label={formatMessage({ id: 'app.settings.basic.newpwdagain' })}>
+              {getFieldDecorator('newpwdAgain', {
                 rules: [
                   {
                     required: true, // 是否必选
-                    message: formatMessage({ id: 'app.settings.basic.email-message' }, {}), // 校验提示信息
+                    message: formatMessage({ id: 'app.settings.basic.newpwdagain-message' }, {}), // 校验提示信息
                   },
                 ],
               })(<Input />)}
-            </FormItem>
-            {/* 所属单位 */}
-            <FormItem label={formatMessage({ id: 'app.settings.basic.address' })}>
-              {getFieldDecorator('insitution', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.address-message' }, {}),
-                  },
-                ],
-              })(<Input />)}
-            </FormItem>
-            {/* 手机号码 */}
-            <FormItem label={formatMessage({ id: 'app.settings.basic.phone' })}>
-              {getFieldDecorator('phone', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.phone-message' }, {}),
-                  },
-                ],
-              })(<Input placeholder="请输入手机号码" />)}
             </FormItem>
             {
               this.state.result?(
@@ -194,8 +172,8 @@ class SecurityView extends Component {
             }
             <Button type="primary" onClick={this.handleSubmit}>
               <FormattedMessage
-                id="app.settings.basic.update"
-                defaultMessage="Update Information"
+                id="app.settings.basic.updatepwd"
+                defaultMessage="Update Password"
               />
             </Button>
           </Form>

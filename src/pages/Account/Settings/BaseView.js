@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Form, Input, Button, Alert } from 'antd';
 import { connect } from 'dva';
-import { query as queryUsers, queryCurrent, getAllUserinfo } from '@/services/user';
+import { getAllUserinfo } from '@/services/user';
 import styles from './BaseView.less';
 import { updateUserInfo} from '@/services/user';
 // import GeographicView from './GeographicView';
@@ -13,51 +13,53 @@ const FormItem = Form.Item;
 
 @connect(({ user }) => ({
   currentUser: user.currentUser,
-  users:user.users,
-  allInfo:user.allInfo,
+  users: user.users,
+  allInfo: user.allInfo,
 }))
 @Form.create()
 class BaseView extends Component {
-  constructor(){
+  constructor() {
     super();
     this.state={
       result:false,
       errorResult:false,
     };
   }
+
   componentDidMount() {
-    const {users} = this.props;
-    if(Object.keys(users).length>0){
+    const { users } = this.props;
+    const ele = document.getElementsByClassName('ant-menu-submenu')[3];
+    const rsu = getAllUserinfo(users);
+    const tgt = document.getElementsByClassName(
+      'antd-pro\\components\\-global-header\\index-name'
+    )[0];
+    if (Object.keys(users).length > 0) {
       // 如果是普通用户，不允许查看当前的所有用户，即系统管理功能
-      if(users.status==1){
-        const ele=document.getElementsByClassName("ant-menu-submenu")[3];
-        ele.style.display="none";
+      if (users.status === 1) {
+        ele.style.display = 'none';
       }
-      const rsu=getAllUserinfo(users);
-      rsu.then((response)=>{
-        const tgt=document.getElementsByClassName("antd-pro\\components\\-global-header\\index-name")[0];
-        console.log('显示当前用户的所有个人信息');
-        console.log(response);
+
+      rsu.then(response => {
+        // console.log('显示当前用户的所有个人信息');
+        // console.log(response);
         this.setBaseInfo(response);
-        this.props.dispatch({
-          type:'user/modifyUserInfo',
-          payload:response,
-        });
-        tgt.innerHTML=response.username;
+        
+        // console.log(tgt);
+        tgt.innerHTML = response.username;
       });
+    } else {
+      this.setBaseInfo({});
+      // var tgt = document.getElementsByClassName(
+      //   'antd-pro\\components\\-global-header\\index-name'
+      // )[0];
+      tgt.innerHTML = '';
     }
-    else{
-        const tgt=document.getElementsByClassName("antd-pro\\components\\-global-header\\index-name")[0];
-        this.setBaseInfo({});
-        tgt.innerHTML="";
-    }
-       
   }
 
-  setBaseInfo = (res) => {
+  setBaseInfo = res => {
     const { form } = this.props;
     const formValue = form.getFieldsValue();
-    
+
     Object.keys(formValue).forEach(key => {
       const obj = {};
       obj[key] = res[key] || null;
@@ -78,8 +80,8 @@ class BaseView extends Component {
     console.log(formValue);
     const bol=true;
     Object.keys(formValue).forEach(key => {
-      if(!formValue[key]){
-        bol=false;
+      if (!formValue[key]) {
+        bol = false;
       }
     });
     
@@ -111,13 +113,14 @@ class BaseView extends Component {
     }
     else{
       // 信息不完整 不允许提交
-      
     }
-  }
+  };
+
   render() {
     const {
       form: { getFieldDecorator },
     } = this.props;
+    const { result } = this.state;
     return (
       <div className={styles.baseView} ref={this.getViewDom}>
         <div className={styles.left}>
@@ -131,7 +134,7 @@ class BaseView extends Component {
                     message: formatMessage({ id: 'app.settings.basic.username-message' }, {}),
                   },
                 ],
-              })(<Input readOnly/>)}
+              })(<Input readOnly />)}
               <span className={styles.spanWarn}>（注意:不可修改）</span>
             </FormItem>
 
@@ -158,8 +161,8 @@ class BaseView extends Component {
                 ],
               })(<Input />)}
             </FormItem>
-             {/* 邮箱 */}
-             <FormItem label={formatMessage({ id: 'app.settings.basic.email' })}>
+            {/* 邮箱 */}
+            <FormItem label={formatMessage({ id: 'app.settings.basic.email' })}>
               {getFieldDecorator('email', {
                 rules: [
                   {
