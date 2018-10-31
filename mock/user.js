@@ -115,7 +115,7 @@ export default {
     });
   },
   'POST /api/getCurrentUser': (req, res) => {
-    const { currentAuthority, status } = req.body;
+    const { currentAuthority } = req.body;
     if (currentAuthority=="admin") {
       res.send({
         name: 'daipeng',
@@ -149,6 +149,19 @@ export default {
   },
   'POST /api/updateUserInfo': (req, res) => {
     const {name, username, insitution, phone, userId,email} = req.body;
+    if(username){
+      res.send({
+        status:'ok'
+      });
+    }
+    else{
+      res.send({
+        status:'error'
+      });
+    }
+  },
+  'POST /api/updatePwd': (req, res) => {
+    const {newpwd,username } = req.body;
     if(username){
       res.send({
         status:'ok'

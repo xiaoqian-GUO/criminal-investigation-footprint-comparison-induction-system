@@ -3,11 +3,12 @@ import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Form, Input, Button, Alert,List } from 'antd';
 import { connect } from 'dva';
 import styles from './BaseView.less';
+import { updatePwd} from '@/services/user';
 // import { getTimeDistance } from '@/utils/utils';
 const FormItem = Form.Item;
 
 @connect(({ user }) => ({
-  currentUsers:user.allInfo,
+  currentUsers:user.allInfo || {},
 }))
 @Form.create()
 // const passwordStrength = {
@@ -35,36 +36,54 @@ class SecurityView extends Component {
     this.state={
       result:false,
       errorResult:false,
+      errorText:"密码修改失败，请重新提交",
     };
   }
   componentDidMount() {
-    console.log(this.props);
-    this.setBaseInfo();
-  }
+    if(Object.keys(this.props.currentUsers).length>0){
 
-  setBaseInfo = () => {
-    const { form, currentUsers } = this.props;
-    const formValue = form.getFieldsValue();
+    }
+    else{
+      const tgt = document.getElementsByClassName(
+        'antd-pro\\components\\-global-header\\index-name'
+      )[0];
+      let username=localStorage.getItem("login") || "";
+      tgt.innerHTML=username;
+      alert('认证失败，请重新登陆！');
+      window.location.href="/user/login";
+    }
+  }
+  handleEmpty = () => {
+    let { form, currentUsers } = this.props;
+    let formValue = form.getFieldsValue();
     
     Object.keys(formValue).forEach(key => {
-      const obj = {};
-      obj[key] = currentUsers[key] || null;
-      form.setFieldsValue(obj);
+      if(key=="newpwd" || key=="newpwdAgain"){
+        formValue[key]=null;
+      }
+      form.setFieldsValue(formValue);
     });
+    this.newpwdInput.focus();
+  };
+  emptyAll = () => {
+    let { form, currentUsers } = this.props;
+    form.setFieldsValue({oldpwd:null,newpwd:null,newpwdAgain:null});
+    this.oldpwdInput.focus();
   };
 
   getViewDom = ref => {
     this.view = ref;
   };
   handleSubmit=()=>{
+    let { form } = this.props;
+    let formValue = form.getFieldsValue();
+    let bol=true;
+    let rsu;
+    let obj;
     this.setState({
       result:false,
       errorResult:false,
     });
-    const { form } = this.props;
-    const formValue = form.getFieldsValue();
-    console.log(formValue);
-    const bol=true;
     Object.keys(formValue).forEach(key => {
       if(!formValue[key]){
         bol=false;
@@ -73,29 +92,47 @@ class SecurityView extends Component {
     
     if(bol){
       // 如果bol为true的话，就可以提交数据，否则不允许提交
-      const rsu=updateUserInfo(formValue);
-      rsu.then((response)=>{
-        console.log(response);
-        if(response.status=="ok"){
-          // 如果信息更新成功，则提示信息修改成功
-          this.setState({
-            result:true,
-            errorResult:false
-          });
-          setTimeout(()=>{
+      if(formValue["newpwd"]!=formValue["newpwdAgain"]){
+        this.setState({
+          result:false,
+          errorResult:true,
+          errorText:"两次输入新密码不匹配，请重新输入",
+        });
+        this.handleEmpty();
+      }
+      else{
+        obj={
+          ...formValue,
+          username:localStorage.getItem("login"),
+        };
+        rsu=updatePwd(obj);
+        rsu.then((response)=>{
+          console.log(response);
+          if(response.status=="ok"){
+            // 如果信息更新成功，则提示信息修改成功
             this.setState({
-              result:false,
+              result:true,
               errorResult:false
             });
-          },3000);
-        }
-        else if(response.status=="error"){
-          this.setState({
-            result:false,
-            errorResult:true
-          });
-        }
-      });
+            setTimeout(()=>{
+              this.setState({
+                result:false,
+                errorResult:false
+              });
+              this.emptyAll();
+            },3000);
+          }
+          else if(response.status=="error"){
+            this.setState({
+              result:false,
+              errorResult:true,
+              errorText:"密码更新失败，请重新确认旧密码",
+            });
+            this.emptyAll();
+          }
+        });
+      }
+      
     }
     else{
       // 信息不完整 不允许提交
@@ -109,18 +146,7 @@ class SecurityView extends Component {
     return (
       <div className={styles.baseView} ref={this.getViewDom}>
         <div className={styles.left}>
-          <Form layout="vertical" onSubmit={this.handleSubmit} hideRequiredMark>
-            {/* 用户名 */}
-            <FormItem label={formatMessage({ id: 'app.settings.basic.username' })}>
-              {getFieldDecorator('username', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.username-message' }, {}),
-                  },
-                ],
-              })(<Input readOnly/>)}
-            </FormItem>
+          <Form layout="vertical" onSubmit={this.handleSubmit}>
 
             {/* 旧密码 */}
             <FormItem label={formatMessage({ id: 'app.settings.basic.oldpwd' })}>
@@ -131,7 +157,7 @@ class SecurityView extends Component {
                     message: formatMessage({ id: 'app.settings.basic.oldpwd-message' }, {}),
                   },
                 ],
-              })(<Input />)}
+              })(<Input type="password" ref={node=>this.oldpwdInput=node} />)}
             </FormItem>
 
             {/* 新密码 */}
@@ -143,7 +169,7 @@ class SecurityView extends Component {
                     message: formatMessage({ id: 'app.settings.basic.newpwd-message' }, {}),
                   },
                 ],
-              })(<Input />)}
+              })(<Input type="password" ref={node=>this.newpwdInput=node}/>)}
             </FormItem>
              {/* 再次输入新密码 */}
              <FormItem label={formatMessage({ id: 'app.settings.basic.newpwdagain' })}>
@@ -154,7 +180,7 @@ class SecurityView extends Component {
                     message: formatMessage({ id: 'app.settings.basic.newpwdagain-message' }, {}), // 校验提示信息
                   },
                 ],
-              })(<Input />)}
+              })(<Input type="password" />)}
             </FormItem>
             {
               this.state.result?(
@@ -166,7 +192,7 @@ class SecurityView extends Component {
             {
               this.state.errorResult?(
                 <div className={styles.resultText}>
-                    <Alert type="error" message="密码修改失败，请重新提交" banner showIcon/>
+                    <Alert type="error" message={this.state.errorText} banner showIcon/>
                 </div>
               ):null
             }

@@ -20,3 +20,9 @@ export function updateUserInfo(params) {
     body: params,
   });
 }
+export function updatePwd(params) {
+  return request('/api/updatePwd',{
+    method: 'POST',
+    body: params,
+  });
+}

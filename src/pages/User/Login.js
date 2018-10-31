@@ -125,12 +125,14 @@ class LoginPage extends Component {
               this.setState({
                 result:false
               });
+              localStorage.setItem("login",response.currentAuthority);
               this.props.dispatch(routerRedux.push({
                 pathname:'/account/settings/base',
                 query:response,
             }));
           }
           else{
+            localStorage.setItem("login","");
             this.emitUserEmpty();
             this.setState({
               hasUser:true,

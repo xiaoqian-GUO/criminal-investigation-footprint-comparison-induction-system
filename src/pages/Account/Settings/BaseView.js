@@ -35,7 +35,7 @@ class BaseView extends Component {
     )[0];
     if (Object.keys(users).length > 0) {
       // 如果是普通用户，不允许查看当前的所有用户，即系统管理功能
-      if (users.status === 1) {
+      if (users.status === '1') {
         ele.style.display = 'none';
       }
 
@@ -52,19 +52,18 @@ class BaseView extends Component {
       });
     } else {
       this.setBaseInfo({});
-      // var tgt = document.getElementsByClassName(
-      //   'antd-pro\\components\\-global-header\\index-name'
-      // )[0];
       tgt.innerHTML = '';
+      alert('认证失败，请重新登陆！');
+      window.location.href="/user/login";
     }
   }
 
   setBaseInfo = res => {
-    const { form } = this.props;
-    const formValue = form.getFieldsValue();
+    let { form } = this.props;
+    let formValue = form.getFieldsValue();
 
     Object.keys(formValue).forEach(key => {
-      const obj = {};
+      let obj = {};
       obj[key] = res[key] || null;
       form.setFieldsValue(obj);
     });
@@ -78,10 +77,10 @@ class BaseView extends Component {
       result:false,
       errorResult:false,
     });
-    const { form } = this.props;
-    const formValue = form.getFieldsValue();
+    let { form } = this.props;
+    let formValue = form.getFieldsValue();
     console.log(formValue);
-    const bol=true;
+    let bol=true;
     Object.keys(formValue).forEach(key => {
       if (!formValue[key]) {
         bol = false;
@@ -123,7 +122,7 @@ class BaseView extends Component {
     const {
       form: { getFieldDecorator },
     } = this.props;
-    const { result } = this.state;
+    let { result } = this.state;
     return (
       <div className={styles.baseView} ref={this.getViewDom}>
         <div className={styles.left}>
