@@ -43,7 +43,10 @@ class BaseView extends Component {
         // console.log('显示当前用户的所有个人信息');
         // console.log(response);
         this.setBaseInfo(response);
-        
+        this.props.dispatch({
+          type:'user/modifyUserInfo',
+          payload:response,
+        });
         // console.log(tgt);
         tgt.innerHTML = response.username;
       });
