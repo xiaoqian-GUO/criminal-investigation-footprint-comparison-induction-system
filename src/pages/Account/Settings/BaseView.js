@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Form, Input, Button, Alert } from 'antd';
 import { connect } from 'dva';
-import { getAllUserinfo } from '@/services/user';
+import { getAllUserinfo, updateUserInfo } from '@/services/user';
 import styles from './BaseView.less';
-import { updateUserInfo} from '@/services/user';
+
 // import GeographicView from './GeographicView';
 // import PhoneView from './PhoneView';
 // import { getTimeDistance } from '@/utils/utils';
@@ -20,19 +20,20 @@ const FormItem = Form.Item;
 class BaseView extends Component {
   constructor() {
     super();
-    this.state={
-      result:false,
-      errorResult:false,
+    this.state = {
+      result: false,
+      errorResult: false,
     };
   }
 
   componentDidMount() {
-    const { users } = this.props;
+    const { users, dispatch } = this.props;
     const ele = document.getElementsByClassName('ant-menu-submenu')[3];
     const rsu = getAllUserinfo(users);
     const tgt = document.getElementsByClassName(
       'antd-pro\\components\\-global-header\\index-name'
     )[0];
+
     if (Object.keys(users).length > 0) {
       // 如果是普通用户，不允许查看当前的所有用户，即系统管理功能
       if (users.status === '1') {
@@ -43,9 +44,9 @@ class BaseView extends Component {
         // console.log('显示当前用户的所有个人信息');
         // console.log(response);
         this.setBaseInfo(response);
-        this.props.dispatch({
-          type:'user/modifyUserInfo',
-          payload:response,
+        dispatch({
+          type: 'user/modifyUserInfo',
+          payload: response,
         });
         // console.log(tgt);
         tgt.innerHTML = response.username;
@@ -54,16 +55,16 @@ class BaseView extends Component {
       this.setBaseInfo({});
       tgt.innerHTML = '';
       alert('认证失败，请重新登陆！');
-      window.location.href="/user/login";
+      window.location.href = '/user/login';
     }
   }
 
   setBaseInfo = res => {
-    let { form } = this.props;
-    let formValue = form.getFieldsValue();
+    const { form } = this.props;
+    const formValue = form.getFieldsValue();
 
     Object.keys(formValue).forEach(key => {
-      let obj = {};
+      const obj = {};
       obj[key] = res[key] || null;
       form.setFieldsValue(obj);
     });
@@ -72,48 +73,47 @@ class BaseView extends Component {
   getViewDom = ref => {
     this.view = ref;
   };
-  handleSubmit=()=>{
+
+  handleSubmit = () => {
     this.setState({
-      result:false,
-      errorResult:false,
+      result: false,
+      errorResult: false,
     });
-    let { form } = this.props;
-    let formValue = form.getFieldsValue();
+    const { form } = this.props;
+    const formValue = form.getFieldsValue();
     console.log(formValue);
-    let bol=true;
+    let bol = true;
     Object.keys(formValue).forEach(key => {
       if (!formValue[key]) {
         bol = false;
       }
     });
-    
-    if(bol){
+
+    if (bol) {
       // 如果bol为true的话，就可以提交数据，否则不允许提交
-      const rsu=updateUserInfo(formValue);
-      rsu.then((response)=>{
+      const rsu = updateUserInfo(formValue);
+      rsu.then(response => {
         console.log(response);
-        if(response.status=="ok"){
+        if (response.status === 'ok') {
           // 如果信息更新成功，则提示信息修改成功
           this.setState({
-            result:true,
-            errorResult:false
+            result: true,
+            errorResult: false,
           });
-          setTimeout(()=>{
+          setTimeout(() => {
             this.setState({
-              result:false,
-              errorResult:false
+              result: false,
+              errorResult: false,
             });
-          },3000);
-        }
-        else if(response.status=="error"){
+          }, 3000);
+        } else if (response.status === 'error') {
           this.setState({
-            result:false,
-            errorResult:true
+            result: false,
+            errorResult: true,
           });
         }
       });
-    }
-    else{
+    } else {
       // 信息不完整 不允许提交
     }
   };
@@ -122,7 +122,7 @@ class BaseView extends Component {
     const {
       form: { getFieldDecorator },
     } = this.props;
-    let { result } = this.state;
+    const { result, errorResult } = this.state;
     return (
       <div className={styles.baseView} ref={this.getViewDom}>
         <div className={styles.left}>
@@ -196,20 +196,16 @@ class BaseView extends Component {
                 ],
               })(<Input placeholder="请输入手机号码" />)}
             </FormItem>
-            {
-              this.state.result?(
-                <div className={styles.resultText}>
-                    <Alert type="success" message="信息更新成功, 3秒后自动消失..." banner showIcon/>
-                </div>
-              ):null
-            }
-            {
-              this.state.errorResult?(
-                <div className={styles.resultText}>
-                    <Alert type="error" message="信息提交失败，请重新提交" banner showIcon/>
-                </div>
-              ):null
-            }
+            {result ? (
+              <div className={styles.resultText}>
+                <Alert type="success" message="信息更新成功, 3秒后自动消失..." banner showIcon />
+              </div>
+            ) : null}
+            {errorResult ? (
+              <div className={styles.resultText}>
+                <Alert type="error" message="信息提交失败，请重新提交" banner showIcon />
+              </div>
+            ) : null}
             <Button type="primary" onClick={this.handleSubmit}>
               <FormattedMessage
                 id="app.settings.basic.update"
