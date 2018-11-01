@@ -71,8 +71,6 @@ export default {
   subscriptions:{
     setup({dispatch, history}){
       history.listen((location)=>{
-        console.log('location:');
-        console.log(location);
         if(Object.keys(location.query).length>0){
           dispatch({
             type:'addMethod',
