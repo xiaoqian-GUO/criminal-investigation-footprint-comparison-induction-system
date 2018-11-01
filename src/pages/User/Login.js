@@ -26,6 +26,11 @@ class LoginPage extends Component {
     result:false,
   };
 
+  componentDidMount(){
+    localStorage.setItem("antd-pro-authority","guest");
+    localStorage.setItem("login","");
+  }
+
   onChangeUserName=(e)=>{
     var bol=e.target.value?false:true;
     this.setState({
@@ -125,13 +130,16 @@ class LoginPage extends Component {
               this.setState({
                 result:false
               });
-              localStorage.setItem("login",response.currentAuthority);
+              var authority=response.status==="0"?"admin":"user";
+              localStorage.setItem("antd-pro-authority",authority);
+              localStorage.setItem("login",response.currentUser);
               this.props.dispatch(routerRedux.push({
                 pathname:'/account/settings/base',
                 query:response,
             }));
           }
           else{
+            localStorage.setItem("antd-pro-authority","guest");
             localStorage.setItem("login","");
             this.emitUserEmpty();
             this.setState({

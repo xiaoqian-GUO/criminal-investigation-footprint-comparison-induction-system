@@ -2,7 +2,7 @@
 export default {
   // 支持值为 Object 和 Array
   'GET /api/currentUser': {
-    name: 'gxq',
+    name: '',
     username: 'userName',
     address: '西安电子科技大学',
     phone: '18392089875',
@@ -57,14 +57,14 @@ export default {
     if (password === '888888' && userName === 'admin') {
       res.send({
         status: '0',
-        currentAuthority: 'admin',
+        currentUser: 'admin',
       });
       return;
     }
     if (password === '123456' && userName === 'user') {
       res.send({
         status: '1',
-        currentAuthority: 'user',
+        currentUser: 'user',
       });
       return;
     }
@@ -115,8 +115,8 @@ export default {
     });
   },
   'POST /api/getCurrentUser': (req, res) => {
-    const { currentAuthority } = req.body;
-    if (currentAuthority=="admin") {
+    const { currentUser } = req.body;
+    if (currentUser=="admin") {
       res.send({
         name: 'daipeng',
         username: 'admin',

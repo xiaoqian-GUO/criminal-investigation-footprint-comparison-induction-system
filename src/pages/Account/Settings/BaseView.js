@@ -12,9 +12,9 @@ import styles from './BaseView.less';
 const FormItem = Form.Item;
 
 @connect(({ user }) => ({
-  currentUser: user.currentUser,
-  users: user.users,
-  allInfo: user.allInfo,
+  currentUser: user.currentUser,    //当前用户
+  users: user.users,                //从model传过来的登陆状态，保存用户的username和status身份（管理员or普通用户）
+  allInfo: user.allInfo,            //当前用户的详细信息
 }))
 @Form.create()
 class BaseView extends Component {
@@ -28,18 +28,9 @@ class BaseView extends Component {
 
   componentDidMount() {
     const { users, dispatch } = this.props;
-    const ele = document.getElementsByClassName('ant-menu-submenu')[3];
     const rsu = getAllUserinfo(users);
-    const tgt = document.getElementsByClassName(
-      'antd-pro\\components\\-global-header\\index-name'
-    )[0];
 
     if (Object.keys(users).length > 0) {
-      // 如果是普通用户，不允许查看当前的所有用户，即系统管理功能
-      if (users.status === '1') {
-        ele.style.display = 'none';
-      }
-
       rsu.then(response => {
         // console.log('显示当前用户的所有个人信息');
         // console.log(response);
@@ -48,12 +39,8 @@ class BaseView extends Component {
           type: 'user/modifyUserInfo',
           payload: response,
         });
-        // console.log(tgt);
-        tgt.innerHTML = response.username;
       });
     } else {
-      this.setBaseInfo({});
-      tgt.innerHTML = '';
       alert('认证失败，请重新登陆！');
       window.location.href = '/user/login';
     }
@@ -81,7 +68,6 @@ class BaseView extends Component {
     });
     const { form } = this.props;
     const formValue = form.getFieldsValue();
-    console.log(formValue);
     let bol = true;
     Object.keys(formValue).forEach(key => {
       if (!formValue[key]) {
@@ -119,6 +105,7 @@ class BaseView extends Component {
   };
 
   render() {
+    console.log(this.props);
     const {
       form: { getFieldDecorator },
     } = this.props;

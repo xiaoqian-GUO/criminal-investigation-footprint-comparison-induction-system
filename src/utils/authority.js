@@ -2,7 +2,7 @@
 export function getAuthority(str) {
   // return localStorage.getItem('antd-pro-authority') || ['admin', 'user'];
   const authorityString =
-    typeof str === 'undefined' ? localStorage.getItem('antd-pro-authority') : str;
+    typeof str === 'undefined' ? localStorage.getItem('antd-pro-authority') : "guest";
   // authorityString could be admin, "admin", ["admin"]
   let authority;
   try {

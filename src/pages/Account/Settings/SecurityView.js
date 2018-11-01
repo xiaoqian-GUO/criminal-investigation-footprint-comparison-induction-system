@@ -8,7 +8,7 @@ import { updatePwd} from '@/services/user';
 const FormItem = Form.Item;
 
 @connect(({ user }) => ({
-  currentUsers:user.allInfo || {},
+  currentUsers:user.allInfo || {},     //从baseview页面更新过来的当前用户的详细信息
 }))
 @Form.create()
 // const passwordStrength = {
@@ -44,11 +44,6 @@ class SecurityView extends Component {
 
     }
     else{
-      const tgt = document.getElementsByClassName(
-        'antd-pro\\components\\-global-header\\index-name'
-      )[0];
-      let username=localStorage.getItem("login") || "";
-      tgt.innerHTML=username;
       alert('认证失败，请重新登陆！');
       window.location.href="/user/login";
     }

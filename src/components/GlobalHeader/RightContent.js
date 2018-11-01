@@ -2,12 +2,16 @@ import React, { PureComponent } from 'react';
 import { FormattedMessage, formatMessage } from 'umi/locale';
 import { Spin, Tag, Menu, Icon, Dropdown, Avatar, Tooltip } from 'antd';
 import moment from 'moment';
+import { connect } from 'dva';
 import groupBy from 'lodash/groupBy';
 import NoticeIcon from '../NoticeIcon';
 import HeaderSearch from '../HeaderSearch';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
 
+@connect(({ user }) => ({
+  rightContent:user.rightContent,
+}))
 export default class GlobalHeaderRight extends PureComponent {
   getNoticeData() {
     const { notices = [] } = this.props;
@@ -43,6 +47,7 @@ export default class GlobalHeaderRight extends PureComponent {
   render() {
     const {
       currentUser,
+      rightContent,
       fetchingNotices,
       onNoticeVisibleChange,
       onMenuClick,
@@ -139,21 +144,20 @@ export default class GlobalHeaderRight extends PureComponent {
             emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
           />
         </NoticeIcon> */}
-        {currentUser.name ? (
+        {rightContent.name?(
           <Dropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>
               <Avatar
                 size="small"
                 className={styles.avatar}
-                src={currentUser.avatar}
+                src={rightContent.avatar}
                 alt="avatar"
               />
-              <span className={styles.name}>{currentUser.name}</span>
+              <span className={styles.name}>{rightContent.name}</span>
             </span>
           </Dropdown>
-        ) : (
-          <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />
-        )}
+        ):null
+        }
         <SelectLang className={styles.action} />
       </div>
     );

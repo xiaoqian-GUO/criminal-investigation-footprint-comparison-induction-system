@@ -8,6 +8,7 @@ export default {
     currentUser: {},
     users:{},
     allInfo:{},
+    rightContent:{},
   },
 
   effects: {
@@ -33,6 +34,10 @@ export default {
         ...state,
         users: action.payload,
         allInfo:{},
+        rightContent:{
+          name:action.payload.currentUser,
+          avatar:"https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+        },
       };
     },
     modifyUserInfo(state,action){
