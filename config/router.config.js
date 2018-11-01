@@ -73,6 +73,7 @@ export default [
         path: '/system',
         icon: 'table',
         name: 'system',
+        Routes: ['src/pages/Authorized'],
         authority: ['admin'],
         routes: [
           {

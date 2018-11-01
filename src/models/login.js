@@ -65,6 +65,8 @@ export default {
       //   })
       // );
       console.log('退出');
+      localStorage.setItem("antd-pro-authority","guest");
+      localStorage.setItem("login","");
       window.location.href="/user/login";
 
     },
@@ -79,5 +81,12 @@ export default {
         type: payload.type,
       };
     },
+    changeLoginAuthority(state, { payload }){
+      console.log("reload");
+      reloadAuthorized();
+      return {
+        ...state,
+      };
+    }
   },
 };

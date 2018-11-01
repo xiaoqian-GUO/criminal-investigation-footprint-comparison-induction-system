@@ -70,7 +70,7 @@ class SecurityView extends Component {
     this.view = ref;
   };
   handleSubmit=()=>{
-    let { form } = this.props;
+    const { form } = this.props;
     let formValue = form.getFieldsValue();
     let bol=true;
     let rsu;

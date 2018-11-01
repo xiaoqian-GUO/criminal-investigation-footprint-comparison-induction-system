@@ -105,7 +105,6 @@ class BaseView extends Component {
   };
 
   render() {
-    console.log(this.props);
     const {
       form: { getFieldDecorator },
     } = this.props;

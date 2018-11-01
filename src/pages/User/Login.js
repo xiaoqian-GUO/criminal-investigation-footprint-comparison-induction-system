@@ -27,8 +27,8 @@ class LoginPage extends Component {
   };
 
   componentDidMount(){
-    localStorage.setItem("antd-pro-authority","guest");
-    localStorage.setItem("login","");
+    // localStorage.setItem("antd-pro-authority","guest");
+    // localStorage.setItem("login","");
   }
 
   onChangeUserName=(e)=>{
@@ -105,6 +105,7 @@ class LoginPage extends Component {
     <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />
   );
   onClick=(e)=>{
+      const { dispatch } = this.props;
       this.setState({
         result:false
       });
@@ -133,6 +134,10 @@ class LoginPage extends Component {
               var authority=response.status==="0"?"admin":"user";
               localStorage.setItem("antd-pro-authority",authority);
               localStorage.setItem("login",response.currentUser);
+              dispatch({
+                type:"login/changeLoginAuthority",
+                payload:{},
+              });
               this.props.dispatch(routerRedux.push({
                 pathname:'/account/settings/base',
                 query:response,
