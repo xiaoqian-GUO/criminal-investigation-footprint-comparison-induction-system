@@ -28,6 +28,8 @@ class BaseView extends Component {
 
   componentDidMount() {
     const { users, dispatch } = this.props;
+    const userName=localStorage.getItem("login") || "";
+    users.currentUser=users.currentUser?users.currentUser:userName;
     const rsu = getAllUserinfo(users);
 
     if (Object.keys(users).length > 0) {

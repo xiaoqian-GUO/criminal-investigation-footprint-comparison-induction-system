@@ -1,5 +1,6 @@
 import { Upload, Icon, message } from 'antd';
 import './Avatar.less';
+import { connect } from 'dva';
 
 function getBase64(img, callback) {
   const reader = new FileReader();
@@ -19,22 +20,32 @@ function beforeUpload(file) {
   return isJPG && isLt2M;
 }
 
+@connect(({ collect }) => ({
+  imageUrl:collect.imageUrl,
+}))
 class Avatar extends React.Component {
   state = {
     loading: false,
   };
 
   handleChange = (info) => {
+    const { dispatch } = this.props;
     if (info.file.status === 'uploading') {
       this.setState({ loading: true });
       return;
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl => this.setState({
-        imageUrl,
-        loading: false,
-      }));
+      getBase64(info.file.originFileObj, imageUrl => {
+        this.setState({
+          imageUrl,
+          loading: false,
+        })
+        dispatch({
+          type:"collect/getImageUrl",
+          payload:imageUrl,
+        });
+      });
     }
   }
   componentDidMount(){
@@ -47,7 +58,7 @@ class Avatar extends React.Component {
         <div className="ant-upload-text">点击上传图片</div>
       </div>
     );
-    const imageUrl = this.state.imageUrl;
+    const imageUrl = this.props.imageUrl;
     return (
         <div id={this.props.id}>
             {imageUrl ? <img src={imageUrl} alt="&nbsp;&nbsp;请重新上传图片" /> : null}

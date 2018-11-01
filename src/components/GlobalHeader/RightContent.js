@@ -76,10 +76,13 @@ export default class GlobalHeaderRight extends PureComponent {
       </Menu>
     );
     const noticeData = this.getNoticeData();
+    const currentUsername=localStorage.getItem("login") || "";
+    const avatar="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png";
     let className = styles.right;
     if (theme === 'dark') {
       className = `${styles.right}  ${styles.dark}`;
     }
+
     return (
       <div className={className}>
         <HeaderSearch
@@ -144,16 +147,16 @@ export default class GlobalHeaderRight extends PureComponent {
             emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
           />
         </NoticeIcon> */}
-        {rightContent.name?(
+        {currentUsername?(
           <Dropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>
               <Avatar
                 size="small"
                 className={styles.avatar}
-                src={rightContent.avatar}
+                src={avatar}
                 alt="avatar"
               />
-              <span className={styles.name}>{rightContent.name}</span>
+              <span className={styles.name}>{currentUsername}</span>
             </span>
           </Dropdown>
         ):null

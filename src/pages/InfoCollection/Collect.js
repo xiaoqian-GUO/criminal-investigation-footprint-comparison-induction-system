@@ -12,6 +12,10 @@ function onChange(date, dateString) {
   console.log(date.format(), dateString);
 }
 
+@connect(({ collect }) => ({
+  imageUrl:collect.imageUrl,
+  hasPic:collect.hasPic,
+}))
 class Collect extends React.Component {
   constructor(){
     super();
@@ -39,10 +43,19 @@ class Collect extends React.Component {
       details:bol,
     });
   }
-  onTimeChange=(e)=>{
-    this.setState({
-      timeText:e,
-    });
+  onTimeChange=(date)=>{
+    if(!date){
+      this.setState({
+        timeText:date,
+        time:true,
+      });
+    }
+    else{
+      this.setState({
+        timeText:date,
+        time:false,
+      });
+    }
   }
   onLocationChange=(e)=>{
     var bol=e.target.value==""?true:false;
@@ -103,9 +116,10 @@ class Collect extends React.Component {
                 <Avatar id="upload" />
               </div>
 
-              {this.state.picture?(
-                <div className={styles.alertStyle}>
-                    <Alert message="请上传图片" type="error" showIcon />
+              {this.props.hasPic?(
+                <div className={styles.errorStyle}>
+                * 请上传图片
+                    {/* <Alert />message="请上传图片" type="error" showIcon /> */}
                 </div>
               ):null}
                 
@@ -117,8 +131,9 @@ class Collect extends React.Component {
               </div>
 
               {this.state.details?(
-                <div className={styles.alertStyle}>
-                    <Alert message="请填写案件详情" type="error" showIcon />
+                <div className={styles.errorStyle}>
+                * 请填写案件详情
+                    {/* <Alert message="请填写案件详情" type="error" showIcon /> */}
                 </div>
               ):null}
               
@@ -130,8 +145,9 @@ class Collect extends React.Component {
               </div>
 
               {this.state.time?(
-                <div className={styles.alertStyle}>
-                    <Alert message="请选择时间" type="error" showIcon />
+                <div className={styles.errorStyle}>
+                * 请选择时间
+                    {/* <Alert message="请选择时间" type="error" showIcon /> */}
                 </div>
               ):null}
 
@@ -143,8 +159,9 @@ class Collect extends React.Component {
               </div>
 
               {this.state.location?(
-                <div className={styles.alertStyle}>
-                    <Alert message="请填写地点" type="error" showIcon />
+                <div className={styles.errorStyle}>
+                * 请填写地点
+                    {/* <Alert message="请填写地点" type="error" showIcon /> */}
                 </div>
               ):null}
 
@@ -156,8 +173,9 @@ class Collect extends React.Component {
               </div>
 
               {this.state.collectType?(
-                <div className={styles.alertStyle}>
-                    <Alert message="请填写足迹采集方式" type="error" showIcon />
+                <div className={styles.errorStyle}>
+                * 请填写足迹采集方式
+                    {/* <Alert message="请填写足迹采集方式" type="error" showIcon /> */}
                 </div>
               ):null}
 
@@ -169,8 +187,9 @@ class Collect extends React.Component {
               </div>
 
               {this.state.leaveType?(
-                <div className={styles.alertStyle}>
-                    <Alert message="请填写足迹遗留方式" type="error" showIcon />
+                <div className={styles.errorStyle}>
+                * 请填写足迹遗留方式
+                    {/* <Alert message="请填写足迹遗留方式" type="error" showIcon /> */}
                 </div>
               ):null}
 
@@ -195,17 +214,23 @@ class Collect extends React.Component {
                   <div className={styles.leftContent}>
                       <Button type="primary" onClick={()=>{
                             const rsu=this.state.result;
+                            const { dispatch } = this.props;
                             if(rsu){
                               if(this.state.resultStatus){
                                   // 如果是信息提交成功，则再次点击按钮就是清除图片
-                                  var ele=document.getElementById('upload');
-                                  var img=ele.getElementsByTagName('img');
-                                  if(img.length>=0){
-                                      var ele=img[0];
-                                      var par=ele.parentNode;
-                                      //par.removeChild(ele);
-                                      ele.src="";
-                                  }
+                                  // var ele=document.getElementById('upload');
+                                  // var img=ele.getElementsByTagName('img');
+                                  // if(img.length>=0){
+                                  //     var ele=img[0];
+                                  //     var par=ele.parentNode;
+                                  //     //par.removeChild(ele);
+                                  //     ele.src="";
+                                  // }
+
+                                  // 调用dispatch清除图片
+                                  dispatch({
+                                    type:"collect/clearImageUrl",
+                                  });
                                   this.setState({
                                     picture:false,
                                     details:false,
@@ -231,15 +256,14 @@ class Collect extends React.Component {
                             }
                             else{
                               //首先判断是否信息输入完整
-                              console.log(this.state);
-                              var bolPic=false,bolDetils=false,bolTime=false,bolLoc=false,bolCol=false,bolLeave=false;
-                              var ele=document.getElementById('upload');
-                              var img=ele.getElementsByTagName('img');
-                              if(img.length==0){
-                                  bolPic=true;
-                                  // var ele=img[0];
-                                  // var par=ele.parentNode;
-                                  // par.removeChild(ele);
+                              let bolPic=false,bolDetils=false,bolTime=false,bolLoc=false,bolCol=false,bolLeave=false;
+                              // var ele=document.getElementById('upload');
+                              // var img=ele.getElementsByTagName('img');
+                              const { imageUrl, dispatch } = this.props;
+                              if(imageUrl===""){
+                                  dispatch({
+                                    type:"collect/appearWarning",
+                                  });
                               }
                               var {detailsText,timeText,locationText,leaveTypeText,collectTypeText}=this.state;
                               if(!detailsText){
