@@ -5,6 +5,7 @@ import { Form, Breadcrumb, Alert,Input, Icon, Upload, message, Button,DatePicker
 import styles from './Collect.less';
 import Avatar from './Avatar';
 import moment from 'moment';
+import { collectPrintInfo } from '@/services/user';
 import './Avatar.less';
 
 const { TextArea } = Input;
@@ -89,6 +90,7 @@ class Collect extends React.Component {
     }
   }
   render() {
+    const { imageUrl, dispatch } = this.props;
     const fileList = [];
     const props1 = {
       action: '//jsonplaceholder.typicode.com/posts/',
@@ -250,16 +252,44 @@ class Collect extends React.Component {
                               }
                               else{
                                   // 如果为false，则表示上传失败，可以点击重新上传
+                                   //获取表单所有数据，重新发送请求
+                                   const {detailsText:detail, timeText:time, locationText:location, collectTypeText:gatherMethod, leaveTypeText:leaveMethod} = this.state;
+                                   let milliseconds=time?new Date(time.format()).getTime():null;
+                                   const params = {footprintImage:imageUrl, detail, time:milliseconds, location, gatherMethod, leaveMethod};
+                                   
+                                   let res=collectPrintInfo(params);
+                                   res.then((response)=>{
+                                     if(response.status==="ok"){
+                                         this.setState({
+                                             picture:false,
+                                             details:false,
+                                             time:false,
+                                             location:false,
+                                             collectType:false,
+                                             leaveType:false,
+                                             result:true,
+                                             buttonText:"再次采集足迹",
+                                             resultStatus:true,
+                                         });
+                                       }
+                                       else{
+                                         this.setState({
+                                             result:true,
+                                             buttonText:"再次点击上传",
+                                             resultStatus:false,
+                                         });
+                                       }
+                                     // end:信息上传失败
+                                   });
 
-                              }
-                              
+                                }
                             }
                             else{
                               //首先判断是否信息输入完整
                               let bolPic=false,bolDetils=false,bolTime=false,bolLoc=false,bolCol=false,bolLeave=false;
                               // var ele=document.getElementById('upload');
                               // var img=ele.getElementsByTagName('img');
-                              const { imageUrl, dispatch } = this.props;
+                              
                               if(imageUrl===""){
                                   dispatch({
                                     type:"collect/appearWarning",
@@ -296,27 +326,36 @@ class Collect extends React.Component {
                               }
                               else{
                                   //如果信息输入完整，再去上传信息，若信息也上传保存成功，则清空表单，再次上传
-                                  if(true){
-                                    this.setState({
-                                        picture:false,
-                                        details:false,
-                                        time:false,
-                                        location:false,
-                                        collectType:false,
-                                        leaveType:false,
-                                        result:true,
-                                        buttonText:"再次采集足迹",
-                                        resultStatus:true,
-                                    });
-                                  }
-                                  else{
-                                    this.setState({
-                                        result:true,
-                                        buttonText:"再次点击上传",
-                                        resultStatus:false,
-                                    });
-                                  }
-                                // end:信息上传失败 
+                                  //获取表单所有数据，发送请求
+                                  const {detailsText:detail, timeText:time, locationText:location, collectTypeText:gatherMethod, leaveTypeText:leaveMethod} = this.state;
+                                  let milliseconds=time?new Date(time.format()).getTime():null;
+                                  const params = {footprintImage:imageUrl, detail, time:milliseconds, location, gatherMethod, leaveMethod};
+                                  
+                                  let res=collectPrintInfo(params);
+                                  res.then((response)=>{
+                                    if(response.status==="ok"){
+                                        this.setState({
+                                            picture:false,
+                                            details:false,
+                                            time:false,
+                                            location:false,
+                                            collectType:false,
+                                            leaveType:false,
+                                            result:true,
+                                            buttonText:"再次采集足迹",
+                                            resultStatus:true,
+                                        });
+                                      }
+                                      else{
+                                        this.setState({
+                                            result:true,
+                                            buttonText:"再次点击上传",
+                                            resultStatus:false,
+                                        });
+                                      }
+                                    // end:信息上传失败
+                                  });
+                                 
                               }
                             }
 

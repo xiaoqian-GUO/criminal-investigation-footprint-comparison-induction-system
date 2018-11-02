@@ -173,7 +173,19 @@ export default {
       });
     }
   },
-
+  'POST /api/collectPrintInfo': (req, res) => {
+    const { footprintImage, detail, time, location, gatherMethod, leaveMethod } = req.body;
+    if(footprintImage && detail && time && location && gatherMethod && leaveMethod){
+      res.send({
+        status:'ok'
+      });
+    }
+    else{
+      res.send({
+        status:'error'
+      });
+    }
+  },
 
 
 };
