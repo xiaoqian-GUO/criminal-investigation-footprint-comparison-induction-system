@@ -13,21 +13,28 @@ export default {
   'GET /api/users': [
     {
       key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
+      username: 'John Brown',
+      authority: 'admin',
     },
     {
       key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
+      username: 'John',
+      authority: 'user',
     },
     {
       key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
+      username: ' Brown',
+      authority: 'admin',
+    },
+    {
+      key: '4',
+      username: ' daipeng',
+      authority: 'admin',
+    },
+    {
+      key: '5',
+      username: ' xiaoqian',
+      authority: 'admin',
     },
   ],
   'POST /api/login/account': (req, res) => {
@@ -74,7 +81,6 @@ export default {
     });
   },
 
-
   'POST /api/register': (req, res) => {
     res.send({ status: 'ok', currentAuthority: 'user' });
   },
@@ -116,7 +122,7 @@ export default {
   },
   'POST /api/getCurrentUser': (req, res) => {
     const { currentUser } = req.body;
-    if (currentUser=="admin") {
+    if (currentUser == 'admin') {
       res.send({
         name: 'daipeng',
         username: 'admin',
@@ -130,8 +136,7 @@ export default {
         // email: 'antdesign@alipay.com',
       });
       return;
-    }
-    else{
+    } else {
       res.send({
         name: 'user',
         username: 'xiaoqian',
@@ -148,32 +153,27 @@ export default {
     }
   },
   'POST /api/updateUserInfo': (req, res) => {
-    const {name, username, insitution, phone, userId,email} = req.body;
-    if(username){
+    const { name, username, insitution, phone, userId, email } = req.body;
+    if (username) {
       res.send({
-        status:'ok'
+        status: 'ok',
       });
-    }
-    else{
+    } else {
       res.send({
-        status:'error'
+        status: 'error',
       });
     }
   },
   'POST /api/updatePwd': (req, res) => {
-    const {newpwd,username } = req.body;
-    if(username){
+    const { newpwd, username } = req.body;
+    if (username) {
       res.send({
-        status:'ok'
+        status: 'ok',
       });
-    }
-    else{
+    } else {
       res.send({
-        status:'error'
+        status: 'error',
       });
     }
   },
-
-
-
 };
