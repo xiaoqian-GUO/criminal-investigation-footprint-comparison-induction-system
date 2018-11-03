@@ -14,29 +14,43 @@ export default {
     {
       key: '1',
       username: 'John Brown',
+      password: '123456',
       authority: 'admin',
     },
     {
       key: '2',
       username: 'John',
+      password: '123456',
       authority: 'user',
     },
     {
       key: '3',
       username: ' Brown',
+      password: '123456',
       authority: 'admin',
     },
     {
       key: '4',
       username: ' daipeng',
+      password: '123456',
       authority: 'admin',
     },
     {
       key: '5',
       username: ' xiaoqian',
+      password: '123456',
       authority: 'admin',
     },
   ],
+
+  'POST /api/addUser': {
+    status: 'ok',
+  },
+
+  'POST /api/deleteUser': {
+    status: 'ok',
+  },
+
   'POST /api/login/account': (req, res) => {
     const { password, userName } = req.body;
     if (password === '888888' && userName === 'admin') {
@@ -153,7 +167,7 @@ export default {
     }
   },
   'POST /api/updateUserInfo': (req, res) => {
-    const { name, username, insitution, phone, userId, email } = req.body;
+    const { username } = req.body;
     if (username) {
       res.send({
         status: 'ok',
