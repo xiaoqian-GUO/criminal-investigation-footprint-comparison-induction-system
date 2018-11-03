@@ -3,30 +3,24 @@ import { Table, Button, Modal } from 'antd';
 import { connect } from 'dva';
 import LocalizedModal from './LocalizedModal';
 
-function lockConfirm() {
-  Modal.confirm({
-    title: '确认要锁定该用户吗？',
-    content: '点击确认后该用户将被锁定',
-    onOk() {
-      return new Promise((resolve, reject) => {
-        setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-      }).catch(() => console.log('Oops errors!'));
-    },
-    onCancel() {},
-  });
-}
-@connect(({ userManagement, loading }) => {
-  return {
-    data: userManagement.data,
-    loading: loading.effects['userManagement/fetchAllUsers'],
-  };
-})
+@connect(({ userManagement, loading }) => ({
+  data: userManagement.data,
+  loading: loading.effects['userManagement/fetchAllUsers'],
+}))
 class TableList extends Component {
   // 表头数据
   columns = [
     {
+      title: 'key',
+      dataIndex: 'key',
+    },
+    {
       title: '用户名',
       dataIndex: 'username',
+    },
+    {
+      title: '密码',
+      dataIndex: 'password',
     },
     {
       title: '角色',
@@ -38,7 +32,7 @@ class TableList extends Component {
       render: (text, record) => (
         <span>
           <LocalizedModal text="Edit" data={record} />
-          <Button onClick={lockConfirm}>Lock</Button>
+          <Button onClick={() => this.lockConfirm(record.key)}>Lock</Button>
           <Button type="danger" onClick={() => this.deleteConfirm(record.key)}>
             Delete
           </Button>
@@ -52,6 +46,22 @@ class TableList extends Component {
     // 获取用户数据
     dispatch({ type: 'userManagement/fetchAllUsers' });
   }
+
+  lockConfirm = key => {
+    const that = this;
+    Modal.confirm({
+      title: '确认要锁定该用户吗？',
+      content: '点击确认后该用户将被锁定',
+      onOk() {
+        const { dispatch } = that.props;
+        dispatch({
+          type: 'userManagement/lockUser',
+          payload: key,
+        });
+      },
+      onCancel() {},
+    });
+  };
 
   deleteConfirm = key => {
     const that = this;

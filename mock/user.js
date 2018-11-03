@@ -51,6 +51,10 @@ export default {
     status: 'ok',
   },
 
+  'POST /api/lockUser': {
+    status: 'ok',
+  },
+
   'POST /api/login/account': (req, res) => {
     const { password, userName } = req.body;
     if (password === '888888' && userName === 'admin') {
@@ -136,7 +140,7 @@ export default {
   },
   'POST /api/getCurrentUser': (req, res) => {
     const { currentUser } = req.body;
-    if (currentUser == 'admin') {
+    if (currentUser === 'admin') {
       res.send({
         name: 'daipeng',
         username: 'admin',
@@ -149,7 +153,6 @@ export default {
         userid: '00000001',
         // email: 'antdesign@alipay.com',
       });
-      return;
     } else {
       res.send({
         name: 'user',
@@ -163,7 +166,6 @@ export default {
         userid: '00000001',
         // email: 'antdesign@alipay.com',
       });
-      return;
     }
   },
   'POST /api/updateUserInfo': (req, res) => {

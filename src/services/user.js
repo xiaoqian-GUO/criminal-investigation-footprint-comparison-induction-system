@@ -22,6 +22,13 @@ export function deleteUser(params) {
   });
 }
 
+export function lockUser(params) {
+  return request('/api/lockUser', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export function getAllUserinfo(params) {
   return request('/api/getCurrentUser', {
     method: 'POST',

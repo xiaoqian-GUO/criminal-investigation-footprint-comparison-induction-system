@@ -3,6 +3,7 @@ import {
   deleteUser as delUser,
   updateUserInfo,
   addUser,
+  lockUser,
 } from '@/services/user';
 import { Modal } from 'antd';
 
@@ -48,18 +49,32 @@ export default {
         Modal.error({ title: 'This is an error message', content: '更新失败' });
       }
     },
+    // 锁定某个用户
+    *lockUser({ payload }, { call }) {
+      const response = yield call(lockUser, payload);
+      if (response.status === 'ok') {
+        Modal.success({ title: 'This is a success message', content: '锁定成功' });
+        // 锁定后本地state 无需做出变更
+        // yield put({
+        //   type: 'lockUser',
+        //   payload,
+        // });
+      } else {
+        Modal.error({ title: 'This is an error message', content: '锁定失败' });
+      }
+    },
     // 删除某个用户
     *deleteUser({ payload }, { call, put }) {
       const response = yield call(delUser, payload);
       if (response.status === 'ok') {
         Modal.success({ title: 'This is a success message', content: '删除成功' });
+        yield put({
+          type: 'delUser',
+          payload,
+        });
       } else {
         Modal.error({ title: 'This is an error message', content: '删除失败' });
       }
-      // 删除操作再次请求加载数据
-      yield put({
-        type: 'fetchAllUsers',
-      });
     },
   },
 
@@ -70,7 +85,14 @@ export default {
         data: payload,
       };
     },
-    updateUser(state, { payload }) {},
+    updateUser(state, { payload }) {
+      const { data } = state;
+      const newData = data.map(item => (item.key === payload.key ? payload : item));
+      return {
+        ...state,
+        data: newData,
+      };
+    },
     addNewUser(state, { payload }) {
       const { data } = state;
       const newData = data.concat({
@@ -80,6 +102,14 @@ export default {
       return {
         ...state,
         data: newData,
+      };
+    },
+    delUser(state, { payload: delKey }) {
+      const { data } = state;
+      const newDate = data.filter(item => item.key !== delKey);
+      return {
+        ...state,
+        data: newDate,
       };
     },
   },

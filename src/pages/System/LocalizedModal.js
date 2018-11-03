@@ -21,6 +21,7 @@ class LocalizedModal extends React.Component {
 
     if (text === 'Edit') {
       setFieldsValue({
+        key: data.key,
         username: data.username,
         password: data.password,
         authority: data.authority,
@@ -43,6 +44,7 @@ class LocalizedModal extends React.Component {
   submitEdit = () => {
     const {
       dispatch,
+      data,
       form: { validateFields },
     } = this.props;
 
@@ -51,7 +53,10 @@ class LocalizedModal extends React.Component {
       if (!err) {
         dispatch({
           type: 'userManagement/editUser',
-          payload: values,
+          payload: {
+            ...values,
+            key: data.key,
+          },
         });
         // 重置 `visible` 属性为 false 以关闭对话框
         this.setState({ visible: false });
@@ -111,6 +116,7 @@ class LocalizedModal extends React.Component {
           cancelText="取消"
         >
           <Form>
+            {/* <FormItem label="key">{getFieldDecorator('key', {})(<Input />)}</FormItem> */}
             <FormItem label="用户名">
               {getFieldDecorator('username', {
                 rules: [{ required: true }],

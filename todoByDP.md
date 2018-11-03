@@ -22,6 +22,7 @@
 {
     key: '1', // 唯一标识该条记录的 key
     username: 'John Brown',// 用户名
+    password: '123456'
     authority: 'admin',// 用户角色 
 }
 ```
