@@ -40,3 +40,10 @@ export function updatePwd(params) {
     body: params,
   });
 }
+// 采集足迹信息
+export function collectPrintInfo(params) {
+  return request('/api/collectPrintInfo', {
+    method: 'POST',
+    body: params,
+  });
+}
