@@ -8,20 +8,34 @@ export async function queryCurrent() {
   return request('/api/currentUser');
 }
 
+export function addUser(params) {
+  return request('/api/addUser', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export function deleteUser(params) {
+  return request('/api/deleteUser', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export function getAllUserinfo(params) {
-  return request('/api/getCurrentUser',{
+  return request('/api/getCurrentUser', {
     method: 'POST',
     body: params,
   });
 }
 export function updateUserInfo(params) {
-  return request('/api/updateUserInfo',{
+  return request('/api/updateUserInfo', {
     method: 'POST',
     body: params,
   });
 }
 export function updatePwd(params) {
-  return request('/api/updatePwd',{
+  return request('/api/updatePwd', {
     method: 'POST',
     body: params,
   });
