@@ -3,19 +3,6 @@ import { Table, Button, Modal } from 'antd';
 import { connect } from 'dva';
 import LocalizedModal from './LocalizedModal';
 
-function deleteConfirm() {
-  Modal.confirm({
-    title: '确认要删除该用户吗？',
-    content: '点击确认后该用户将被注销',
-    onOk() {
-      return new Promise((resolve, reject) => {
-        setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-      }).catch(() => console.log('Oops errors!'));
-    },
-    onCancel() {},
-  });
-}
-
 function lockConfirm() {
   Modal.confirm({
     title: '确认要锁定该用户吗？',
@@ -28,8 +15,11 @@ function lockConfirm() {
     onCancel() {},
   });
 }
-@connect(({ userManagement }) => {
-  return { data: userManagement.data };
+@connect(({ userManagement, loading }) => {
+  return {
+    data: userManagement.data,
+    loading: loading.effects['userManagement/fetchAllUsers'],
+  };
 })
 class TableList extends Component {
   // 表头数据
@@ -47,9 +37,9 @@ class TableList extends Component {
       key: 'action',
       render: (text, record) => (
         <span>
-          <LocalizedModal />
+          <LocalizedModal text="Edit" data={record} />
           <Button onClick={lockConfirm}>Lock</Button>
-          <Button type="danger" onClick={deleteConfirm}>
+          <Button type="danger" onClick={() => this.deleteConfirm(record.key)}>
             Delete
           </Button>
         </span>
@@ -60,8 +50,24 @@ class TableList extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     // 获取用户数据
-    dispatch({ type: 'userManagement/fetchAllUsers', payload: null });
+    dispatch({ type: 'userManagement/fetchAllUsers' });
   }
+
+  deleteConfirm = key => {
+    const that = this;
+    Modal.confirm({
+      title: '确认要删除该用户吗？',
+      content: '点击确认后该用户将被注销',
+      onOk() {
+        const { dispatch } = that.props;
+        dispatch({
+          type: 'userManagement/deleteUser',
+          payload: key,
+        });
+      },
+      onCancel() {},
+    });
+  };
 
   // 操作：编辑
   handleEdit = () => {};
@@ -79,11 +85,14 @@ class TableList extends Component {
   };
 
   render() {
-    const { data } = this.props;
+    const { data, loading } = this.props;
     return (
       <div>
         <h1>用户管理</h1>
-        <Table columns={this.columns} dataSource={data} />
+        <p>
+          <LocalizedModal text="新建用户" />
+        </p>
+        <Table columns={this.columns} dataSource={data} loading={loading} />
       </div>
     );
   }
