@@ -12,7 +12,8 @@ const FormItem = Form.Item;
 class LocalizedModal extends React.Component {
   state = { visible: false };
 
-  componentDidMount() {
+  handleClick = () => {
+    // this.showModal();
     const {
       form: { setFieldsValue },
       text,
@@ -27,7 +28,7 @@ class LocalizedModal extends React.Component {
         authority: data.authority,
       });
     }
-  }
+  };
 
   showModal = () => {
     this.setState({
@@ -104,7 +105,13 @@ class LocalizedModal extends React.Component {
 
     return (
       <span>
-        <Button type="primary" onClick={this.showModal}>
+        <Button
+          type="primary"
+          onClick={() => {
+            this.showModal();
+            this.handleClick();
+          }}
+        >
           {text}
         </Button>
         <Modal

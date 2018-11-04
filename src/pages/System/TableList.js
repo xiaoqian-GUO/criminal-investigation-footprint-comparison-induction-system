@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
-import { Table, Button, Modal } from 'antd';
+import { Table, Button, Modal, Input } from 'antd';
 import { connect } from 'dva';
 import LocalizedModal from './LocalizedModal';
 
+const { Search } = Input;
+
 @connect(({ userManagement, loading }) => ({
-  data: userManagement.data,
+  filterData: userManagement.filterData,
   loading: loading.effects['userManagement/fetchAllUsers'],
 }))
 class TableList extends Component {
   // 表头数据
   columns = [
-    {
-      title: 'key',
-      dataIndex: 'key',
-    },
     {
       title: '用户名',
       dataIndex: 'username',
@@ -25,10 +23,12 @@ class TableList extends Component {
     {
       title: '角色',
       dataIndex: 'authority',
+      width: 300,
     },
     {
       title: '操作',
       key: 'action',
+      width: 400,
       render: (text, record) => (
         <span>
           <LocalizedModal text="Edit" data={record} />
@@ -79,30 +79,34 @@ class TableList extends Component {
     });
   };
 
-  // 操作：编辑
-  handleEdit = () => {};
-
-  // 操作：锁定
-  handleLock = () => {};
-
-  // 操作：删除
-  handleDelete = () => {
-    this.showModal();
-  };
-
   handleCancel = () => {
     this.closeModel();
   };
 
+  handleSearch = value => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'userManagement/searchUser',
+      payload: value,
+    });
+  };
+
   render() {
-    const { data, loading } = this.props;
+    const { filterData, loading } = this.props;
     return (
       <div>
         <h1>用户管理</h1>
         <p>
           <LocalizedModal text="新建用户" />
         </p>
-        <Table columns={this.columns} dataSource={data} loading={loading} />
+        <Search
+          placeholder="input search text"
+          enterButton="Search"
+          size="large"
+          onSearch={this.handleSearch}
+        />
+
+        <Table columns={this.columns} dataSource={filterData} loading={loading} />
       </div>
     );
   }

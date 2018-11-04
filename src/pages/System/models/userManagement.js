@@ -11,7 +11,8 @@ export default {
   namespace: 'userManagement',
 
   state: {
-    data: [],
+    data: [], // 辅助筛查时的备份
+    filterData: [],
   },
 
   effects: {
@@ -83,18 +84,22 @@ export default {
       return {
         ...state,
         data: payload,
+        filterData: payload,
       };
     },
     updateUser(state, { payload }) {
-      const { data } = state;
+      const { filterData, data } = state;
       const newData = data.map(item => (item.key === payload.key ? payload : item));
+      const updatedFilterData = filterData.map(item => (item.key === payload.key ? payload : item));
       return {
         ...state,
         data: newData,
+        filterData: updatedFilterData,
       };
     },
     addNewUser(state, { payload }) {
       const { data } = state;
+
       const newData = data.concat({
         key: new Date().getTime(),
         ...payload,
@@ -102,14 +107,29 @@ export default {
       return {
         ...state,
         data: newData,
+        filterData: newData,
       };
     },
     delUser(state, { payload: delKey }) {
-      const { data } = state;
+      const { data, filterData } = state;
       const newDate = data.filter(item => item.key !== delKey);
+      const updatedFilterData = filterData.filter(item => item.key !== delKey);
       return {
         ...state,
         data: newDate,
+        filterData: updatedFilterData,
+      };
+    },
+    searchUser(state, { payload: searchKey }) {
+      const { data } = state;
+      const filterData = data.filter(item => {
+        const reg = new RegExp(searchKey, 'i');
+        const index = item.username.search(reg);
+        return index !== -1;
+      });
+      return {
+        ...state,
+        filterData,
       };
     },
   },

@@ -41,6 +41,12 @@ export default {
       password: '123456',
       authority: 'admin',
     },
+    {
+      key: 'fdsjf',
+      username: 'df',
+      password: '4324',
+      authority: 'admin',
+    },
   ],
 
   'POST /api/addUser': {
