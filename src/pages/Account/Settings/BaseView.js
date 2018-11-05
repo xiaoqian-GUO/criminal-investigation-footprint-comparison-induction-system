@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Form, Input, Button, Alert } from 'antd';
+import { Form, Input, Button, Alert, message } from 'antd';
 import { connect } from 'dva';
 import { getAllUserinfo, updateUserInfo } from '@/services/user';
 import styles from './BaseView.less';
@@ -103,6 +103,7 @@ class BaseView extends Component {
       });
     } else {
       // 信息不完整 不允许提交
+      message.error("信息输入不完整，请按照要求完整输入!");
     }
   };
 
@@ -186,7 +187,7 @@ class BaseView extends Component {
             </FormItem>
             {result ? (
               <div className={styles.resultText}>
-                <Alert type="success" message="信息更新成功, 3秒后自动消失..." banner showIcon />
+                <Alert type="success" message="信息更新成功, 3秒后自动消失~~~" banner showIcon />
               </div>
             ) : null}
             {errorResult ? (

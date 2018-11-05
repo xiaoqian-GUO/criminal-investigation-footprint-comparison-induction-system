@@ -372,6 +372,7 @@ class Collect extends React.Component {
                           buttonText: '提交足迹信息',
                           resultStatus: true,
                         });
+                        message.error("信息输入不完整，请按照要求完整输入信息!");
                       } else {
                         //如果信息输入完整，再去上传信息，若信息也上传保存成功，则清空表单，再次上传
                         //获取表单所有数据，发送请求
