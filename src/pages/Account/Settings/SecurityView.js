@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Form, Input, Button, Alert,List } from 'antd';
+import { Form, Input, Button, Alert, List, message } from 'antd';
 import { connect } from 'dva';
 import styles from './BaseView.less';
 import { updatePwd} from '@/services/user';
@@ -40,13 +40,7 @@ class SecurityView extends Component {
     };
   }
   componentDidMount() {
-    if(Object.keys(this.props.currentUsers).length>0){
-
-    }
-    else{
-      alert('认证失败，请重新登陆！');
-      window.location.href="/user/login";
-    }
+    
   }
   handleEmpty = () => {
     let { form, currentUsers } = this.props;
@@ -115,7 +109,7 @@ class SecurityView extends Component {
                 errorResult:false
               });
               this.emptyAll();
-            },3000);
+            },2000);
           }
           else if(response.status=="error"){
             this.setState({
@@ -131,7 +125,7 @@ class SecurityView extends Component {
     }
     else{
       // 信息不完整 不允许提交
-      
+      message.warning("信息输入不完整，请继续输入或放弃操作!");
     }
   }
   render() {
@@ -180,7 +174,7 @@ class SecurityView extends Component {
             {
               this.state.result?(
                 <div className={styles.resultText}>
-                    <Alert type="success" message="密码修改成功, 3秒后自动消失..." banner showIcon/>
+                    <Alert type="success" message="密码修改成功" banner showIcon/>
                 </div>
               ):null
             }

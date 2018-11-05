@@ -19,6 +19,13 @@ function beforeUpload(file) {
   }
   return isJPG && isLt2M;
 }
+function getRootPath(){
+  let url=location.href;
+  const pathname=window.location.pathname;
+  const index=url.indexOf(pathname);
+  let rootPath=url.slice(0,index);
+  return rootPath;
+}
 
 @connect(({ collect }) => ({
   imageUrl:collect.imageUrl,
@@ -59,6 +66,7 @@ class Avatar extends React.Component {
       </div>
     );
     const imageUrl = this.props.imageUrl;
+    const rootPath=getRootPath();
     return (
         <div id={this.props.id}>
             {imageUrl ? <img src={imageUrl} alt="&nbsp;&nbsp;请重新上传图片" /> : null}
@@ -67,7 +75,7 @@ class Avatar extends React.Component {
                 listType="picture-card"
                 className="avatar-uploader"
                 showUploadList={false}
-                action="http://localhost:8001/"
+                action={rootPath}
                 beforeUpload={beforeUpload}
                 onChange={this.handleChange}
             >
