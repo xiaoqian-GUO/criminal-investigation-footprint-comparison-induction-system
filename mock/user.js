@@ -13,23 +13,54 @@ export default {
   'GET /api/users': [
     {
       key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
+      username: 'John Brown',
+      password: '123456',
+      authority: 'admin',
     },
     {
       key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
+      username: 'John',
+      password: '123456',
+      authority: 'user',
     },
     {
       key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
+      username: ' Brown',
+      password: '123456',
+      authority: 'admin',
+    },
+    {
+      key: '4',
+      username: ' daipeng',
+      password: '123456',
+      authority: 'admin',
+    },
+    {
+      key: '5',
+      username: ' xiaoqian',
+      password: '123456',
+      authority: 'admin',
+    },
+    {
+      key: 'fdsjf',
+      username: 'df',
+      password: '4324',
+      authority: 'admin',
     },
   ],
+
+  'POST /api/addUser': {
+    status: 'ok',
+  },
+
+  'POST /api/deleteUser': {
+    status: 'ok',
+  },
+
+  'POST /api/lockUser': {
+    status: 'ok',
+  },
+
   'POST /api/login/account': (req, res) => {
     const { password, userName } = req.body;
     if (password === '888888' && userName === 'admin') {
@@ -74,7 +105,6 @@ export default {
     });
   },
 
-
   'POST /api/register': (req, res) => {
     res.send({ status: 'ok', currentAuthority: 'user' });
   },
@@ -116,7 +146,7 @@ export default {
   },
   'POST /api/getCurrentUser': (req, res) => {
     const { currentUser } = req.body;
-    if (currentUser=="admin") {
+    if (currentUser === 'admin') {
       res.send({
         name: 'daipeng',
         username: 'admin',
@@ -129,9 +159,7 @@ export default {
         userid: '00000001',
         // email: 'antdesign@alipay.com',
       });
-      return;
-    }
-    else{
+    } else {
       res.send({
         name: 'user',
         username: 'xiaoqian',
@@ -144,48 +172,42 @@ export default {
         userid: '00000001',
         // email: 'antdesign@alipay.com',
       });
-      return;
     }
   },
   'POST /api/updateUserInfo': (req, res) => {
-    const {name, username, insitution, phone, userId,email} = req.body;
-    if(username){
+    const { username } = req.body;
+    if (username) {
       res.send({
-        status:'ok'
+        status: 'ok',
       });
-    }
-    else{
+    } else {
       res.send({
-        status:'error'
+        status: 'error',
       });
     }
   },
   'POST /api/updatePwd': (req, res) => {
-    const {newpwd,username } = req.body;
-    if(username){
+    const { newpwd, username } = req.body;
+    if (username) {
       res.send({
-        status:'ok'
+        status: 'ok',
       });
-    }
-    else{
+    } else {
       res.send({
-        status:'error'
+        status: 'error',
       });
     }
   },
   'POST /api/collectPrintInfo': (req, res) => {
     const { footprintImage, detail, time, location, gatherMethod, leaveMethod } = req.body;
-    if(footprintImage && detail && time && location && gatherMethod && leaveMethod){
+    if (footprintImage && detail && time && location && gatherMethod && leaveMethod) {
       res.send({
-        status:'ok'
+        status: 'ok',
       });
-    }
-    else{
+    } else {
       res.send({
-        status:'error'
+        status: 'error',
       });
     }
   },
-
-
 };
