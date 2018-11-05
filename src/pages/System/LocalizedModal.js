@@ -20,7 +20,7 @@ class LocalizedModal extends React.Component {
       data,
     } = this.props;
 
-    if (text === 'Edit') {
+    if (text === '编辑') {
       setFieldsValue({
         key: data.key,
         username: data.username,
@@ -91,7 +91,7 @@ class LocalizedModal extends React.Component {
     } = this.props;
 
     let modalConfig;
-    if (text === 'Edit') {
+    if (text === '编辑') {
       modalConfig = {
         title: '修改用户',
         onOk: this.submitEdit,

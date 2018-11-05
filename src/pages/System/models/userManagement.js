@@ -51,17 +51,26 @@ export default {
       }
     },
     // 锁定某个用户
-    *lockUser({ payload }, { call }) {
+    *lockUser({ payload }, { call, put }) {
       const response = yield call(lockUser, payload);
       if (response.status === 'ok') {
-        Modal.success({ title: 'This is a success message', content: '锁定成功' });
+        if(payload.locked){
+          Modal.success({ title: 'This is a success message', content: '解除锁定成功' });
+        }
+        else{
+          Modal.success({ title: 'This is a success message', content: '锁定成功' });
+        }
+        yield put({
+          type: 'handleLock',
+          payload,
+        });
         // 锁定后本地state 无需做出变更
         // yield put({
         //   type: 'lockUser',
         //   payload,
         // });
       } else {
-        Modal.error({ title: 'This is an error message', content: '锁定失败' });
+        Modal.error({ title: 'This is an error message', content: '操作失败' });
       }
     },
     // 删除某个用户
@@ -132,5 +141,23 @@ export default {
         filterData,
       };
     },
+    handleLock(state, { payload }) {
+      const { data } = state;
+      let newData = [...data];
+      newData = newData.map((item) => {
+        if(item.key === payload.key){
+          item.locked=!item.locked;
+        }
+        return item;
+      });
+      return {
+        ...state,
+        data: newData,
+        filterData: newData,
+      };
+    }
+
+
+
   },
 };
