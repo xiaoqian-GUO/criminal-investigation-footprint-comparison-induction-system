@@ -33,16 +33,15 @@ class TableList extends Component {
       key: 'action',
       width: 400,
       render: (text, record) => (
-        <span>
-          <LocalizedModal text="编辑" data={record} />&nbsp;&nbsp;
+        <span className={styles['override-ant-btn']}>
+          <LocalizedModal text="编辑" data={record} />
           {
             record.locked ? (
               <Button onClick={() => this.lockConfirm(record.username, record.locked)}>解除锁定</Button>
             ) : (
-                <Button onClick={() => this.lockConfirm(record.username, record.locked)}>&nbsp;&nbsp;&nbsp;&nbsp;锁定&nbsp;&nbsp;&nbsp;&nbsp;</Button>
+                <Button onClick={() => this.lockConfirm(record.username, record.locked)}>锁定</Button>
               )
           }
-          &nbsp;&nbsp;
           <Button type="danger" onClick={() => this.deleteConfirm(record.username)}>
             删除
           </Button>
@@ -121,7 +120,7 @@ class TableList extends Component {
         <h1>用户管理</h1>
         <div className={styles.searchInput}>
           <Search
-            placeholder="input search text"
+            placeholder="根据用户名查询"
             enterButton="Search"
             onSearch={this.handleSearch}
           />

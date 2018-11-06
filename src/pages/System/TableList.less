@@ -2,3 +2,15 @@
     width:300px;
     margin-bottom: 16px;
 }
+
+.override-ant-btn {
+    // 覆盖 ant-d 样式
+    :global(.ant-btn) {
+        border-radius: 10px;
+        width: 100px;
+        margin-right:15px;
+        &:nth-child(3){
+            margin-right: 0;
+        }
+    }
+}
