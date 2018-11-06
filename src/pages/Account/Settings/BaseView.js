@@ -23,6 +23,7 @@ class BaseView extends Component {
     this.state = {
       result: false,
       errorResult: false,
+      locked: false,
     };
   }
 
@@ -36,11 +37,21 @@ class BaseView extends Component {
       rsu.then(response => {
         // console.log('显示当前用户的所有个人信息');
         // console.log(response);
-        this.setBaseInfo(response);
-        dispatch({
-          type: 'user/modifyUserInfo',
-          payload: response,
-        });
+        if(response.status === "ok"){
+          const data = response.data;
+          this.setState({
+            locked: data.locked,
+          });
+          this.setBaseInfo(data);
+          dispatch({
+            type: 'user/modifyUserInfo',
+            payload: data,
+          });
+        }
+        else{
+          message.error("获取用户信息失败");
+        }
+        
       });
     } else {
       alert('认证失败，请重新登陆！');
@@ -69,42 +80,49 @@ class BaseView extends Component {
       errorResult: false,
     });
     const { form } = this.props;
+    const { locked } = this.state;
     const formValue = form.getFieldsValue();
     let bol = true;
-    Object.keys(formValue).forEach(key => {
-      if (!formValue[key]) {
-        bol = false;
-      }
-    });
-
-    if (bol) {
-      // 如果bol为true的话，就可以提交数据，否则不允许提交
-      const rsu = updateUserInfo(formValue);
-      rsu.then(response => {
-        console.log(response);
-        if (response.status === 'ok') {
-          // 如果信息更新成功，则提示信息修改成功
-          this.setState({
-            result: true,
-            errorResult: false,
-          });
-          setTimeout(() => {
-            this.setState({
-              result: false,
-              errorResult: false,
-            });
-          }, 3000);
-        } else if (response.status === 'error') {
-          this.setState({
-            result: false,
-            errorResult: true,
-          });
+    if(locked){
+      message.error("用户已被锁定，不可修改信息");
+    }
+    else{
+      Object.keys(formValue).forEach(key => {
+        if (!formValue[key]) {
+          bol = false;
         }
       });
-    } else {
-      // 信息不完整 不允许提交
-      message.error("信息输入不完整，请按照要求完整输入!");
+  
+      if (bol) {
+        // 如果bol为true的话，就可以提交数据，否则不允许提交
+        const rsu = updateUserInfo(formValue);
+        rsu.then(response => {
+          console.log(response);
+          if (response.status === 'ok') {
+            // 如果信息更新成功，则提示信息修改成功
+            this.setState({
+              result: true,
+              errorResult: false,
+            });
+            setTimeout(() => {
+              this.setState({
+                result: false,
+                errorResult: false,
+              });
+            }, 3000);
+          } else if (response.status === 'error') {
+            this.setState({
+              result: false,
+              errorResult: true,
+            });
+          }
+        });
+      } else {
+        // 信息不完整 不允许提交
+        message.error("信息输入不完整，请按照要求完整输入!");
+      }
     }
+    
   };
 
   render() {

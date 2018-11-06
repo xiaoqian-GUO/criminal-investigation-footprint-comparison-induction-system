@@ -64,7 +64,7 @@ class SecurityView extends Component {
     this.view = ref;
   };
   handleSubmit=()=>{
-    const { form } = this.props;
+    const { currentUsers, form } = this.props;
     let formValue = form.getFieldsValue();
     let bol=true;
     let rsu;
@@ -73,60 +73,67 @@ class SecurityView extends Component {
       result:false,
       errorResult:false,
     });
-    Object.keys(formValue).forEach(key => {
-      if(!formValue[key]){
-        bol=false;
-      }
-    });
-    
-    if(bol){
-      // 如果bol为true的话，就可以提交数据，否则不允许提交
-      if(formValue["newpwd"]!=formValue["newpwdAgain"]){
-        this.setState({
-          result:false,
-          errorResult:true,
-          errorText:"两次输入新密码不匹配，请重新输入",
-        });
-        this.handleEmpty();
-      }
-      else{
-        obj={
-          ...formValue,
-          username:localStorage.getItem("login"),
-        };
-        rsu=updatePwd(obj);
-        rsu.then((response)=>{
-          console.log(response);
-          if(response.status=="ok"){
-            // 如果信息更新成功，则提示信息修改成功
-            this.setState({
-              result:true,
-              errorResult:false
-            });
-            setTimeout(()=>{
-              this.setState({
-                result:false,
-                errorResult:false
-              });
-              this.emptyAll();
-            },2000);
-          }
-          else if(response.status=="error"){
-            this.setState({
-              result:false,
-              errorResult:true,
-              errorText:"密码更新失败，请重新确认旧密码",
-            });
-            this.emptyAll();
-          }
-        });
-      }
-      
+    if(currentUsers.locked){
+      message.error("用户已被锁定，不可修改密码");
     }
     else{
-      // 信息不完整 不允许提交
-      message.warning("信息输入不完整，请继续输入或放弃操作!");
+      Object.keys(formValue).forEach(key => {
+        if(!formValue[key]){
+          bol=false;
+        }
+      });
+      
+      if(bol){
+        // 如果bol为true的话，就可以提交数据，否则不允许提交
+        if(formValue["newpwd"]!=formValue["newpwdAgain"]){
+          this.setState({
+            result:false,
+            errorResult:true,
+            errorText:"两次输入新密码不匹配，请重新输入",
+          });
+          this.handleEmpty();
+        }
+        else{
+          obj={
+            ...formValue,
+            username:localStorage.getItem("login"),
+          };
+          rsu=updatePwd(obj);
+          rsu.then((response)=>{
+            console.log(response);
+            if(response.status=="ok"){
+              // 如果信息更新成功，则提示信息修改成功
+              this.setState({
+                result:true,
+                errorResult:false
+              });
+              setTimeout(()=>{
+                this.setState({
+                  result:false,
+                  errorResult:false
+                });
+                this.emptyAll();
+              },2000);
+            }
+            else if(response.status=="error"){
+              let text = response.errorInfo || "密码更新失败，请重新确认旧密码";
+              this.setState({
+                result: false,
+                errorResult: true,
+                errorText: text,
+              });
+              this.emptyAll();
+            }
+          });
+        }
+        
+      }
+      else{
+        // 信息不完整 不允许提交
+        message.warning("信息输入不完整，请继续输入或放弃操作!");
+      }
     }
+    
   }
   render() {
     const {

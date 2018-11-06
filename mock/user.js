@@ -154,29 +154,37 @@ export default {
     const { currentUser } = req.body;
     if (currentUser === 'admin') {
       res.send({
-        name: 'daipeng',
-        username: 'admin',
-        insitution: '西安电子科技大学',
-        phone: '18392089875',
-        userId: '1610122398',
-        email: '1843887878@163.com',
-        // name: 'Serati Ma',
-        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
-        userid: '00000001',
-        // email: 'antdesign@alipay.com',
+        status: 'ok',
+        data:{
+          name: 'daipeng',
+          username: 'admin',
+          insitution: '西安电子科技大学',
+          phone: '18392089875',
+          userId: '1610122398',
+          email: '1843887878@163.com',
+          // name: 'Serati Ma',
+          avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
+          userid: '00000001',
+          locked: false,
+          // email: 'antdesign@alipay.com',
+        }
       });
     } else {
       res.send({
-        name: 'user',
-        username: 'xiaoqian',
-        insitution: '西安电子科技大学',
-        phone: '18392089875',
-        userId: '1610122604',
-        email: '18392089875@163.com',
-        // name: 'Serati Ma',
-        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
-        userid: '00000001',
-        // email: 'antdesign@alipay.com',
+        status: 'ok',
+        data: {
+          name: 'user',
+          username: 'xiaoqian',
+          insitution: '西安电子科技大学',
+          phone: '18392089875',
+          userId: '1610122604',
+          email: '18392089875@163.com',
+          // name: 'Serati Ma',
+          avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
+          userid: '00000001',
+          locked: true,
+          // email: 'antdesign@alipay.com',
+        }
       });
     }
   },
@@ -197,10 +205,12 @@ export default {
     if (username) {
       res.send({
         status: 'ok',
+        errorInfo: "",
       });
     } else {
       res.send({
         status: 'error',
+        errorInfo: "用户已被锁定，不允许修改",
       });
     }
   },

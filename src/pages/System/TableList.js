@@ -37,9 +37,9 @@ class TableList extends Component {
           <LocalizedModal text="编辑" data={record} />&nbsp;&nbsp;
           {
             record.locked?(
-              <Button onClick={() => this.lockConfirm(record.key, record.locked)}>解除锁定</Button>
+              <Button onClick={() => this.lockConfirm(record.username, record.locked)}>解除锁定</Button>
             ):(
-              <Button onClick={() => this.lockConfirm(record.key, record.locked)}>&nbsp;&nbsp;&nbsp;&nbsp;锁定&nbsp;&nbsp;&nbsp;&nbsp;</Button>
+              <Button onClick={() => this.lockConfirm(record.username, record.locked)}>&nbsp;&nbsp;&nbsp;&nbsp;锁定&nbsp;&nbsp;&nbsp;&nbsp;</Button>
             )
           }
           &nbsp;&nbsp;
@@ -57,7 +57,7 @@ class TableList extends Component {
     dispatch({ type: 'userManagement/fetchAllUsers' });
   }
 
-  lockConfirm = (key, locked) => {
+  lockConfirm = (username, locked) => {
     const that = this;
     let modalConfig;
     if(locked){
@@ -79,7 +79,7 @@ class TableList extends Component {
         const { dispatch } = that.props;
         dispatch({
           type: 'userManagement/lockUser',
-          payload: {key, locked},
+          payload: {username, locked},
         });
       },
       onCancel() {},

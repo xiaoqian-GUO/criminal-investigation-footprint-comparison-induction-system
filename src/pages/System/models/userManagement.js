@@ -145,7 +145,7 @@ export default {
       const { data } = state;
       let newData = [...data];
       newData = newData.map((item) => {
-        if(item.key === payload.key){
+        if(item.username === payload.username){
           item.locked=!item.locked;
         }
         return item;
