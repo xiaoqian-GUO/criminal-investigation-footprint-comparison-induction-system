@@ -133,7 +133,7 @@ class LoginPage extends Component {
               });
               var authority=response.status==="0"?"admin":"user";
               localStorage.setItem("antd-pro-authority",authority);
-              localStorage.setItem("login",response.currentUser);
+              localStorage.setItem("login",username);
               dispatch({
                 type:"login/changeLoginAuthority",
                 payload:{},
