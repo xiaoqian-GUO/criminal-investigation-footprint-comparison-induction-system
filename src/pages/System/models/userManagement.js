@@ -26,15 +26,21 @@ export default {
     },
     // 添加单个用户
     *addUser({ payload }, { call, put }) {
-      const response = yield call(addUser, payload);
-      if (response.status === 'ok') {
-        Modal.success({ title: 'This is a success message', content: '新建成功' });
-        yield put({
-          type: 'addNewUser',
-          payload,
-        });
+      const data = yield call(queryUsers);
+      // 判断有没有重复的 username
+      if (data.every(item => item.username !== payload.username)) {
+        const response = yield call(addUser, payload);
+        if (response.status === 'ok') {
+          Modal.success({ title: 'This is a success message', content: '新建成功' });
+          yield put({
+            type: 'addNewUser',
+            payload,
+          });
+        } else {
+          Modal.error({ title: 'This is an error message', content: '新建失败' });
+        }
       } else {
-        Modal.error({ title: 'This is an error message', content: '新建失败' });
+        Modal.error({ title: 'This is an error message', content: '用户名重复' });
       }
     },
     // 编辑

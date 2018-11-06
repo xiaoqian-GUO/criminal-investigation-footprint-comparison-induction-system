@@ -76,3 +76,4 @@ addNewUser(state, { payload }) {
 1. 用户列表 用 key 作为主键，与username 同一个值（和后端统一数据格式）
 2. lock 操作锁定+解锁
 3. 用户名不可修改
+4. 添加重复用户名不能成功
