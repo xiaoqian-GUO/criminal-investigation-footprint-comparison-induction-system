@@ -13,7 +13,6 @@ export function getAuthority(str) {
   if (typeof authority === 'string') {
     return [authority];
   }
-  console.log(Authority);
   return authority;
 }
 

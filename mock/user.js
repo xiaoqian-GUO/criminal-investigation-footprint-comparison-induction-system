@@ -90,15 +90,15 @@ export default {
   },
 
   'POST /api/login/accountlogin': (req, res) => {
-    const { password, userName } = req.body;
-    if (password === '888888' && userName === 'admin') {
+    const { password, username } = req.body;
+    if (password === '888888' && username === 'admin') {
       res.send({
         status: '0',
         currentUser: 'admin',
       });
       return;
     }
-    if (password === '123456' && userName === 'user') {
+    if (password === '123456' && username === 'user') {
       res.send({
         status: '1',
         currentUser: 'user',
@@ -107,7 +107,7 @@ export default {
     }
     res.send({
       status: 'error',
-      currentAuthority: 'guest',
+      currentUser: 'guest',
     });
   },
 
