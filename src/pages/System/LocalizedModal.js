@@ -27,6 +27,13 @@ class LocalizedModal extends React.Component {
         authority: data.authority,
       });
     }
+    else{
+        setFieldsValue({
+            username:"",
+            password:"",
+            authority:"",
+        });
+    }
   };
 
   showModal = () => {
