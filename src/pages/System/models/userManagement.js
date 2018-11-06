@@ -24,6 +24,7 @@ export default {
         payload: response,
       });
     },
+    // 添加单个用户
     *addUser({ payload }, { call, put }) {
       const response = yield call(addUser, payload);
       if (response.status === 'ok') {
@@ -32,12 +33,11 @@ export default {
           type: 'addNewUser',
           payload,
         });
-        // TODO 生产环境无法模拟 key 需重新获取
-        // yield put({ type:'fetchAllUsers'});
       } else {
         Modal.error({ title: 'This is an error message', content: '新建失败' });
       }
     },
+    // 编辑
     *editUser({ payload }, { call, put }) {
       const response = yield call(updateUserInfo, payload);
       if (response.status === 'ok') {
@@ -54,21 +54,17 @@ export default {
     *lockUser({ payload }, { call, put }) {
       const response = yield call(lockUser, payload);
       if (response.status === 'ok') {
-        if(payload.locked){
+        if (payload.locked) {
           Modal.success({ title: 'This is a success message', content: '解除锁定成功' });
         }
-        else{
+        else {
           Modal.success({ title: 'This is a success message', content: '锁定成功' });
         }
         yield put({
           type: 'handleLock',
           payload,
         });
-        // 锁定后本地state 无需做出变更
-        // yield put({
-        //   type: 'lockUser',
-        //   payload,
-        // });
+
       } else {
         Modal.error({ title: 'This is an error message', content: '操作失败' });
       }
@@ -98,8 +94,8 @@ export default {
     },
     updateUser(state, { payload }) {
       const { filterData, data } = state;
-      const newData = data.map(item => (item.key === payload.key ? payload : item));
-      const updatedFilterData = filterData.map(item => (item.key === payload.key ? payload : item));
+      const newData = data.map(item => (item.username === payload.username ? payload : item));
+      const updatedFilterData = filterData.map(item => (item.username === payload.username ? payload : item));
       return {
         ...state,
         data: newData,
@@ -108,9 +104,7 @@ export default {
     },
     addNewUser(state, { payload }) {
       const { data } = state;
-
       const newData = data.concat({
-        key: new Date().getTime(),
         ...payload,
       });
       return {
@@ -121,8 +115,8 @@ export default {
     },
     delUser(state, { payload: delKey }) {
       const { data, filterData } = state;
-      const newDate = data.filter(item => item.key !== delKey);
-      const updatedFilterData = filterData.filter(item => item.key !== delKey);
+      const newDate = data.filter(item => item.username !== delKey);
+      const updatedFilterData = filterData.filter(item => item.username !== delKey);
       return {
         ...state,
         data: newDate,
@@ -143,10 +137,9 @@ export default {
     },
     handleLock(state, { payload }) {
       const { data } = state;
-      let newData = [...data];
-      newData = newData.map((item) => {
-        if(item.username === payload.username){
-          item.locked=!item.locked;
+      const newData = data.map((item) => {
+        if (item.username === payload.username) {
+          item.locked = !item.locked;
         }
         return item;
       });
@@ -156,8 +149,5 @@ export default {
         filterData: newData,
       };
     }
-
-
-
   },
 };

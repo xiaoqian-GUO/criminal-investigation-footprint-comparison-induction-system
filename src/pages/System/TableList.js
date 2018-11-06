@@ -16,17 +16,17 @@ class TableList extends Component {
     {
       title: '用户名',
       dataIndex: 'username',
-      width:150,
+      width: 200,
     },
     {
       title: '密码',
       dataIndex: 'password',
-      width:200,
+      width: 200,
     },
     {
       title: '角色',
       dataIndex: 'authority',
-      width: 300,
+      width: 200,
     },
     {
       title: '操作',
@@ -36,14 +36,14 @@ class TableList extends Component {
         <span>
           <LocalizedModal text="编辑" data={record} />&nbsp;&nbsp;
           {
-            record.locked?(
+            record.locked ? (
               <Button onClick={() => this.lockConfirm(record.username, record.locked)}>解除锁定</Button>
-            ):(
-              <Button onClick={() => this.lockConfirm(record.username, record.locked)}>&nbsp;&nbsp;&nbsp;&nbsp;锁定&nbsp;&nbsp;&nbsp;&nbsp;</Button>
-            )
+            ) : (
+                <Button onClick={() => this.lockConfirm(record.username, record.locked)}>&nbsp;&nbsp;&nbsp;&nbsp;锁定&nbsp;&nbsp;&nbsp;&nbsp;</Button>
+              )
           }
           &nbsp;&nbsp;
-          <Button type="danger" onClick={() => this.deleteConfirm(record.key)}>
+          <Button type="danger" onClick={() => this.deleteConfirm(record.username)}>
             删除
           </Button>
         </span>
@@ -60,13 +60,13 @@ class TableList extends Component {
   lockConfirm = (username, locked) => {
     const that = this;
     let modalConfig;
-    if(locked){
+    if (locked) {
       modalConfig = {
         title: '确认要解除该用户的锁定吗？',
         content: '点击确认后该用户将被解除锁定',
-      }; 
+      };
     }
-    else{
+    else {
       modalConfig = {
         title: '确认要锁定该用户吗？',
         content: '点击确认后该用户将被锁定',
@@ -79,10 +79,10 @@ class TableList extends Component {
         const { dispatch } = that.props;
         dispatch({
           type: 'userManagement/lockUser',
-          payload: {username, locked},
+          payload: { username, locked },
         });
       },
-      onCancel() {},
+      onCancel() { },
     });
   };
 
@@ -98,7 +98,7 @@ class TableList extends Component {
           payload: key,
         });
       },
-      onCancel() {},
+      onCancel() { },
     });
   };
 
@@ -129,7 +129,7 @@ class TableList extends Component {
         <p>
           <LocalizedModal text="新建用户" />
         </p>
-        <Table columns={this.columns} bordered dataSource={filterData} loading={loading} />
+        <Table columns={this.columns} bordered dataSource={filterData} rowKey={record => record.username} loading={loading} />
       </div>
     );
   }

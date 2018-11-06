@@ -12,43 +12,37 @@ export default {
   // GET POST 可省略
   'GET /api/users': [
     {
-      key: '1',
       username: 'John Brown',
       password: '123456',
       authority: 'admin',
       locked: false,
     },
     {
-      key: '2',
       username: 'John',
       password: '123456',
       authority: 'user',
       locked: false,
     },
     {
-      key: '3',
-      username: ' Brown',
+      username: 'Brown',
       password: '123456',
       authority: 'admin',
       locked: true,
     },
     {
-      key: '4',
-      username: ' daipeng',
+      username: 'daipeng',
       password: '123456',
       authority: 'admin',
       locked: false,
     },
     {
-      key: '5',
-      username: ' xiaoqian',
+      username: 'xiaoqian',
       password: '123456',
       authority: 'admin',
       locked: false,
     },
     {
-      key: 'fdsjf',
-      username: 'df',
+      username: 'fdsjf',
       password: '4324',
       authority: 'admin',
       locked: true,
@@ -155,7 +149,7 @@ export default {
     if (currentUser === 'admin') {
       res.send({
         status: 'ok',
-        data:{
+        data: {
           name: 'daipeng',
           username: 'admin',
           insitution: '西安电子科技大学',

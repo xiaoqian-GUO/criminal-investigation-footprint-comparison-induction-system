@@ -22,7 +22,6 @@ class LocalizedModal extends React.Component {
 
     if (text === '编辑') {
       setFieldsValue({
-        key: data.key,
         username: data.username,
         password: data.password,
         authority: data.authority,
@@ -45,7 +44,6 @@ class LocalizedModal extends React.Component {
   submitEdit = () => {
     const {
       dispatch,
-      data,
       form: { validateFields },
     } = this.props;
 
@@ -56,7 +54,6 @@ class LocalizedModal extends React.Component {
           type: 'userManagement/editUser',
           payload: {
             ...values,
-            key: data.key,
           },
         });
         // 重置 `visible` 属性为 false 以关闭对话框
@@ -95,11 +92,15 @@ class LocalizedModal extends React.Component {
       modalConfig = {
         title: '修改用户',
         onOk: this.submitEdit,
+        Input: <Input readOnly />,
+        label: '用户名（不可修改）'
       };
     } else {
       modalConfig = {
         title: '新建用户',
         onOk: this.submitNew,
+        Input: <Input />,
+        label: '用户名'
       };
     }
 
@@ -120,14 +121,13 @@ class LocalizedModal extends React.Component {
           onOk={modalConfig.onOk}
           onCancel={this.hideModal}
           okText="提交"
-          cancelText="取消"
+          cancelText="返回"
         >
           <Form>
-            {/* <FormItem label="key">{getFieldDecorator('key', {})(<Input />)}</FormItem> */}
-            <FormItem label="用户名">
+            <FormItem label={modalConfig.label}>
               {getFieldDecorator('username', {
                 rules: [{ required: true }],
-              })(<Input />)}
+              })(modalConfig.Input)}
             </FormItem>
             <FormItem label="密码">
               {getFieldDecorator('password', {
