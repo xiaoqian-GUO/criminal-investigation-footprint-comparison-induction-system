@@ -27,12 +27,12 @@ export default {
         },
         ...(!process.env.TEST && os.platform() === 'darwin'
           ? {
-              dll: {
-                include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch'],
-                exclude: ['@babel/runtime'],
-              },
-              hardSource: true,
-            }
+            dll: {
+              include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch'],
+              exclude: ['@babel/runtime'],
+            },
+            hardSource: true,
+          }
           : {}),
       },
     ],
@@ -61,13 +61,23 @@ export default {
     '@antv/data-set': 'DataSet',
     jquery: 'jQuery.noConflict()',
   },
-  // proxy: {
-  //   '/server/api/': {
-  //     target: 'https://preview.pro.ant.design/',
-  //     changeOrigin: true,
-  //     pathRewrite: { '^/server': '' },
-  //   },
-  // },
+
+  /**
+   * 代理配置如下:
+   * 
+   * 例如：本地请求的 ulr 为 /api/currentUser
+   * http://localhost:8000/api/currentUser 会被重定向到 http://wiebo.net:8888/currentUser
+   * 
+   * 关闭 mock： npm run start:no mock
+   * 如启动 npm start，将直接先获取到 mock 的数据
+   */
+  proxy: {
+    '/api': { // 以此开头的 request url 都会被转发到 target 服务器中 
+      target: 'http://wiebo.net:8888',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' }, // '/api' 会被替换成空,其余的拼接到 target 后面
+    },
+  },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,
