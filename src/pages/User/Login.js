@@ -126,6 +126,7 @@ class LoginPage extends Component {
         };
         var rsu=fakeLogin(params);
         rsu.then((response)=>{
+          console.log(rsu);
           if(response.status!="error"){
               this.setState({
                 result:false

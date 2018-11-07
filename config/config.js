@@ -61,13 +61,13 @@ export default {
     '@antv/data-set': 'DataSet',
     jquery: 'jQuery.noConflict()',
   },
-  // proxy: {
-  //   '/server/api/': {
-  //     target: 'https://preview.pro.ant.design/',
-  //     changeOrigin: true,
-  //     pathRewrite: { '^/server': '' },
-  //   },
-  // },
+  proxy: {
+    '/api/': {
+      target: 'http://wiebo.net:8888/',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+    },
+  },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,
