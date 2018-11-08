@@ -6,40 +6,19 @@ import styles from './BasicInfo.less';
 import Avatar from './Avatar';
 
 @connect(({ info, loading }) => ({
-  info,
+  imageUrl: info.imageUrl,
   loading: loading.models.info,
 }))
 class BasicInfo extends React.Component {
   constructor(){
     super();
-    this.state={
-      visible:true,
-      userName:''
-    };
   }
-  handlerClose=(e)=>{
-    this.setState({visible:false});
-  }
-  handlerEmpty=()=>{
-    //点击后缀图标，清空输入框
-    this.setState({
-      userName:''
-    });
-    //并且将焦点放到输入框上，重新输入
-    this.userNameNode.focus();
-  }
-  onChange=(e)=>{
-    this.setState({
-      userName:e.target.value
-    });
-  }
+
   render() {
     const {
-      info: { info },
+      imageUrl,
       loading,
     } = this.props;
-    // 判断suffix是否显示
-    var suffix=this.state.userName?<Icon type="close-circle" onClick={this.handlerEmpty} />:null;
     return (
       <div>
         <div className={styles.content}>

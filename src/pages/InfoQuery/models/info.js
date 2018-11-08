@@ -1,11 +1,20 @@
 export default {
   namespace: 'info',
 
-  state: {},
+  state: {
+    imageUrl: "",
+  },
 
   effects: {},
 
-  reducers: {},
+  reducers: {
+    getImageUrl(state, action) {
+      return {
+        imageUrl: action.payload,
+      };
+    },
+
+  },
   subscriptions: {
     //订阅数据源
     

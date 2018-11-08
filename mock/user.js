@@ -83,7 +83,7 @@ export default {
     });
   },
 
-  'POST /api/login/accountlogin': (req, res) => {
+  'POST /api/user/login': (req, res) => {
     const { password, username } = req.body;
     if (password === '888888' && username === 'admin') {
       res.send({
@@ -144,6 +144,21 @@ export default {
       path: '/base/category/list',
     });
   },
+  'POST /api/currentUser': (req, res) => {
+    if(req.body){
+      res.send({
+        name: 'admin',
+        username: 'admin',
+        insitution: '西安电子科技大学',
+        phone: '18392089875',
+        email: '1843887878@163.com',
+        // name: 'Serati Ma',
+        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
+        userid: '00000001',
+        locked: false,
+      });
+    }
+  },
   'POST /api/getCurrentUser': (req, res) => {
     const { currentUser } = req.body;
     if (currentUser === 'admin') {
@@ -154,11 +169,10 @@ export default {
           username: 'admin',
           insitution: '西安电子科技大学',
           phone: '18392089875',
-          userId: '1610122398',
           email: '1843887878@163.com',
           // name: 'Serati Ma',
           avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
-          userid: '00000001',
+          userid: '1610122398',
           locked: false,
           // email: 'antdesign@alipay.com',
         }
@@ -171,11 +185,10 @@ export default {
           username: 'xiaoqian',
           insitution: '西安电子科技大学',
           phone: '18392089875',
-          userId: '1610122604',
           email: '18392089875@163.com',
           // name: 'Serati Ma',
           avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
-          userid: '00000001',
+          userid: '1610122604',
           locked: true,
           // email: 'antdesign@alipay.com',
         }

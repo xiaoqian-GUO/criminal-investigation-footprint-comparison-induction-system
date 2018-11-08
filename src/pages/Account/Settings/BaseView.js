@@ -161,7 +161,7 @@ class BaseView extends Component {
 
             {/* 工号 */}
             <FormItem label={formatMessage({ id: 'app.settings.basic.userId' })}>
-              {getFieldDecorator('userId', {
+              {getFieldDecorator('userid', {
                 rules: [
                   {
                     required: true,

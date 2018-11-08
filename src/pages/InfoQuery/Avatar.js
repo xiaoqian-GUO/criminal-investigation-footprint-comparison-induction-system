@@ -1,5 +1,5 @@
 import { Upload, Icon, message } from 'antd';
-
+import { connect } from 'dva';
 function getBase64(img, callback) {
   const reader = new FileReader();
   reader.addEventListener('load', () => callback(reader.result));
@@ -24,23 +24,32 @@ function getRootPath(){
   let rootPath=url.slice(0,index);
   return rootPath;
 }
-
+@connect(({ info }) => ({
+  imageUrl:info.imageUrl,
+}))
 class Avatar extends React.Component {
   state = {
     loading: false,
   };
 
   handleChange = (info) => {
+    const { dispatch } = this.props;
     if (info.file.status === 'uploading') {
       this.setState({ loading: true });
       return;
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl => this.setState({
-        imageUrl,
-        loading: false,
-      }));
+      getBase64(info.file.originFileObj, imageUrl => {
+        this.setState({
+          imageUrl,
+          loading: false,
+        });
+        dispatch({
+          type:"info/getImageUrl",
+          payload:imageUrl,
+        });
+      });
     }
   }
   componentDidMount(){
