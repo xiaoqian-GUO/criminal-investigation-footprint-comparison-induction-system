@@ -73,7 +73,7 @@ export default {
    */
   proxy: {
     '/api': { // 以此开头的 request url 都会被转发到 target 服务器中 
-      target: 'http://wiebo.net:8888',
+      target: 'http://wiebo.net:8888', //'http://jsonplaceholder.typicode.com',//'http://wiebo.net:8888',
       changeOrigin: true,
       pathRewrite: { '^/api': '' }, // '/api' 会被替换成空,其余的拼接到 target 后面
     },

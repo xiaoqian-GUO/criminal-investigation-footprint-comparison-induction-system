@@ -20,11 +20,11 @@ export default {
       });
     },
     *fetchCurrent({ payload }, { call, put }) {
-      const response = yield call(queryCurrent, payload);
-      yield put({
-        type: 'saveCurrentUser',
-        payload: response,
-      });
+      // const response = yield call(queryCurrent, payload);
+      // yield put({
+      //   type: 'saveCurrentUser',
+      //   payload: response,
+      // });
     },
   },
 
@@ -71,10 +71,10 @@ export default {
   subscriptions:{
     setup({dispatch, history}){
       history.listen((location)=>{
-        if(Object.keys(location.query).length>0){
+        if(location.state){
           dispatch({
             type:'addMethod',
-            payload:location.query||{},
+            payload:location.state||{},
           });
         }
         

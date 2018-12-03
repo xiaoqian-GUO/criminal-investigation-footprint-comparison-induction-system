@@ -80,7 +80,6 @@ export default function request(
     .sha256()
     .update(fingerprint)
     .digest('hex');
-
   const defaultOptions = {
     credentials: 'include',
   };
@@ -92,7 +91,7 @@ export default function request(
   ) {
     if (!(newOptions.body instanceof FormData)) {
       newOptions.headers = {
-        Accept: 'application/json',
+        Accept: 'application/json',//'application/json',
         'Content-Type': 'application/json; charset=utf-8',
         ...newOptions.headers,
       };
@@ -121,37 +120,36 @@ export default function request(
       sessionStorage.removeItem(`${hashcode}:timestamp`);
     }
   }
-  return fetch(url, newOptions)
-    .then(checkStatus)  //.then(response => cachedSave(response, hashcode))
-    .then(response => {
-      // DELETE and 204 do not return data by default
-      // using .json will report an error.
-      if (newOptions.method === 'DELETE' || response.status === 204) {
-        return response.text();
-      }
-      return response.json();
-    })
-    .catch(e => {
-      // const status = e.name;
-      // if (status === 401) {
-      //   // @HACK
-      //   /* eslint-disable no-underscore-dangle */
-      //   window.g_app._store.dispatch({
-      //     type: 'login/logout',
-      //   });
-      //   return;
-      // }
-      // // environment should not be used
-      // if (status === 403) {
-      //   router.push('/exception/403');
-      //   return;
-      // }
-      // if (status <= 504 && status >= 500) {
-      //   router.push('/exception/500');
-      //   return;
-      // }
-      // if (status >= 404 && status < 422) {
-      //   router.push('/exception/404');
-      // }
-    });
+  return fetch(url, newOptions).then(checkStatus).then( res => res.text());
+    // .then(checkStatus)  //.then(response => cachedSave(response, hashcode))
+    // .then(response => {
+    //   // DELETE and 204 do not return data by default
+    //   // using .json will report an error.
+    //   if (newOptions.method === 'DELETE' || response.status === 204) {
+    //     return response.text();
+    //   }
+    //   return response.json();
+    // }).catch(e => {
+    //   // const status = e.name;
+    //   // if (status === 401) {
+    //   //   // @HACK
+    //   //   /* eslint-disable no-underscore-dangle */
+    //   //   window.g_app._store.dispatch({
+    //   //     type: 'login/logout',
+    //   //   });
+    //   //   return;
+    //   // }
+    //   // // environment should not be used
+    //   // if (status === 403) {
+    //   //   router.push('/exception/403');
+    //   //   return;
+    //   // }
+    //   // if (status <= 504 && status >= 500) {
+    //   //   router.push('/exception/500');
+    //   //   return;
+    //   // }
+    //   // if (status >= 404 && status < 422) {
+    //   //   router.push('/exception/404');
+    //   // }
+    // });
 }

@@ -4,7 +4,7 @@ export default {
   'GET /api/currentUser': {
     name: '',
     username: 'userName',
-    address: '西安电子科技大学',
+    address: '哈尔滨工业大学',
     phone: '18392089875',
     userId: '00000001',
     email: '1843887878@163.com',
@@ -30,13 +30,13 @@ export default {
       locked: true,
     },
     {
-      username: 'daipeng',
+      username: 'zhangsan',
       password: '123456',
       authority: 'admin',
       locked: false,
     },
     {
-      username: 'xiaoqian',
+      username: 'Lisi',
       password: '123456',
       authority: 'admin',
       locked: false,
@@ -149,7 +149,7 @@ export default {
       res.send({
         name: 'admin',
         username: 'admin',
-        insitution: '西安电子科技大学',
+        insitution: '哈尔滨工业大学',
         phone: '18392089875',
         email: '1843887878@163.com',
         // name: 'Serati Ma',
@@ -165,14 +165,14 @@ export default {
       res.send({
         status: 'ok',
         data: {
-          name: 'daipeng',
+          name: '学生1',
           username: 'admin',
-          insitution: '西安电子科技大学',
-          phone: '18392089875',
-          email: '1843887878@163.com',
+          insitution: '哈尔滨工业大学',
+          phone: '18392365875',
+          email: '18392365875@163.com',
           // name: 'Serati Ma',
           avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
-          userid: '1610122398',
+          userid: '1629473927',
           locked: false,
           // email: 'antdesign@alipay.com',
         }
@@ -183,7 +183,7 @@ export default {
         data: {
           name: 'user',
           username: 'xiaoqian',
-          insitution: '西安电子科技大学',
+          insitution: '哈尔滨工业大学',
           phone: '18392089875',
           email: '18392089875@163.com',
           // name: 'Serati Ma',

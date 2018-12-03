@@ -26,7 +26,7 @@ class Conclude extends React.Component {
         <div className={styles.contentBody}>
             <div className={styles.flexBody}>
               <div className={styles.rightContent}>
-                  <img src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png"/>
+                  <img src="/foot.jpg"/>
               </div>
 
               <div className={styles.centerContent}>
@@ -34,7 +34,7 @@ class Conclude extends React.Component {
               </div>
 
               <div className={styles.rightContent}>
-                 test
+                  <img src="/foot2.jpg"/>
               </div>
 
             </div>
@@ -42,7 +42,7 @@ class Conclude extends React.Component {
             <div className={styles.concludeResult}>
                   <div className={styles.concludeText}>对比归纳结果: </div>
                   <div className={styles.conclude}>
-                        test
+                        经归纳对比，两个案件相似度不高，不建议并案！
                   </div>
             </div>
         </div> 

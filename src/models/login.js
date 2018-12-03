@@ -82,7 +82,6 @@ export default {
       };
     },
     changeLoginAuthority(state, { payload }){
-      console.log("reload");
       reloadAuthorized();
       return {
         ...state,

@@ -126,22 +126,27 @@ class LoginPage extends Component {
         };
         var rsu=fakeLogin(params);
         rsu.then((response)=>{
-          console.log(rsu);
-          if(response.status!="error"){
+          console.log(response);
+          if(response){
               this.setState({
                 result:false
               });
-              var authority=response.status==="0"?"admin":"user";
+              //var authority=response.status==="0"?"admin":"user";
+              var authority = "admin";
               localStorage.setItem("antd-pro-authority",authority);
               localStorage.setItem("login",username);
+              localStorage.setItem("sessionid",response);
               dispatch({
                 type:"login/changeLoginAuthority",
                 payload:{},
               });
-              this.props.dispatch(routerRedux.push({
-                pathname:'/account/settings/base',
-                query:response,
-            }));
+              this.props.dispatch(routerRedux.push('/account/settings/base',
+                {
+                  currentUser: username,
+                  status: '0',
+                  sessionid: response,
+                },
+              ));
           }
           else{
             localStorage.setItem("antd-pro-authority","guest");

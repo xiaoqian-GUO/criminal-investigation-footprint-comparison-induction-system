@@ -28,35 +28,35 @@ class BaseView extends Component {
   }
 
   componentDidMount() {
-    const { users, dispatch } = this.props;
-    const userName=localStorage.getItem("login") || "";
-    users.currentUser=users.currentUser?users.currentUser:userName;
-    const rsu = getAllUserinfo(users);
+    // const { users, dispatch } = this.props;
+    // const userName=localStorage.getItem("login") || "";
+    // users.currentUser=users.currentUser?users.currentUser:userName;
+    // const rsu = getAllUserinfo();
 
-    if (Object.keys(users).length > 0) {
-      rsu.then(response => {
-        // console.log('显示当前用户的所有个人信息');
-        // console.log(response);
-        if(response.status === "ok"){
-          const data = response.data;
-          this.setState({
-            locked: data.locked,
-          });
-          this.setBaseInfo(data);
-          dispatch({
-            type: 'user/modifyUserInfo',
-            payload: data,
-          });
-        }
-        else{
-          message.error("获取用户信息失败");
-        }
+    // if (Object.keys(users).length > 0) {
+    //   rsu.then(response => {
+    //     // console.log('显示当前用户的所有个人信息');
+    //     // console.log(response);
+    //     if(response.status === "ok"){
+    //       const data = response.data;
+    //       this.setState({
+    //         locked: data.locked,
+    //       });
+    //       this.setBaseInfo(data);
+    //       dispatch({
+    //         type: 'user/modifyUserInfo',
+    //         payload: data,
+    //       });
+    //     }
+    //     else{
+    //       message.error("获取用户信息失败");
+    //     }
         
-      });
-    } else {
-      alert('认证失败，请重新登陆！');
-      window.location.href = '/user/login';
-    }
+    //   });
+    // } else {
+    //   alert('认证失败，请重新登陆！');
+    //   window.location.href = '/user/login';
+    // }
   }
 
   setBaseInfo = res => {

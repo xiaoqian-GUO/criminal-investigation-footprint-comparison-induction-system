@@ -32,10 +32,9 @@ export function lockUser(params) {
   });
 }
 
-export function getAllUserinfo(params) {
-  return request('/api/getCurrentUser', {
+export function getAllUserinfo() {
+  return request('/api/manage/queryselfprofile', {
     method: 'POST',
-    body: params,
   });
 }
 export function updateUserInfo(params) {
