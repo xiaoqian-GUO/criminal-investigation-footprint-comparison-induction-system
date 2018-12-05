@@ -21,7 +21,7 @@ export default {
       const response = yield call(queryUsers);
       yield put({
         type: 'saveUsers',
-        payload: response,
+        payload: JSON.parse(response),
       });
     },
     // 添加单个用户
@@ -62,15 +62,13 @@ export default {
       if (response.status === 'ok') {
         if (payload.locked) {
           Modal.success({ title: 'This is a success message', content: '解除锁定成功' });
-        }
-        else {
+        } else {
           Modal.success({ title: 'This is a success message', content: '锁定成功' });
         }
         yield put({
           type: 'handleLock',
           payload,
         });
-
       } else {
         Modal.error({ title: 'This is an error message', content: '操作失败' });
       }
@@ -101,7 +99,9 @@ export default {
     updateUser(state, { payload }) {
       const { filterData, data } = state;
       const newData = data.map(item => (item.username === payload.username ? payload : item));
-      const updatedFilterData = filterData.map(item => (item.username === payload.username ? payload : item));
+      const updatedFilterData = filterData.map(
+        item => (item.username === payload.username ? payload : item)
+      );
       return {
         ...state,
         data: newData,
@@ -143,7 +143,7 @@ export default {
     },
     handleLock(state, { payload }) {
       const { data } = state;
-      const newData = data.map((item) => {
+      const newData = data.map(item => {
         if (item.username === payload.username) {
           item.locked = !item.locked;
         }
@@ -154,6 +154,6 @@ export default {
         data: newData,
         filterData: newData,
       };
-    }
+    },
   },
 };
