@@ -120,10 +120,10 @@ class LoginPage extends Component {
       }
       else{
         // 信息填写完成，但是还没有验证
-        var params={
-          username:username,
-          password:password,
-        };
+        var params=[
+          ["username", username],
+          ["password", password]
+        ];
         var rsu=fakeLogin(params);
         rsu.then((response)=>{
           console.log(response);

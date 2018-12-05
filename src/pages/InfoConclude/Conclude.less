@@ -47,9 +47,17 @@
     min-width: 300px;
     border: solid 2px #e0e0e0;
     margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     img{
         height: 300px;
         width: 300px;
+    }
+    :global(.ant-upload) {
+        width: 300px;
+        height: 300px;
+        margin: 0px;
     }
 }
 .result{
@@ -79,4 +87,15 @@
     border: solid 2px #e0e0e0;
     overflow: auto;
     padding: 10px;
+}
+.para {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 5px 0px;
+}
+.flexStyle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

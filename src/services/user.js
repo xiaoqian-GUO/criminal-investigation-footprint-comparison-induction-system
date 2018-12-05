@@ -39,16 +39,18 @@ export function getAllUserinfo() {
 }
 export function updateUserInfo(params) {
   var url = '/api/manage/updateuserprofile';
-  url = getSearchUrl(url, params);
+  var body = getSearchUrl( params );
   return request( url, {
     method: 'POST',
+    body: body,
   });
 }
 export function updatePwd(params) {
   var url = '/api/user/changepassword';
-  url = getSearchUrl(url, params);
+  var body = getSearchUrl( params );
   return request(url, {
     method: 'POST',
+    body: body,
   });
 }
 // 采集足迹信息
@@ -59,11 +61,18 @@ export function collectPrintInfo(params) {
   });
 }
 
+export async function startConclude(params) {
+  return request('/api/compare/footprintcompare', {
+    method: 'POST',
+    body: getSearchUrl(params),
+  });
+}
+
 // 实现拼接字符串
-function getSearchUrl(url, params){
+function getSearchUrl( params ){
+  var url = "";
   var keys = Object.keys(params);
   if(keys.length > 0){
-    url += "?";
     var i;
     for(i=0;i<keys.length;i++){
       url += keys[i] + "=" + params[keys[i]] + "&";

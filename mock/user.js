@@ -84,25 +84,26 @@ export default {
   },
 
   'POST /api/user/login': (req, res) => {
-    const { password, username } = req.body;
-    if (password === '888888' && username === 'admin') {
-      res.send({
-        status: '0',
-        currentUser: 'admin',
-      });
-      return;
-    }
-    if (password === '123456' && username === 'user') {
-      res.send({
-        status: '1',
-        currentUser: 'user',
-      });
-      return;
-    }
-    res.send({
-      status: 'error',
-      currentUser: 'guest',
-    });
+    // const { password, username } = req.body;
+    // if (password === '888888' && username === 'admin') {
+    //   res.send({
+    //     status: '0',
+    //     currentUser: 'admin',
+    //   });
+    //   return;
+    // }
+    // if (password === '123456' && username === 'user') {
+    //   res.send({
+    //     status: '1',
+    //     currentUser: 'user',
+    //   });
+    //   return;
+    // }
+    // res.send({
+    //   status: 'error',
+    //   currentUser: 'guest',
+    // });
+    res.send("abcdefghijklmn");
   },
 
   'POST /api/register': (req, res) => {
@@ -233,4 +234,13 @@ export default {
       });
     }
   },
+
+ 'POST /api/compare/footprintcompare': (req, res) => {
+    res.send({
+      status: 'ok',
+      concludeText: '经归纳对比，两个案件相似度不高，建议并案！',
+    });
+ },
+
+
 };

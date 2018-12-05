@@ -1,5 +1,4 @@
 import { Upload, Icon, message } from 'antd';
-import './Avatar.less';
 import { connect } from 'dva';
 
 function getBase64(img, callback) {
@@ -9,10 +8,6 @@ function getBase64(img, callback) {
 }
 
 function beforeUpload(file) {
-  // const isJPG = file.type === 'image/jpeg';
-  // if (!isJPG) {
-  //   message.error('You can only upload JPG file!');
-  // }
   const isLt2M = file.size / 1024 / 1024 < 2;
   if (!isLt2M) {
     message.error('Image must smaller than 2MB!');
@@ -26,17 +21,16 @@ function getRootPath(){
   let rootPath=url.slice(0,index);
   return rootPath;
 }
-
-@connect(({ collect }) => ({
-  imageUrl:collect.imageUrl,
+@connect(({ conclude }) => ({
+  
 }))
-class Avatar extends React.Component {
+class Picture extends React.Component {
   state = {
     loading: false,
   };
 
   handleChange = (info) => {
-    const { dispatch } = this.props;
+    const { dispatch, id } = this.props;
     if (info.file.status === 'uploading') {
       this.setState({ loading: true });
       return;
@@ -44,13 +38,15 @@ class Avatar extends React.Component {
     if (info.file.status === 'done') {
       // Get this url from response in real world.
       getBase64(info.file.originFileObj, imageUrl => {
+        const obj = {};
+        obj[id] = imageUrl;
         this.setState({
           imageUrl,
           loading: false,
         })
         dispatch({
-          type:"collect/getImageUrl",
-          payload:imageUrl,
+          type:"conclude/getImageUrl",
+          payload:obj,
         });
       });
     }
@@ -65,11 +61,11 @@ class Avatar extends React.Component {
         <div className="ant-upload-text">点击上传图片</div>
       </div>
     );
-    const imageUrl = this.props.imageUrl;
+    const imageUrl = this.state.imageUrl;
+    const id = this.props.id;
     const rootPath=getRootPath();
     return (
-        <div id={this.props.id}>
-            {imageUrl ? <img src={imageUrl} alt="&nbsp;&nbsp;请重新上传图片" /> : null}
+        <div id={id}>
             <Upload
                 name="avatar"
                 listType="picture-card"
@@ -79,10 +75,10 @@ class Avatar extends React.Component {
                 beforeUpload={beforeUpload}
                 onChange={this.handleChange}
             >
-                {uploadButton}
+                {imageUrl ? <img src={imageUrl} alt="点击重新上传图片" /> : uploadButton}
             </Upload>
         </div>
     );
   }
 }
-export default Avatar;
+export default Picture;

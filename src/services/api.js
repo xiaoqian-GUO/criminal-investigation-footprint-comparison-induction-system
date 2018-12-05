@@ -110,17 +110,9 @@ export async function fakeAccountLogin(params) {
   });
 }
 export function fakeLogin(params) {
-  var username = params.username;
-  var password = params.password;
-  var url;
-  if(username && password){
-    url = '/api/user/login?username='+username+'&password='+password;
-  }
-  else{
-    url = '/api/user/login';
-  }
-  return request(url, {
+  return request('/api/user/login', {
     method: 'POST',
+    body: new URLSearchParams(params).toString(),
   },'text');
 }
 
