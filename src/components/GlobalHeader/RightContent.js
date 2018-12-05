@@ -62,7 +62,7 @@ export default class GlobalHeaderRight extends PureComponent {
         </Menu.Item> */}
         <Menu.Item key="userinfo">
           <Icon type="setting" />
-          <FormattedMessage id="menu.account.settings" defaultMessage="account settings" />
+          个人设置
         </Menu.Item>
         {/* <Menu.Item key="triggerError">
           <Icon type="close-circle" />
@@ -71,7 +71,7 @@ export default class GlobalHeaderRight extends PureComponent {
         <Menu.Divider />
         <Menu.Item key="logout">
           <Icon type="logout" />
-          <FormattedMessage id="menu.account.logout" defaultMessage="logout" />
+          退出登录
         </Menu.Item>
       </Menu>
     );

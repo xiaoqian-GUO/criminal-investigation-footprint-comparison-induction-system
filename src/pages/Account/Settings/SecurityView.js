@@ -47,7 +47,7 @@ class SecurityView extends Component {
     let formValue = form.getFieldsValue();
     
     Object.keys(formValue).forEach(key => {
-      if(key=="newpwd" || key=="newpwdAgain"){
+      if(key=="newpwd" || key=="newpwdagain"){
         formValue[key]=null;
       }
       form.setFieldsValue(formValue);
@@ -56,7 +56,7 @@ class SecurityView extends Component {
   };
   emptyAll = () => {
     let { form, currentUsers } = this.props;
-    form.setFieldsValue({oldpwd:null,newpwd:null,newpwdAgain:null});
+    form.setFieldsValue({oldpwd:null,newpwd:null,newpwdagain:null});
     this.oldpwdInput.focus();
   };
 
@@ -85,7 +85,7 @@ class SecurityView extends Component {
       
       if(bol){
         // 如果bol为true的话，就可以提交数据，否则不允许提交
-        if(formValue["newpwd"]!=formValue["newpwdAgain"]){
+        if(formValue["newpwd"]!=formValue["newpwdagain"]){
           this.setState({
             result:false,
             errorResult:true,
@@ -96,12 +96,11 @@ class SecurityView extends Component {
         else{
           obj={
             ...formValue,
-            username:localStorage.getItem("login"),
           };
           rsu=updatePwd(obj);
           rsu.then((response)=>{
             console.log(response);
-            if(response.status=="ok"){
+            if(response.status === 0){
               // 如果信息更新成功，则提示信息修改成功
               this.setState({
                 result:true,
@@ -115,7 +114,7 @@ class SecurityView extends Component {
                 this.emptyAll();
               },2000);
             }
-            else if(response.status=="error"){
+            else if(response.status == -1){
               let text = response.errorInfo || "密码更新失败，请重新确认旧密码";
               this.setState({
                 result: false,
@@ -169,7 +168,7 @@ class SecurityView extends Component {
             </FormItem>
              {/* 再次输入新密码 */}
              <FormItem label={formatMessage({ id: 'app.settings.basic.newpwdagain' })}>
-              {getFieldDecorator('newpwdAgain', {
+              {getFieldDecorator('newpwdagain', {
                 rules: [
                   {
                     required: true, // 是否必选

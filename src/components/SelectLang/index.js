@@ -25,7 +25,7 @@ export default class SelectLang extends PureComponent {
         </Menu.Item>
         <Menu.Item key="pt-BR">
           <FormattedMessage id="lang.portuguese" />
-        </Menu.Item>
+        </Menu.Item> 
       </Menu>
     );
     return (

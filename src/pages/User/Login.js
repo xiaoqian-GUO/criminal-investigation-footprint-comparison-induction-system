@@ -132,7 +132,8 @@ class LoginPage extends Component {
                 result:false
               });
               //var authority=response.status==="0"?"admin":"user";
-              var authority = "admin";
+              var authority = username==="admin"?"admin":"user";
+              var status = username==="admin"?"0":"1";
               localStorage.setItem("antd-pro-authority",authority);
               localStorage.setItem("login",username);
               localStorage.setItem("sessionid",response);
@@ -143,7 +144,7 @@ class LoginPage extends Component {
               this.props.dispatch(routerRedux.push('/account/settings/base',
                 {
                   currentUser: username,
-                  status: '0',
+                  status: status,
                   sessionid: response,
                 },
               ));
@@ -151,6 +152,7 @@ class LoginPage extends Component {
           else{
             localStorage.setItem("antd-pro-authority","guest");
             localStorage.setItem("login","");
+            localStorage.setItem("sessionid","");
             this.emitUserEmpty();
             this.setState({
               hasUser:true,

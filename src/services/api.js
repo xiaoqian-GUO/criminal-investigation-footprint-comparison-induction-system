@@ -121,7 +121,7 @@ export function fakeLogin(params) {
   }
   return request(url, {
     method: 'POST',
-  });
+  },'text');
 }
 
 export async function fakeRegister(params) {

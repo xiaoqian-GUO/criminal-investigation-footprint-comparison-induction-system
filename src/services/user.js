@@ -38,15 +38,17 @@ export function getAllUserinfo() {
   });
 }
 export function updateUserInfo(params) {
-  return request('/api/updateUserInfo', {
+  var url = '/api/manage/updateuserprofile';
+  url = getSearchUrl(url, params);
+  return request( url, {
     method: 'POST',
-    body: params,
   });
 }
 export function updatePwd(params) {
-  return request('/api/updatePwd', {
+  var url = '/api/user/changepassword';
+  url = getSearchUrl(url, params);
+  return request(url, {
     method: 'POST',
-    body: params,
   });
 }
 // 采集足迹信息
@@ -55,4 +57,20 @@ export function collectPrintInfo(params) {
     method: 'POST',
     body: params,
   });
+}
+
+// 实现拼接字符串
+function getSearchUrl(url, params){
+  var keys = Object.keys(params);
+  if(keys.length > 0){
+    url += "?";
+    var i;
+    for(i=0;i<keys.length;i++){
+      url += keys[i] + "=" + params[keys[i]] + "&";
+    }
+    return url.slice(0,-1);
+  }
+  else{
+    return url ;
+  }
 }

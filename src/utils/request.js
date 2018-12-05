@@ -63,7 +63,7 @@ const cachedSave = (response, hashcode) => {
  * @param  {object} [option] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export default function request(url, option) {
+export default function request(url, option, res) {
   const options = {
     expirys: isAntdPro(),
     ...option,
@@ -80,11 +80,12 @@ export default function request(url, option) {
   const defaultOptions = {
     credentials: 'include',
   };
+  const sessionid = localStorage.getItem('sessionid');
   const newOptions = {
     ...defaultOptions,
     ...options,
     headers: {
-      sessionid: 'htkEbiiKubvSLKzlOmGNAw==',
+      sessionid: sessionid,      //'htkEbiiKubvSLKzlOmGNAw==',
     },
   };
   if (
@@ -123,9 +124,17 @@ export default function request(url, option) {
       sessionStorage.removeItem(`${hashcode}:timestamp`);
     }
   }
-  return fetch(url, newOptions)
-    .then(checkStatus)
-    .then(res => res.text());
+  if(res === 'text'){
+    return fetch(url, newOptions)
+      .then(checkStatus)
+      .then(res => res.text());
+  }
+  else{
+    return fetch(url, newOptions)
+      .then(checkStatus)
+      .then(res => res.json());
+  }
+ 
   // .then(checkStatus)  //.then(response => cachedSave(response, hashcode))
   // .then(response => {
   //   // DELETE and 204 do not return data by default

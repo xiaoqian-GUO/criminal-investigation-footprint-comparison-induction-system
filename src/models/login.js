@@ -67,6 +67,7 @@ export default {
       console.log('退出');
       localStorage.setItem("antd-pro-authority","guest");
       localStorage.setItem("login","");
+      localStorage.setItem("sessionid","");
       window.location.href="/user/login";
 
     },

@@ -28,35 +28,35 @@ class BaseView extends Component {
   }
 
   componentDidMount() {
-    // const { users, dispatch } = this.props;
-    // const userName=localStorage.getItem("login") || "";
-    // users.currentUser=users.currentUser?users.currentUser:userName;
-    // const rsu = getAllUserinfo();
+    const { users, dispatch } = this.props;
+    const userName=localStorage.getItem("login") || "";
+    users.currentUser=users.currentUser?users.currentUser:userName;
+    const rsu = getAllUserinfo();
 
-    // if (Object.keys(users).length > 0) {
-    //   rsu.then(response => {
-    //     // console.log('显示当前用户的所有个人信息');
-    //     // console.log(response);
-    //     if(response.status === "ok"){
-    //       const data = response.data;
-    //       this.setState({
-    //         locked: data.locked,
-    //       });
-    //       this.setBaseInfo(data);
-    //       dispatch({
-    //         type: 'user/modifyUserInfo',
-    //         payload: data,
-    //       });
-    //     }
-    //     else{
-    //       message.error("获取用户信息失败");
-    //     }
+    if (Object.keys(users).length > 0) {
+      rsu.then(response => {
+        console.log('显示当前用户的所有个人信息');
+        console.log(response);
+        if(Object.keys(response).length > 0){
+          const data = response;
+          this.setState({
+            locked: data.locked,
+          });
+          this.setBaseInfo(data);
+          dispatch({
+            type: 'user/modifyUserInfo',
+            payload: data,
+          });
+        }
+        else{
+          message.error("获取用户信息失败");
+        }
         
-    //   });
-    // } else {
-    //   alert('认证失败，请重新登陆！');
-    //   window.location.href = '/user/login';
-    // }
+      });
+    } else {
+      alert('认证失败，请重新登陆！');
+      window.location.href = '/user/login';
+    }
   }
 
   setBaseInfo = res => {
@@ -98,7 +98,7 @@ class BaseView extends Component {
         const rsu = updateUserInfo(formValue);
         rsu.then(response => {
           console.log(response);
-          if (response.status === 'ok') {
+          if (response.status === 0) {
             // 如果信息更新成功，则提示信息修改成功
             this.setState({
               result: true,
@@ -110,7 +110,7 @@ class BaseView extends Component {
                 errorResult: false,
               });
             }, 3000);
-          } else if (response.status === 'error') {
+          } else {
             this.setState({
               result: false,
               errorResult: true,
@@ -183,7 +183,7 @@ class BaseView extends Component {
             </FormItem>
             {/* 所属单位 */}
             <FormItem label={formatMessage({ id: 'app.settings.basic.address' })}>
-              {getFieldDecorator('insitution', {
+              {getFieldDecorator('institution', {
                 rules: [
                   {
                     required: true,
