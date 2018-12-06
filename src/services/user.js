@@ -55,9 +55,9 @@ export function updatePwd(params) {
 }
 // 采集足迹信息
 export function collectPrintInfo(params) {
-  return request('/api/collectPrintInfo', {
+  return request('/api/gather/entering', {
     method: 'POST',
-    body: params,
+    body: getSearchUrl(params),
   });
 }
 

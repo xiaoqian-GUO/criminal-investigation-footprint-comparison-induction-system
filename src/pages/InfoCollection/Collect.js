@@ -288,7 +288,7 @@ class Collect extends React.Component {
                           collectTypeText: gatherMethod,
                           leaveTypeText: leaveMethod,
                         } = this.state;
-                        let milliseconds = time ? new Date(time.format()).getTime() : null;
+                        let milliseconds = time ? new Date(time.format()).toLocaleString() : null;
                         const params = {
                           footprintImage: imageUrl,
                           detail,
@@ -383,7 +383,7 @@ class Collect extends React.Component {
                           collectTypeText: gatherMethod,
                           leaveTypeText: leaveMethod,
                         } = this.state;
-                        let milliseconds = time ? new Date(time.format()).getTime() : null;
+                        let milliseconds = time ? new Date(time.format()).toLocaleString() : null;
                         const params = {
                           footprintImage: imageUrl,
                           detail,

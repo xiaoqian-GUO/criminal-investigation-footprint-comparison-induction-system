@@ -93,7 +93,6 @@ export default function request(url, option, res) {
     newOptions.method === 'PUT' ||
     newOptions.method === 'DELETE'
   ) {
-    console.log(newOptions.body instanceof FormData);
     if (!(newOptions.body instanceof FormData)) {
       newOptions.headers = {
         Accept: 'application/json', //'application/json',
