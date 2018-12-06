@@ -24,9 +24,16 @@ class TableList extends Component {
       width: 200,
     },
     {
-      title: '角色',
-      dataIndex: 'authority',
+      title: '所属机构',
+      dataIndex: 'institution',
       width: 200,
+    },
+    {
+      title: '锁定状态',
+      dataIndex: 'locked',
+      render: item => {
+        return item ? '锁定' : '未锁定';
+      },
     },
     {
       title: '操作',
@@ -35,13 +42,13 @@ class TableList extends Component {
       render: (text, record) => (
         <span className={styles['override-ant-btn']}>
           <LocalizedModal text="编辑" data={record} />
-          {
-            record.locked ? (
-              <Button onClick={() => this.lockConfirm(record.username, record.locked)}>解除锁定</Button>
-            ) : (
-                <Button onClick={() => this.lockConfirm(record.username, record.locked)}>锁定</Button>
-              )
-          }
+          {record.locked ? (
+            <Button onClick={() => this.lockConfirm(record.username, record.locked)}>
+              解除锁定
+            </Button>
+          ) : (
+            <Button onClick={() => this.lockConfirm(record.username, record.locked)}>锁定</Button>
+          )}
           <Button type="danger" onClick={() => this.deleteConfirm(record.username)}>
             删除
           </Button>
@@ -64,8 +71,7 @@ class TableList extends Component {
         title: '确认要解除该用户的锁定吗？',
         content: '点击确认后该用户将被解除锁定',
       };
-    }
-    else {
+    } else {
       modalConfig = {
         title: '确认要锁定该用户吗？',
         content: '点击确认后该用户将被锁定',
@@ -81,7 +87,7 @@ class TableList extends Component {
           payload: { username, locked },
         });
       },
-      onCancel() { },
+      onCancel() {},
     });
   };
 
@@ -97,7 +103,7 @@ class TableList extends Component {
           payload: key,
         });
       },
-      onCancel() { },
+      onCancel() {},
     });
   };
 
@@ -119,16 +125,18 @@ class TableList extends Component {
       <div>
         <h1>用户管理</h1>
         <div className={styles.searchInput}>
-          <Search
-            placeholder="根据用户名查询"
-            enterButton="Search"
-            onSearch={this.handleSearch}
-          />
+          <Search placeholder="根据用户名查询" enterButton="Search" onSearch={this.handleSearch} />
         </div>
         <p>
           <LocalizedModal text="新建用户" />
         </p>
-        <Table columns={this.columns} bordered dataSource={filterData} rowKey={record => record.username} loading={loading} />
+        <Table
+          columns={this.columns}
+          bordered
+          dataSource={filterData}
+          rowKey={record => record.username}
+          loading={loading}
+        />
       </div>
     );
   }
