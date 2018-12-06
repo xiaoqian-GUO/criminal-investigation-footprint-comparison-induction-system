@@ -26,13 +26,12 @@ class LocalizedModal extends React.Component {
         password: data.password,
         authority: data.authority,
       });
-    }
-    else{
-        setFieldsValue({
-            username:"",
-            password:"",
-            authority:"",
-        });
+    } else {
+      setFieldsValue({
+        username: '',
+        password: '',
+        authority: '',
+      });
     }
   };
 
@@ -100,14 +99,14 @@ class LocalizedModal extends React.Component {
         title: '修改用户',
         onOk: this.submitEdit,
         Input: <Input readOnly />,
-        label: '用户名（不可修改）'
+        label: '用户名（不可修改）',
       };
     } else {
       modalConfig = {
         title: '新建用户',
         onOk: this.submitNew,
         Input: <Input />,
-        label: '用户名'
+        label: '用户名',
       };
     }
 
@@ -141,8 +140,8 @@ class LocalizedModal extends React.Component {
                 rules: [{ required: true }],
               })(<Input />)}
             </FormItem>
-            <FormItem label="权限">
-              {getFieldDecorator('authority', {
+            <FormItem label="组织">
+              {getFieldDecorator('institution', {
                 rules: [{ required: true }],
               })(<Input />)}
             </FormItem>

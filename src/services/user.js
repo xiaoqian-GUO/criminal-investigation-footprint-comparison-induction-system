@@ -12,9 +12,9 @@ export async function queryCurrent(params) {
 }
 
 export function addUser(params) {
-  return request('/api/addUser', {
+  return request('/api/manage/adduser', {
     method: 'POST',
-    body: params,
+    body: getSearchUrl(params),
   });
 }
 
@@ -39,15 +39,15 @@ export function getAllUserinfo() {
 }
 export function updateUserInfo(params) {
   var url = '/api/manage/updateuserprofile';
-  var body = getSearchUrl( params );
-  return request( url, {
+  var body = getSearchUrl(params);
+  return request(url, {
     method: 'POST',
     body: body,
   });
 }
 export function updatePwd(params) {
   var url = '/api/user/changepassword';
-  var body = getSearchUrl( params );
+  var body = getSearchUrl(params);
   return request(url, {
     method: 'POST',
     body: body,
@@ -69,17 +69,16 @@ export async function startConclude(params) {
 }
 
 // 实现拼接字符串
-function getSearchUrl( params ){
-  var url = "";
+function getSearchUrl(params) {
+  var url = '';
   var keys = Object.keys(params);
-  if(keys.length > 0){
+  if (keys.length > 0) {
     var i;
-    for(i=0;i<keys.length;i++){
-      url += keys[i] + "=" + params[keys[i]] + "&";
+    for (i = 0; i < keys.length; i++) {
+      url += keys[i] + '=' + params[keys[i]] + '&';
     }
-    return url.slice(0,-1);
-  }
-  else{
-    return url ;
+    return url.slice(0, -1);
+  } else {
+    return url;
   }
 }

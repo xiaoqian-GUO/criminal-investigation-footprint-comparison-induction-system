@@ -19,9 +19,10 @@ export default {
     // 获取所有用户
     *fetchAllUsers(_, { call, put }) {
       const response = yield call(queryUsers);
+
       yield put({
         type: 'saveUsers',
-        payload: JSON.parse(response),
+        payload: response,
       });
     },
     // 添加单个用户
