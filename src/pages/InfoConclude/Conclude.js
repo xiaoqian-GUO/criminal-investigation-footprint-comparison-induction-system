@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Form, Breadcrumb, Alert,Input, Icon, Button, message} from 'antd';
+import { Form, Breadcrumb, Alert, Input, Icon, Button, message} from 'antd';
 import styles from './Conclude.less';
 import Picture from './Picture';
 
@@ -12,15 +12,30 @@ import Picture from './Picture';
 class Conclude extends React.Component {
   constructor(){
     super();
+    this.state = {
+      imageid1: '',
+      imageid2: ''
+    };
+  }
+  handleChange1 = (e) => {
+    this.setState({
+      imageid1: e.target.value
+    });
+  }
+  handleChange2 = (e) => {
+    this.setState({
+      imageid2: e.target.value
+    });
   }
   // 点击开始对比归纳
   handleClick = () => {
     const { dispatch, imageUrl } = this.props;
     const len = Object.keys(imageUrl).length;
+    const { imageid1, imageid2 } = this.state;
     if(len == 2){
       const payload = {
-        'imageid1': imageUrl['upload1'],
-        'imageid2': imageUrl['upload2'],
+        'imageid1': imageid1,
+        'imageid2': imageid2,
       };
       dispatch({
         type: 'conclude/startConclude',
@@ -41,17 +56,21 @@ class Conclude extends React.Component {
             <Breadcrumb>
               <Breadcrumb.Item>首页</Breadcrumb.Item>
               <Breadcrumb.Item>足迹比对归纳</Breadcrumb.Item>
-              <Breadcrumb.Item>足迹归纳页</Breadcrumb.Item>
+              <Breadcrumb.Item>案件归纳对比</Breadcrumb.Item>
             </Breadcrumb>
           </div>
           <div className={styles.headerH}>
-            <h2>归纳结果</h2>
+            <h2>案件归纳</h2>
           </div>
         </div>
         <div className={styles.contentBody}>
             <div className={styles.flexBody}>
               <div className={styles.rightContent}>
-                <Picture id="upload1" />
+                <div>
+                  <Picture id="upload1" />
+                  <p className={styles.centerPara}>案件编号：</p>
+                  <Input type="text" value={ this.state.imageid1 } onChange={this.handleChange1}/>
+                </div>
               </div>
 
               <div className={styles.centerContent}>
@@ -62,7 +81,11 @@ class Conclude extends React.Component {
               </div>
 
               <div className={styles.rightContent}>
-                <Picture id="upload2" />
+                <div>
+                  <Picture id="upload2" />
+                  <p className={styles.centerPara}>案件编号：</p>
+                  <Input type="text" value={ this.state.imageid2 } onChange={this.handleChange2}/>
+                </div>
               </div>
 
             </div>

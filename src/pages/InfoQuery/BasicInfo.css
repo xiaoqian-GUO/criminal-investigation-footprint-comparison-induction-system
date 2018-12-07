@@ -19,7 +19,7 @@
 }
 .flexBody {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 .upload {
@@ -39,66 +39,37 @@
   align-items: center;
   width: 100px;
   height: 300px;
-  margin: 0 50px;
+  margin: 0 10px;
   font-size: 40px;
 }
 .rightContent {
-  min-height: 200px;
-  min-width: 200px;
-  margin-top: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 400px;
+  min-width: 400px;
 }
-.rightContent img {
-  height: 200px;
-  width: 200px;
+.marginAuto {
+  margin-right: 8px;
+  text-align: center;
 }
-.rightContent :global(.ant-upload) {
-  width: 200px;
-  height: 200px;
-  margin: 0px;
+.marginRightAuto {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
 }
 .result {
-  min-height: 300px;
+  min-height: 330px;
   margin: 0 20px;
   border: solid 2px #e0e0e0;
   overflow: auto;
-}
-.concludeResult {
   width: 100%;
-  min-height: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 70px;
+  height: 100%;
 }
-.concludeText {
-  font-size: 15px;
-  font-weight: bold;
-}
-.conclude {
-  width: 400px;
-  height: 150px;
-  font-size: 14px;
-  font-weight: bold;
-  margin-left: 20px;
-  border: solid 2px #e0e0e0;
-  overflow: auto;
-  padding: 10px;
-}
-.para {
-  text-align: center;
-  font-size: 16px;
-  font-weight: bold;
-  padding: 5px 0px;
-}
-.flexStyle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.imgStyle {
+  margin: 0 5px 5px 0;
 }
 .centerPara {
   text-align: center;
-  padding-top: 10px;
 }

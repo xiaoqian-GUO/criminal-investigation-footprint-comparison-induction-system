@@ -1,38 +1,36 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
+import { collectPrintInfo } from '@/services/user';
 
 export default {
   namespace: 'collect',
   state: {
-    imageUrl:"",
-    hasPic:false,
+        status: false
   },
 
   effects: {
-    
+     // 采集足迹信息
+     *uploadPicture({ payload }, { call, put }) {
+        const response = yield call(collectPrintInfo, payload);
+        if (response.status === 0) {
+          message.success("足迹信息上传成功");
+          yield put({
+            type: 'changeStatus',
+            payload: true,
+          });
+          location.href = "success";
+        } else {
+          message.error("足迹信息上传失败");
+        }
+      },
   },
 
   reducers: {
-    getImageUrl(state, action){
+    changeStatus( state, action ){
         return {
             ...state,
-            imageUrl:action.payload,
-            hasPic:false,
+            status: action.payload
         };
     },
-    clearImageUrl(state, action){
-        return {
-            imageUrl:"",
-            hasPic:false,
-        };
-    },
-    appearWarning(state, action){
-        return {
-            ...state,
-            hasPic:true,
-        };
-    },
-
-
   },
 };

@@ -12,6 +12,7 @@ export default {
   effects: {
     //开始归纳对比
     *startConclude({ payload }, { call, put }) {
+      console.log(payload);
       const response = yield call(startConclude, payload);
       if (response.status === 'ok') {
         yield put({

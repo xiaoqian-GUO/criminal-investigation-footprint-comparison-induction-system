@@ -1,19 +1,36 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Form, Breadcrumb, Alert,Input, Icon,Button} from 'antd';
+import { Form, Breadcrumb, Alert, Input, Icon,Button} from 'antd';
 import styles from './BasicInfo.less';
 import Avatar from './Avatar';
 
-@connect(({ info, loading }) => ({
+@connect(({ info }) => ({
   imageUrl: info.imageUrl,
-  loading: loading.models.info,
+  backgroundImg: info.backgroundImg
 }))
 class BasicInfo extends React.Component {
-  constructor(){
-    super();
+  state = {
+    caseid: ''
   }
+  handleChange = (e) => {
+    this.setState({
+      caseid: e.target.value
+    });
+  }
+  handleClick = ()  => {
+    const { caseid } = this.state;
+    const { dispatch } = this.props;
+    if( caseid ){
+      dispatch({
+        type: 'info/fetchCasePic',
+        payload: {
+          caseid: caseid
+        }
+      });
+    }
 
+  }
   render() {
     const {
       imageUrl,
@@ -26,7 +43,7 @@ class BasicInfo extends React.Component {
             <Breadcrumb>
               <Breadcrumb.Item><a href="/infoquery/basic-info">首页</a></Breadcrumb.Item>
               <Breadcrumb.Item>足迹信息查询</Breadcrumb.Item>
-              <Breadcrumb.Item>查询页</Breadcrumb.Item>
+              <Breadcrumb.Item>查询案件所属足迹图片</Breadcrumb.Item>
             </Breadcrumb>
           </div>
           <div className={styles.headerH}>
@@ -38,12 +55,13 @@ class BasicInfo extends React.Component {
               <div className={styles.upload}>
                   <div>
                     <div>
-                      <Avatar id="upload" />
+                      <p className={styles.centerPara}>案件编号：</p>
+                      <Input type="text" value={ this.state.caseid } onChange={this.handleChange}/>
                     </div>
                     <br/>
                     <div>
                       <div className={styles.marginAuto}>
-                          <Button type="primary">开始查询</Button>
+                          <Button type="primary" onClick={this.handleClick}>开始查询</Button>
                       </div>
                     </div>
                   </div>
@@ -55,13 +73,13 @@ class BasicInfo extends React.Component {
                   
                   <div id="result" className={styles.result}>
                       <img className={styles.imgStyle} src="/foot.jpg" style={{width:50,height:50}}/>
-                      <img className={styles.imgStyle} src="/foot.jpg" style={{width:50,height:50}}/>
-                      <img className={styles.imgStyle}src="/foot.jpg" style={{width:50,height:50}}/>
                   </div>
-                  <div className={styles.marginRightAuto}>
+                  {/*
+                    <div className={styles.marginRightAuto}>
                       <Button type="primary">开始归纳比对</Button>
-                  </div>
-                   
+                    </div>
+                   */
+                  }
               </div>
 
             </div>

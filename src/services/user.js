@@ -11,24 +11,31 @@ export async function queryCurrent(params) {
   });
 }
 
-export function addUser(params) {
+export async function addUser(params) {
   return request('/api/manage/adduser', {
     method: 'POST',
     body: getSearchUrl(params),
   });
 }
 
-export function deleteUser(params) {
-  return request('/api/deleteUser', {
+export async function deleteUser(params) {
+  return request('/api/manage/deleteuser', {
     method: 'POST',
-    body: params,
+    body: getSearchUrl(params),
   });
 }
 
-export function lockUser(params) {
-  return request('/api/lockUser', {
+export async function lockUser(params) {
+  return request('/api/manage/lockuser', {
     method: 'POST',
-    body: params,
+    body: getSearchUrl(params),
+  });
+}
+
+export async function updateUserPassword(params) {
+  return request('/api/manage/updateuserpassword', {
+    method: 'POST',
+    body: getSearchUrl(params),
   });
 }
 
@@ -54,10 +61,10 @@ export function updatePwd(params) {
   });
 }
 // 采集足迹信息
-export function collectPrintInfo(params) {
+export async function collectPrintInfo(params) {
   return request('/api/gather/entering', {
     method: 'POST',
-    body: getSearchUrl(params),
+    body: params,
   });
 }
 
@@ -67,6 +74,27 @@ export async function startConclude(params) {
     body: getSearchUrl(params),
   });
 }
+// 查询所有的管辖案件
+export async function queryCases() {
+  return request('/api/query/queryallmycases', {
+    method: 'POST',
+  });
+}
+// 根据caseid查询所有的相似案件
+export async function querySimilarCases( params ) {
+  return request('/api/query/queryfootprint', {
+    method: 'POST',
+    body: getSearchUrl(params),
+  });
+}
+// 根据caseid查询所属图片
+export async function queryCaseImg( params ) {
+  return request('/api/query/queryimg', {
+    method: 'POST',
+    body: getSearchUrl(params),
+  });
+}
+
 
 // 实现拼接字符串
 function getSearchUrl(params) {

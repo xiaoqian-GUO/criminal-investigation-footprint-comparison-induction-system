@@ -84,7 +84,7 @@ class TableList extends Component {
         const { dispatch } = that.props;
         dispatch({
           type: 'userManagement/lockUser',
-          payload: { username, locked },
+          payload: { username: username },
         });
       },
       onCancel() {},
@@ -100,7 +100,9 @@ class TableList extends Component {
         const { dispatch } = that.props;
         dispatch({
           type: 'userManagement/deleteUser',
-          payload: key,
+          payload: {
+            username: key
+          },
         });
       },
       onCancel() {},
@@ -122,7 +124,7 @@ class TableList extends Component {
   render() {
     const { filterData, loading } = this.props;
     return (
-      <div>
+      <div className={styles.mainDiv}>
         <h1>用户管理</h1>
         <div className={styles.searchInput}>
           <Search placeholder="根据用户名查询" enterButton="Search" onSearch={this.handleSearch} />

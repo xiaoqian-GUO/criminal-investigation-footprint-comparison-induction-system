@@ -24,13 +24,13 @@ class LocalizedModal extends React.Component {
       setFieldsValue({
         username: data.username,
         password: data.password,
-        authority: data.authority,
+        institution: data.institution,
       });
     } else {
       setFieldsValue({
         username: '',
         password: '',
-        authority: '',
+        institution: '',
       });
     }
   };
@@ -54,12 +54,13 @@ class LocalizedModal extends React.Component {
     } = this.props;
 
     validateFields((err, values) => {
-      console.log(values);
       if (!err) {
+        const { username, password } = values;
         dispatch({
           type: 'userManagement/editUser',
           payload: {
-            ...values,
+            username,
+            password
           },
         });
         // 重置 `visible` 属性为 false 以关闭对话框
@@ -76,9 +77,16 @@ class LocalizedModal extends React.Component {
 
     validateFields((err, values) => {
       if (!err) {
+        var newValue = {
+          ...values,
+          name: '',
+          userid: '',
+          email: '',
+          phone: '',
+        };
         dispatch({
           type: 'userManagement/addUser',
-          payload: values,
+          payload: newValue,
         });
         // 重置 `visible` 属性为 false 以关闭对话框
         this.setState({ visible: false });
@@ -143,7 +151,7 @@ class LocalizedModal extends React.Component {
             <FormItem label="组织">
               {getFieldDecorator('institution', {
                 rules: [{ required: true }],
-              })(<Input />)}
+              })(modalConfig.Input)}
             </FormItem>
           </Form>
         </Modal>

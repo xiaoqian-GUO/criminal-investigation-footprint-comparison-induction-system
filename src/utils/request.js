@@ -94,16 +94,17 @@ export default function request(url, option, res) {
     newOptions.method === 'DELETE'
   ) {
     if (!(newOptions.body instanceof FormData)) {
-      newOptions.headers = {
-        Accept: 'application/json', //'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-        ...newOptions.headers,
-      };
+        newOptions.headers = {
+          Accept: 'application/json', //'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+          ...newOptions.headers,
+        };
       //newOptions.body = JSON.stringify(newOptions.body);
     } else {
       // newOptions.body is FormData
       newOptions.headers = {
         Accept: 'application/json',
+        //'Content-Type': 'multipart/form-data; charset=utf-8',
         ...newOptions.headers,
       };
     }

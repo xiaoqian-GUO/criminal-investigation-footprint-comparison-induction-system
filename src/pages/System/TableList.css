@@ -1,0 +1,15 @@
+.searchInput {
+  width: 300px;
+  margin-bottom: 16px;
+}
+.mainDiv {
+  background: white;
+}
+.override-ant-btn :global(.ant-btn) {
+  border-radius: 10px;
+  width: 100px;
+  margin-right: 15px;
+}
+.override-ant-btn :global(.ant-btn):nth-child(3) {
+  margin-right: 0;
+}

@@ -4,6 +4,7 @@ import {
   updateUserInfo,
   addUser,
   lockUser,
+  updateUserPassword
 } from '@/services/user';
 import { Modal } from 'antd';
 
@@ -31,7 +32,7 @@ export default {
       // 判断有没有重复的 username
       if (data.every(item => item.username !== payload.username)) {
         const response = yield call(addUser, payload);
-        if (response.status === 'ok') {
+        if (response.status === 0) {
           Modal.success({ title: 'This is a success message', content: '新建成功' });
           yield put({
             type: 'addNewUser',
@@ -46,8 +47,8 @@ export default {
     },
     // 编辑
     *editUser({ payload }, { call, put }) {
-      const response = yield call(updateUserInfo, payload);
-      if (response.status === 'ok') {
+      const response = yield call(updateUserPassword, payload);
+      if (response.status === 0) {
         Modal.success({ title: 'This is a success message', content: '更新成功' });
         yield put({
           type: 'updateUser',
@@ -60,7 +61,7 @@ export default {
     // 锁定某个用户
     *lockUser({ payload }, { call, put }) {
       const response = yield call(lockUser, payload);
-      if (response.status === 'ok') {
+      if (response.status === 0) {
         if (payload.locked) {
           Modal.success({ title: 'This is a success message', content: '解除锁定成功' });
         } else {
@@ -77,7 +78,7 @@ export default {
     // 删除某个用户
     *deleteUser({ payload }, { call, put }) {
       const response = yield call(delUser, payload);
-      if (response.status === 'ok') {
+      if (response.status === 0) {
         Modal.success({ title: 'This is a success message', content: '删除成功' });
         yield put({
           type: 'delUser',
@@ -122,8 +123,8 @@ export default {
     },
     delUser(state, { payload: delKey }) {
       const { data, filterData } = state;
-      const newDate = data.filter(item => item.username !== delKey);
-      const updatedFilterData = filterData.filter(item => item.username !== delKey);
+      const newDate = data.filter(item => item.username !== delKey['username']);
+      const updatedFilterData = filterData.filter(item => item.username !== delKey['username']);
       return {
         ...state,
         data: newDate,

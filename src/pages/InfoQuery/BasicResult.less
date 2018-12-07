@@ -16,3 +16,28 @@
     background: white;
     margin-top: 24px;
 }
+.searchInput {
+    width: 400px;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.override-ant-btn {
+    // 覆盖 ant-d 样式
+    :global(.ant-btn) {
+        border-radius: 10px;
+        width: 100px;
+        margin-right:15px;
+        &:nth-child(3){
+            margin-right: 0;
+        }
+    }
+}
+table {
+    :global(.ant-table-thead) {
+        font-weight: bold;
+        th {
+            background: #eee;
+        }
+    }
+}
