@@ -99,6 +99,7 @@ export default {
   'menu.profile.advanced': '高级详情页',
   'menu.infoconclude': '足迹比对归纳',
   'menu.infoconclude.conclude': '案件归纳对比',
+  'menu.infoconclude.concludecases': '足迹归纳对比',
   'menu.infoquery': '足迹信息查询',
   'menu.infoquery.basicInfo': '足迹查询',
   'menu.infoquery.basicResult': '管辖案件',

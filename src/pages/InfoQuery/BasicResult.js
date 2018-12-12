@@ -49,7 +49,7 @@ class BasicResult extends React.Component {
   handleSearch = value => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'info/fetchAllSimilarCases',
+      type: 'info/searchCases',
       payload: {
         caseid: value,
       },
@@ -74,7 +74,7 @@ class BasicResult extends React.Component {
         </div>
         <div className={styles.contentBody} id="allCases">
           <div className={styles.searchInput}>
-            <Search placeholder="根据案件编号查询所有相似案件" enterButton="点击查询" onSearch={this.handleSearch} />
+            <Search placeholder="根据案件编号查询" enterButton="点击查询" onSearch={this.handleSearch} />
           </div>
           <Table
             columns={this.columns}

@@ -2,15 +2,13 @@ import {
   queryCases,
   querySimilarCases,
   queryCaseImg,
-  getBase64Other
+  mergeCases
 } from '@/services/user';
 import { message } from 'antd';
 export default {
-  namespace: 'info',
+  namespace: 'concludecases',
 
   state: {
-    imageUrl: "",
-    backgroundImg: "",
     cases: [],
     filterCases: []
   },
@@ -42,32 +40,18 @@ export default {
         });
       }
     },
-     // 根据caseid查询足迹所属照片
-     *fetchCasePic({ payload }, { call, put }) {
-      const { caseid } = payload;
-      if( caseid ){
-        const response = yield call(queryCaseImg, payload);
-        yield put({
-          type: 'changeBgImg',
-          payload: response,
-        });
-      }
-      else{
-        yield put({
-          type: 'changeBgImg',
-          payload: '',
-        });
-      }
+    // 获取所有管辖案件
+    *mergeCases({ payload }, { call, put }) {
+      const response = yield call(mergeCases, payload);
+      yield put({
+        type: 'updateCases',
+        payload: response,
+      });
     },
 
   },
 
   reducers: {
-    getImageUrl(state, action) {
-      return {
-        imageUrl: action.payload,
-      };
-    },
     getAllCases( state, action ){
       var arr = action.payload.filter(function( item ){
         return item !==  null;
@@ -79,22 +63,17 @@ export default {
       }
     },
     searchCases( state, action ) {
-      const { caseid: value } = action.payload;
-      const reg = new RegExp(value, 'i');
-      const newArr = state.cases.filter(function( item ){
-        const index = item.caseid.toString().search(reg);
-        return index !== -1;
-      });
       return {
         ...state,
-        filterCases: newArr
+        filterCases: action.payload
       }
     },
-    changeBgImg( state, action ) {
+    updateCases( state, action ){
       return {
         ...state,
-        backgroundImg: action.payload
-      }
+        cases: action.payload,
+        filterCases: action.payload,
+      };
     }
 
   },

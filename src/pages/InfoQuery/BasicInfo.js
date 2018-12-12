@@ -5,37 +5,90 @@ import { Form, Breadcrumb, Alert, Input, Icon,Button} from 'antd';
 import styles from './BasicInfo.less';
 import Avatar from './Avatar';
 
+// 将blob对象转化为baseurl
+function getBase64Other(blob, callback) {
+  var a = new FileReader();
+  a.onload = function(e) {callback(e.target.result);};
+  a.readAsDataURL(blob);
+}
+
 @connect(({ info }) => ({
   imageUrl: info.imageUrl,
   backgroundImg: info.backgroundImg
 }))
 class BasicInfo extends React.Component {
   state = {
-    caseid: ''
+    caseid: '',
+    base64ImageUrl: '',
   }
   handleChange = (e) => {
     this.setState({
-      caseid: e.target.value
+      caseid: e.target.value,
     });
   }
   handleClick = ()  => {
     const { caseid } = this.state;
     const { dispatch } = this.props;
-    if( caseid ){
-      dispatch({
-        type: 'info/fetchCasePic',
-        payload: {
-          caseid: caseid
-        }
-      });
+    dispatch({
+      type: 'info/fetchCasePic',
+      payload: {
+        caseid: caseid
+      }
+    });  
+  }
+  componentDidMount = () => {
+    const {
+      backgroundImg
+    } = this.props;
+    // 如果拿到了响应 就改变state
+    if(backgroundImg){
+      var objectUrl = window.URL.createObjectURL(backgroundImg);
+      this.refImage.src = objectUrl;
+      this.refImage.style.display = "inline";
+      this.refImage.onload = function(){
+        window.URL.revokeObjectURL(backgroundImg);
+      };
+      // getBase64Other(backgroundImg, base64ImageUrl => {
+      //   //console.log(base64ImageUrl);
+      //   this.setState({
+      //     base64ImageUrl: base64ImageUrl
+      //   })
+      // });
     }
-
+  }
+  componentWillUnmount = () => {
+    // 清空blob对象
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'info/changeBgImg',
+      payload: ""
+    });
   }
   render() {
     const {
       imageUrl,
       loading,
+      backgroundImg
     } = this.props;
+
+    if(backgroundImg){
+      var objectUrl = window.URL.createObjectURL(backgroundImg);
+      this.refImage.src = objectUrl;
+      this.refImage.style.display = "inline";
+      this.refImage.onload = function(){
+        window.URL.revokeObjectURL(backgroundImg);
+      };
+    }
+    //console.log(backgroundImg);
+
+    // getBase64Other(backgroundImg, base64ImageUrl => {
+    //   //console.log(base64ImageUrl);
+    //   this.setState({
+    //     base64ImageUrl: base64ImageUrl
+    //   })
+    // });
+    //}
+    const { base64ImageUrl } = this.state;
     return (
       <div>
         <div className={styles.content}>
@@ -72,14 +125,11 @@ class BasicInfo extends React.Component {
               <div className={styles.rightContent}>
                   
                   <div id="result" className={styles.result}>
-                      <img className={styles.imgStyle} src="/foot.jpg" style={{width:50,height:50}}/>
+                    {
+                      backgroundImg? (<img ref = { node => this.refImage = node} className={styles.imgStyle} src='' style={{ display: 'inline'}} />): 
+                      (<img ref = { node => this.refImage = node} className={styles.imgStyle} src='' style={{ display: 'none'}} />)
+                    }
                   </div>
-                  {/*
-                    <div className={styles.marginRightAuto}>
-                      <Button type="primary">开始归纳比对</Button>
-                    </div>
-                   */
-                  }
               </div>
 
             </div>

@@ -92,9 +92,15 @@ export async function queryCaseImg( params ) {
   return request('/api/query/queryimg', {
     method: 'POST',
     body: getSearchUrl(params),
+  }, 'image');
+}
+// 将数组内的cases进行案件合并，并返回新的cases
+export async function mergeCases( params ) {
+  return request('/api/compare/footprintcompare', {
+    method: 'POST',
+    body: getSearchUrl(params),
   });
 }
-
 
 // 实现拼接字符串
 function getSearchUrl(params) {
@@ -109,4 +115,10 @@ function getSearchUrl(params) {
   } else {
     return url;
   }
+}
+//将blob对象转化为baseurl
+function getBase64Other(blob, callback) {
+  var a = new FileReader();
+  a.onload = function(e) {callback(e.target.result);};
+  a.readAsDataURL(blob);
 }

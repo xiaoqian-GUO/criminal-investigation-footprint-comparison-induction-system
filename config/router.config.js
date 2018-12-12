@@ -66,6 +66,11 @@ export default [
             name: 'conclude',
             component: './InfoConclude/Conclude',
           },
+          {
+            path: '/infoconclude/concludecases',
+            name: 'concludecases',
+            component: './InfoConclude/ConcludeCases',
+          },
         ],
       },
       // system

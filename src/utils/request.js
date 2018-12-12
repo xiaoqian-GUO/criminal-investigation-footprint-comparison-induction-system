@@ -94,11 +94,21 @@ export default function request(url, option, res) {
     newOptions.method === 'DELETE'
   ) {
     if (!(newOptions.body instanceof FormData)) {
+      if(res === "image"){
+        newOptions.headers = {
+          Accept: 'image/jpeg', //'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+          ...newOptions.headers,
+        };
+      }
+      else{
         newOptions.headers = {
           Accept: 'application/json', //'application/json',
           'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
           ...newOptions.headers,
         };
+      }
+       
       //newOptions.body = JSON.stringify(newOptions.body);
     } else {
       // newOptions.body is FormData
@@ -129,6 +139,13 @@ export default function request(url, option, res) {
     return fetch(url, newOptions)
       .then(checkStatus)
       .then(res => res.text());
+  }
+  else if( res === "image"){
+    return fetch(url, newOptions)
+      .then(checkStatus)
+      .then(res => {
+          return res.blob();
+       });
   }
   else{
     return fetch(url, newOptions)

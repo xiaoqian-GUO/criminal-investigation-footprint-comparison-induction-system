@@ -301,4 +301,5 @@ export default {
   'app.setting.copyinfo': 'copy successďźplease replace defaultSettings in src/models/setting.js',
   'app.setting.production.hint':
     'Setting panel shows in development environment only, please manually modify',
+  'menu.infoconclude.concludecases': '足迹归纳对比',
 };

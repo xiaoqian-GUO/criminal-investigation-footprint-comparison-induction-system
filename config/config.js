@@ -6,6 +6,7 @@ import defaultSettings from '../src/defaultSettings';
 
 export default {
   // add for transfer to umi
+  history: 'hash', // 默认是 browser
   plugins: [
     [
       'umi-plugin-react',
