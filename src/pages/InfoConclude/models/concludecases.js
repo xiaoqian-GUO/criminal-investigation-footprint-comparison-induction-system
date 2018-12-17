@@ -50,11 +50,13 @@ export default {
         };
         const response = yield call(mergeCases, obj);
         if(response.status === 0){
+          message.success("案件合并成功");
           const response2 = yield call(queryCases);
           yield put({
             type: 'getAllCases',
             payload: response2,
           });
+          location.reload();
         }
         else{
           message.error("案件合并失败");

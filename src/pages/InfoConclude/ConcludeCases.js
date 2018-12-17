@@ -127,7 +127,7 @@ class ConcludeCases extends React.Component {
             columns={this.columns}
             bordered
             dataSource={filterCases}
-            rowKey={record => record.caseid}
+            rowKey={record => (record.caseid + record.detail)}
             loading={loading}
           />
         </div> 
