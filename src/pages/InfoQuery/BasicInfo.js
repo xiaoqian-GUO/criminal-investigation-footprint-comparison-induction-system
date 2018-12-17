@@ -32,7 +32,7 @@ class BasicInfo extends React.Component {
     dispatch({
       type: 'info/fetchCasePic',
       payload: {
-        caseid: caseid
+        imageid: caseid
       }
     });  
   }
@@ -108,7 +108,7 @@ class BasicInfo extends React.Component {
               <div className={styles.upload}>
                   <div>
                     <div>
-                      <p className={styles.centerPara}>案件编号：</p>
+                      <p className={styles.centerPara}>图像编号：</p>
                       <Input type="text" value={ this.state.caseid } onChange={this.handleChange}/>
                     </div>
                     <br/>

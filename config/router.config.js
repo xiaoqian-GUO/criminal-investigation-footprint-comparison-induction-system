@@ -61,11 +61,11 @@ export default [
         icon: 'profile',
         name: 'infoconclude',
         routes: [
-          {
-            path: '/infoconclude/conclude',
-            name: 'conclude',
-            component: './InfoConclude/Conclude',
-          },
+          // {
+          //   path: '/infoconclude/conclude',
+          //   name: 'conclude',
+          //   component: './InfoConclude/Conclude',
+          // },
           {
             path: '/infoconclude/concludecases',
             name: 'concludecases',

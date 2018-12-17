@@ -42,11 +42,27 @@ export default {
     },
     // 获取所有管辖案件
     *mergeCases({ payload }, { call, put }) {
-      const response = yield call(mergeCases, payload);
-      yield put({
-        type: 'updateCases',
-        payload: response,
-      });
+      const { cases } = payload;
+      if( cases.length == 2){
+        var obj = {
+          caseid1: cases[0],
+          caseid2: cases[1]
+        };
+        const response = yield call(mergeCases, obj);
+        if(response.status === 0){
+          const response2 = yield call(queryCases);
+          yield put({
+            type: 'getAllCases',
+            payload: response2,
+          });
+        }
+        else{
+          message.error("案件合并失败");
+        }
+      }
+      else{
+        message.warning("请选择两个相似案件合并");
+      }
     },
 
   },

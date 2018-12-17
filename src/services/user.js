@@ -96,7 +96,7 @@ export async function queryCaseImg( params ) {
 }
 // 将数组内的cases进行案件合并，并返回新的cases
 export async function mergeCases( params ) {
-  return request('/api/compare/footprintcompare', {
+  return request('/api/compare/casemerge', {
     method: 'POST',
     body: getSearchUrl(params),
   });

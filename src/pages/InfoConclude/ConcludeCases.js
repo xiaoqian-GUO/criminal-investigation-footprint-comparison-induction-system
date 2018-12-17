@@ -77,7 +77,7 @@ class ConcludeCases extends React.Component {
     // 获取用户数据
     dispatch({ type: 'concludecases/fetchAllCases' });
   }
-  componentDidUpdate = () => {
+  handleMerge = () => {
     //console.log(this.state.checkedVals);
     //将获取到的caseid合并到一起
     const { dispatch } = this.props;
@@ -119,6 +119,9 @@ class ConcludeCases extends React.Component {
         <div className={styles.contentBody} id="allCases">
           <div className={styles.searchInput}>
             <Search placeholder="根据案件编号查询所有相似案件" enterButton="点击查询" onSearch={this.handleSearch} />
+          </div>
+          <div>
+              <Button type="primary" onClick={this.handleMerge} className={styles.floatBtn}>点击合并</Button>
           </div>
           <Table
             columns={this.columns}

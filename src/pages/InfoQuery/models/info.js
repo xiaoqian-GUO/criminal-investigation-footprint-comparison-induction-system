@@ -44,8 +44,8 @@ export default {
     },
      // 根据caseid查询足迹所属照片
      *fetchCasePic({ payload }, { call, put }) {
-      const { caseid } = payload;
-      if( caseid ){
+      const { imageid } = payload;
+      if( imageid ){
         const response = yield call(queryCaseImg, payload);
         yield put({
           type: 'changeBgImg',
