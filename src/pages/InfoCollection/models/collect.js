@@ -18,7 +18,7 @@ export default {
             type: 'changeStatus',
             payload: true,
           });
-          location.href = "success";
+          location.href = "/#/infocollection/success";
         } else {
           message.error("足迹信息上传失败");
         }
