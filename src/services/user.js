@@ -94,6 +94,13 @@ export async function queryCaseImg( params ) {
     body: getSearchUrl(params),
   }, 'image');
 }
+// 根据caseid查询所属图片--同步事件
+export function queryImg( params ) {
+  return request('/api/query/queryimg', {
+    method: 'POST',
+    body: getSearchUrl(params),
+  }, 'image');
+}
 // 将数组内的cases进行案件合并，并返回新的cases
 export async function mergeCases( params ) {
   return request('/api/compare/casemerge', {
@@ -101,7 +108,12 @@ export async function mergeCases( params ) {
     body: getSearchUrl(params),
   });
 }
-
+// 根据caseid查询案件详情
+export async function getDetails( params ) {
+  const { caseid } = params;
+  const url = '/api/query/querycasedetail?caseid=' + caseid;
+  return request(url);
+}
 // 实现拼接字符串
 function getSearchUrl(params) {
   var url = '';

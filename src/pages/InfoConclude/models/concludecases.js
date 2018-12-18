@@ -2,7 +2,8 @@ import {
   queryCases,
   querySimilarCases,
   queryCaseImg,
-  mergeCases
+  mergeCases,
+  getDetails
 } from '@/services/user';
 import { message } from 'antd';
 export default {
@@ -10,7 +11,8 @@ export default {
 
   state: {
     cases: [],
-    filterCases: []
+    filterCases: [],
+    details: {},
   },
 
   effects: {
@@ -43,6 +45,7 @@ export default {
     // 获取所有管辖案件
     *mergeCases({ payload }, { call, put }) {
       const { cases } = payload;
+      console.log(cases);
       if( cases.length == 2){
         var obj = {
           caseid1: cases[0],
@@ -65,6 +68,14 @@ export default {
       else{
         message.warning("请选择两个相似案件合并");
       }
+    },
+    // 获取所有管辖案件
+    *getDetails({ payload }, { call, put }) {
+      const response = yield call(getDetails, payload);
+      yield put({
+        type: 'updateDetails',
+        payload: response,
+      });
     },
 
   },
@@ -91,6 +102,12 @@ export default {
         ...state,
         cases: action.payload,
         filterCases: action.payload,
+      };
+    },
+    updateDetails( state, action ){
+      return {
+        ...state,
+        details: action.payload
       };
     }
 

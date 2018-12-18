@@ -3,12 +3,15 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Form, Breadcrumb, Alert, Input, Icon, Table, Button, Modal, Checkbox } from 'antd';
 import styles from './ConcludeCases.less';
+import ModalConclude from './ModalConclude';
+import ModalImage from './ModalImage';
 
 const { Search } = Input;
 
 @connect(({ concludecases, loading }) => ({
   filterCases: concludecases.filterCases,
   loading: loading.effects['concludecases/fetchAllCases'],
+  details: concludecases.details
 }))
 class ConcludeCases extends React.Component {
   state = {
@@ -33,6 +36,9 @@ class ConcludeCases extends React.Component {
       });
     }
   }
+  handleImage = ( imageid ) => {
+    alert( imageid );
+  }
   // 表头数据
   columns = [
     {
@@ -50,11 +56,11 @@ class ConcludeCases extends React.Component {
       dataIndex: 'caseid',
       width: 200,
     },
-    {
-      title: '案件详情',
-      dataIndex: 'detail',
-      width: 200,
-    },
+    // {
+    //   title: '案件详情',
+    //   dataIndex: 'detail',
+    //   width: 200,
+    // },
     {
       title: '地点',
       dataIndex: 'location',
@@ -69,6 +75,52 @@ class ConcludeCases extends React.Component {
       title: '足迹遗留方式',
       dataIndex: 'leaveMethod',
       width: 200,
+    },
+    {
+      title: '查看图片',
+      width: 200,
+      render: (text, record) => {
+        const { imageidList } = record;
+        const imageList = [101,109,110];
+        const len = imageList.length;
+        let arr;
+        arr=imageList.map((item,index)=>{
+          if( index === len-1){
+            return (
+              <span key={item}>
+                  {/*<a href="javascript:void(0);" onClick={() => this.handleImage(item)}>{item}</a> */}
+                  <ModalImage imageid={ item }/>
+              </span>
+            );
+          }
+          else{
+            return (
+                <span key={item}>
+                  {/*
+                    <a href="javascript:void(0);" onClick={() => this.handleImage(item)}>{item}</a>
+                    <span className="ant-divider" />    
+                  */}
+                  <ModalImage imageid={ item }/>
+                  <span className="ant-divider" />
+                </span>
+            );
+          } 
+        });
+        return (
+          <span className={styles['override-ant-btn']}>
+            {arr}
+          </span>
+        );
+      }
+    },
+    {
+      title: '查看详情',
+      width: 200,
+      render: (text, record) => (
+        <span className={styles['override-ant-btn']}>
+          <ModalConclude data={ record } />
+        </span>
+      ),
     },
   ];
 
@@ -127,7 +179,7 @@ class ConcludeCases extends React.Component {
             columns={this.columns}
             bordered
             dataSource={filterCases}
-            rowKey={record => (record.caseid + record.detail)}
+            rowKey={record => record.caseid}
             loading={loading}
           />
         </div> 
