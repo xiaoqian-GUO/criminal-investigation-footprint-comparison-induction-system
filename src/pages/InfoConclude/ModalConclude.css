@@ -2,7 +2,7 @@
   padding-right: 60px;
 }
 .textareaStyle {
-  line-height: 15px;
+  line-height: 18px;
   height: 100px;
 }
 :global(.ant-form-item) {

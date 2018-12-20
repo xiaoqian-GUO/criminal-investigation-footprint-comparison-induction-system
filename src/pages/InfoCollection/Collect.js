@@ -124,7 +124,7 @@ class Collect extends React.Component {
                 >
                 {getFieldDecorator('detail', {
                   rules: [{ required: true }],
-                })(<textarea rows={3} cols={40}></textarea>)}
+                })(<textarea rows={3} cols={40} className={styles.textareaStyle}></textarea>)}
               </FormItem>
               <FormItem
                 {...formItemLayout}
