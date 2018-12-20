@@ -59,7 +59,7 @@ export default {
             type: 'getAllCases',
             payload: response2,
           });
-          location.reload();
+          //location.reload();
         }
         else{
           message.error("案件合并失败");

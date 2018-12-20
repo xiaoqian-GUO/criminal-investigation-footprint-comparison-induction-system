@@ -54,7 +54,7 @@ class ConcludeCases extends React.Component {
     {
       title: '案件编号',
       dataIndex: 'caseid',
-      width: 200,
+      width: 100,
     },
     // {
     //   title: '案件详情',
@@ -78,34 +78,36 @@ class ConcludeCases extends React.Component {
     },
     {
       title: '查看图片',
-      width: 200,
+      width: 300,
       render: (text, record) => {
         const { imageidList } = record;
-        const imageList = [101,109,110];
-        const len = imageList.length;
-        let arr;
-        arr=imageList.map((item,index)=>{
-          if( index === len-1){
-            return (
-              <span key={item}>
-                  {/*<a href="javascript:void(0);" onClick={() => this.handleImage(item)}>{item}</a> */}
-                  <ModalImage imageid={ item }/>
-              </span>
-            );
-          }
-          else{
-            return (
-                <span key={item}>
-                  {/*
-                    <a href="javascript:void(0);" onClick={() => this.handleImage(item)}>{item}</a>
-                    <span className="ant-divider" />    
-                  */}
-                  <ModalImage imageid={ item }/>
-                  <span className="ant-divider" />
+        //const imageList = [101,109,110];
+        let arr = [];
+        if( imageidList ){
+          const len = imageidList.length;
+          arr=imageidList.map((item,index)=>{
+            if( index === len-1){
+              return (
+                <span key={""+ item + index}>
+                    {/*<a href="javascript:void(0);" onClick={() => this.handleImage(item)}>{item}</a> */}
+                    <ModalImage imageid={ item }/>
                 </span>
-            );
-          } 
-        });
+              );
+            }
+            else{
+              return (
+                  <span key={""+ item + index}>
+                    {/*
+                      <a href="javascript:void(0);" onClick={() => this.handleImage(item)}>{item}</a>
+                      <span className="ant-divider" />    
+                    */}
+                    <ModalImage imageid={ item }/>
+                    <span className="ant-divider" />
+                  </span>
+              );
+            } 
+          });
+        }
         return (
           <span className={styles['override-ant-btn']}>
             {arr}
@@ -115,7 +117,7 @@ class ConcludeCases extends React.Component {
     },
     {
       title: '查看详情',
-      width: 200,
+      width: 100,
       render: (text, record) => (
         <span className={styles['override-ant-btn']}>
           <ModalConclude data={ record } />
