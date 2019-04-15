@@ -4,7 +4,7 @@ import {
   updateUserInfo,
   addUser,
   lockUser,
-  updateUserPassword
+  updateUserPassword,
 } from '@/services/user';
 import { Modal } from 'antd';
 
@@ -45,7 +45,7 @@ export default {
         Modal.error({ title: 'This is an error message', content: '用户名重复' });
       }
     },
-    // 编辑
+    // 编辑用户密码
     *editUser({ payload }, { call, put }) {
       const response = yield call(updateUserPassword, payload);
       if (response.status === 0) {
@@ -58,6 +58,20 @@ export default {
         Modal.error({ title: 'This is an error message', content: '更新失败' });
       }
     },
+    // 编辑用户除密码外的信息
+    *editUserInfo({ payload }, { call, put }) {
+      const response = yield call(updateUserInfo, payload);
+      if (response.status === 0) {
+        //Modal.success({ title: 'This is a success message', content: '更新成功' });
+        yield put({
+          type: 'updateUserInfo',
+          payload,
+        });
+      } else {
+        Modal.error({ title: 'This is an error message', content: '更新失败' });
+      }
+    },
+
     // 锁定某个用户
     *lockUser({ payload }, { call, put }) {
       const response = yield call(lockUser, payload);
@@ -100,9 +114,25 @@ export default {
     },
     updateUser(state, { payload }) {
       const { filterData, data } = state;
-      const newData = data.map(item => (item.username === payload.username ? payload : item));
+      const newData = data.map(
+        item => (item.username === payload.username ? { ...item, ...payload } : item)
+      );
       const updatedFilterData = filterData.map(
-        item => (item.username === payload.username ? payload : item)
+        item => (item.username === payload.username ? { ...item, ...payload } : item)
+      );
+      return {
+        ...state,
+        data: newData,
+        filterData: updatedFilterData,
+      };
+    },
+    updateUserInfo(state, { payload }) {
+      const { filterData, data } = state;
+      const newData = data.map(
+        item => (item.username === payload.username ? { ...item, ...payload } : item)
+      );
+      const updatedFilterData = filterData.map(
+        item => (item.username === payload.username ? { ...item, ...payload } : item)
       );
       return {
         ...state,

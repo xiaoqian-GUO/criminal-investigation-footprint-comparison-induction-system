@@ -34,9 +34,9 @@
     data: {
         username: 'xxxx',              //用户名
         name: 'xxxx',                  //用户姓名
-        insitution: '西安电子科技大学', //所属机构
+        insitution: '西安电子科技大学', //所属单位
         phone: '18392089875',         //电话
-        userid: '1610122398',         //工号
+        userid: '1610122398',         //警号
         email: '1843887878@163.com',  //邮箱
         locked: true                  //是否被锁定
     }
@@ -50,9 +50,9 @@
 {
     username: 'xxxx',              //用户名
     name: 'xxxx',                  //用户姓名
-    insitution: '西安电子科技大学', //所属机构
+    insitution: '西安电子科技大学', //所属单位
     phone: '18392089875',         //电话
-    userid: '1610122398',         //工号
+    userid: '1610122398',         //警号
     email: '1843887878@163.com',  //邮箱
 }
 ```

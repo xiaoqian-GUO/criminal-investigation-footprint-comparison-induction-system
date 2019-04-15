@@ -16,21 +16,37 @@ class TableList extends Component {
     {
       title: '用户名',
       dataIndex: 'username',
-      width: 200,
+      width: 80,
     },
     {
       title: '密码',
       dataIndex: 'password',
-      width: 200,
+      width: 80,
     },
     {
-      title: '所属机构',
+      title: '用户姓名',
+      dataIndex: 'name',
+      width: 80,
+    },
+    {
+      title: '警号',
+      dataIndex: 'userid',
+      width: 100,
+    },
+    {
+      title: '所属单位',
       dataIndex: 'institution',
-      width: 200,
+      width: 240,
+    },
+    {
+      title: '联系电话',
+      dataIndex: 'phone',
+      width: 100,
     },
     {
       title: '锁定状态',
       dataIndex: 'locked',
+      width: 80,
       render: item => {
         return item ? '锁定' : '未锁定';
       },
@@ -38,7 +54,7 @@ class TableList extends Component {
     {
       title: '操作',
       key: 'action',
-      width: 400,
+      width: 200,
       render: (text, record) => (
         <span className={styles['override-ant-btn']}>
           <LocalizedModal text="编辑" data={record} />
@@ -101,7 +117,7 @@ class TableList extends Component {
         dispatch({
           type: 'userManagement/deleteUser',
           payload: {
-            username: key
+            username: key,
           },
         });
       },
@@ -123,6 +139,7 @@ class TableList extends Component {
 
   render() {
     const { filterData, loading } = this.props;
+
     return (
       <div className={styles.mainDiv}>
         <h1>用户管理</h1>

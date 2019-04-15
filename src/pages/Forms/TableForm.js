@@ -156,7 +156,7 @@ class TableForm extends PureComponent {
         },
       },
       {
-        title: '工号',
+        title: '警号',
         dataIndex: 'workId',
         key: 'workId',
         width: '20%',
@@ -167,7 +167,7 @@ class TableForm extends PureComponent {
                 value={text}
                 onChange={e => this.handleFieldChange(e, 'workId', record.key)}
                 onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="工号"
+                placeholder="警号"
               />
             );
           }

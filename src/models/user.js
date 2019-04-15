@@ -6,9 +6,9 @@ export default {
   state: {
     list: [],
     currentUser: {},
-    users:{},
-    allInfo:{},
-    rightContent:{},
+    users: {},
+    allInfo: {},
+    rightContent: {},
   },
 
   effects: {
@@ -33,14 +33,14 @@ export default {
       return {
         ...state,
         users: action.payload,
-        allInfo:{},
-        rightContent:{
-          name:action.payload.currentUser,
-          avatar:"https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+        allInfo: {},
+        rightContent: {
+          name: action.payload.currentUser,
+          avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
         },
       };
     },
-    modifyUserInfo(state,action){
+    modifyUserInfo(state, action) {
       return {
         ...state,
         allInfo: action.payload,
@@ -68,16 +68,16 @@ export default {
       };
     },
   },
-  subscriptions:{
-    setup({dispatch, history}){
-      history.listen((location)=>{
-        if(location.state){
+  subscriptions: {
+    setup({ dispatch, history }) {
+      history.listen(location => {
+        console.log('location', location);
+        if (location.state) {
           dispatch({
-            type:'addMethod',
-            payload:location.state||{},
+            type: 'addMethod',
+            payload: location.state || {},
           });
         }
-        
       });
     },
   },

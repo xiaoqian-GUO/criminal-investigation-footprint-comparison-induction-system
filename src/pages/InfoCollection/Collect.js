@@ -1,41 +1,48 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Form, Breadcrumb, Input, InputNumber, Button, Upload, 
-  Icon, message, DatePicker
+import {
+  Form,
+  Breadcrumb,
+  Input,
+  InputNumber,
+  Button,
+  Upload,
+  Icon,
+  message,
+  DatePicker,
 } from 'antd';
 import styles from './Collect.less';
 import moment from 'moment';
 
-
 const FormItem = Form.Item;
 
-function getRootPath(){
-  let url=location.href;
-  const pathname=window.location.pathname;
-  const index=url.indexOf(pathname);
-  let rootPath=url.slice(0,index);
+function getRootPath() {
+  let url = location.href;
+  const pathname = window.location.pathname;
+  const index = url.indexOf(pathname);
+  let rootPath = url.slice(0, index);
   return rootPath;
 }
 
-function getFormatTime( time ){
+function getFormatTime(time) {
   var date = new Date(time.format());
-  var currentTime = date.getFullYear() + "-" + (parseInt(date.getMonth())+1) + "-" + date.getDay();
-  var str = date.toLocaleTimeString();
-  if(str.indexOf('PM') !== -1){
-    var tmp = str.indexOf(':');
-    var tmpStr = str.slice(0,tmp);
-    str = "" + ( parseInt(tmpStr) + 12 ) + str.slice(tmp);
-  }
-  currentTime += " " + str.slice(0,-3);
+  var currentTime =
+    date.getFullYear() + '-' + (parseInt(date.getMonth()) + 1) + '-' + date.getDate();
+  var hour = date.getHours().toString().length > 1 ? date.getHours() : '0' + date.getHours();
+  var minutes =
+    date.getMinutes().toString().length > 1 ? date.getMinutes() : '0' + date.getMinutes();
+  var seconds =
+    date.getSeconds().toString().length > 1 ? date.getSeconds() : '0' + date.getSeconds();
+  currentTime += ' ' + hour + ':' + minutes + ':' + seconds;
   return currentTime;
 }
 @connect(({ collect }) => ({
-  status: collect.status,         //用来表示当前的上传状态， 如果上传成功就清空form表单
+  status: collect.status, //用来表示当前的上传状态， 如果上传成功就清空form表单
 }))
 @Form.create()
 class Collect extends React.Component {
-  handleSubmit = (e) => {
+  handleSubmit = e => {
     e.preventDefault();
     const { dispatch } = this.props;
     this.props.form.validateFields((err, values) => {
@@ -54,24 +61,23 @@ class Collect extends React.Component {
           type: 'collect/uploadPicture',
           payload: form_data,
         });
-      }
-      else{
-        message.error("信息不完整，不允许提交！");
+      } else {
+        message.error('信息不完整，不允许提交！');
       }
     });
-  }
-  normFile = (e) => {
+  };
+  normFile = e => {
     console.log('Upload event:', e);
     if (Array.isArray(e)) {
       return e;
     }
     return e && e.fileList;
-  }
+  };
   render() {
-    const rootPath=getRootPath();
+    const rootPath = getRootPath();
     const {
       form: { setFieldsValue, getFieldDecorator },
-      status
+      status,
     } = this.props;
     const formItemLayout = {
       labelCol: {
@@ -102,11 +108,8 @@ class Collect extends React.Component {
         </div>
         <div className={styles.contentBody}>
           <div className={styles.contentMain}>
-          <Form id="form" onSubmit={this.handleSubmit} encType="multipart/form-data">
-            <FormItem
-                {...formItemLayout}
-                label="上传图片"
-              >
+            <Form id="form" onSubmit={this.handleSubmit} encType="multipart/form-data">
+              <FormItem {...formItemLayout} label="上传图片">
                 {getFieldDecorator('footprintimage', {
                   valuePropName: 'fileList',
                   getValueFromEvent: this.normFile,
@@ -118,62 +121,44 @@ class Collect extends React.Component {
                   </Upload>
                 )}
               </FormItem>
-              <FormItem 
-                 {...formItemLayout}
-                 label="详细案情："
-                >
+              <FormItem {...formItemLayout} label="详细案情：">
                 {getFieldDecorator('detail', {
                   rules: [{ required: true }],
-                })(<textarea rows={3} cols={40} className={styles.textareaStyle}></textarea>)}
+                })(<textarea rows={3} cols={40} className={styles.textareaStyle} />)}
               </FormItem>
-              <FormItem
-                {...formItemLayout}
-                label="时间："
-              >
+              <FormItem {...formItemLayout} label="时间：">
                 {getFieldDecorator('time', config)(
                   <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />
                 )}
               </FormItem>
-              <FormItem 
-                {...formItemLayout}
-                label="地点："
-              >
+              <FormItem {...formItemLayout} label="地点：">
                 {getFieldDecorator('location', {
                   rules: [{ required: true }],
                 })(<Input />)}
               </FormItem>
-              <FormItem 
-                {...formItemLayout}
-                label="足迹采集方式："
-              >
+              <FormItem {...formItemLayout} label="足迹采集方式：">
                 {getFieldDecorator('gatherMethod', {
                   rules: [{ required: true }],
                 })(<Input />)}
               </FormItem>
-              <FormItem 
-                {...formItemLayout}
-                label="足迹遗留方式："
-              >
+              <FormItem {...formItemLayout} label="足迹遗留方式：">
                 {getFieldDecorator('leaveMethod', {
                   rules: [{ required: true }],
                 })(<Input />)}
               </FormItem>
-              <FormItem 
-                {...formItemLayout}
-                label="文件格式："
-              >
+              <FormItem {...formItemLayout} label="文件格式：">
                 {getFieldDecorator('imageformat', {
                   rules: [{ required: true }],
                 })(<Input />)}
               </FormItem>
-              <FormItem
-                wrapperCol={{ span: 12, offset: 6 }}
-              >
-                <Button type="primary" htmlType="submit">提交足迹信息</Button>
+              <FormItem wrapperCol={{ span: 12, offset: 6 }}>
+                <Button type="primary" htmlType="submit">
+                  提交足迹信息
+                </Button>
               </FormItem>
-            </Form>       
+            </Form>
           </div>
-          <br/>
+          <br />
         </div>
       </div>
     );

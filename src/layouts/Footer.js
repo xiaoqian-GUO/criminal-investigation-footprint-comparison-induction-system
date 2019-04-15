@@ -28,7 +28,7 @@ const FooterView = () => (
       ]}
       copyright={
         <Fragment>
-          Copyright <Icon type="copyright" /> 2018 刑侦足迹对比系统
+          Copyright <Icon type="copyright" /> 2018 公安机关足迹比对系统
         </Fragment>
       }
     />

@@ -186,7 +186,7 @@ class BasicLayout extends React.PureComponent {
       id: currRouterData.locale || currRouterData.name,
       defaultMessage: currRouterData.name,
     });
-    return `${message} - 刑侦足迹对比系统`;
+    return `${message} - 公安机关足迹比对系统`;
   };
 
   getLayoutStyle = () => {

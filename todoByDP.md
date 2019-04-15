@@ -5,10 +5,10 @@
 1. 个人基本信息(all type string)
     - username 用户名
     - name 用户姓名
-    - userId  工号
+    - userId  警号
     - email 邮箱
     - phone 手机号码
-    - institution 所属机构
+    - institution 所属单位
 
 2. 用户管理：显示注册的用户，可以实现删除、查询、锁定、修改密码。可以新建。
     - 新增：弹窗填写用户名、密码、权限 信息，提交时后台生成唯一key，需重新刷新请求数据（本地暂时用时间毫秒数模拟唯一key）

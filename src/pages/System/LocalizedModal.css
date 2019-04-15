@@ -1,0 +1,19 @@
+.override-cascader-picker :global(.ant-cascader-picker) {
+  width: 280px;
+  font-size: 12.5px;
+}
+:global .ant-cascader-menu {
+  height: 130px;
+  width: 140px;
+}
+:global .ant-cascader-menu:nth-of-type(3) {
+  min-width: 80px;
+  width: 80px;
+}
+:global .ant-cascader-picker-label {
+  padding-left: 3px;
+  padding-right: 20px;
+}
+:global .ant-input {
+  padding: 4px 3px;
+}

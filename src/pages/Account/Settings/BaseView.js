@@ -12,9 +12,9 @@ import styles from './BaseView.less';
 const FormItem = Form.Item;
 
 @connect(({ user }) => ({
-  currentUser: user.currentUser,    //当前用户
-  users: user.users,                //从model传过来的登陆状态，保存用户的username和status身份（管理员or普通用户）
-  allInfo: user.allInfo,            //当前用户的详细信息
+  currentUser: user.currentUser, //当前用户
+  users: user.users, //从model传过来的登陆状态，保存用户的username和status身份（管理员or普通用户）
+  allInfo: user.allInfo, //当前用户的详细信息
 }))
 @Form.create()
 class BaseView extends Component {
@@ -29,15 +29,15 @@ class BaseView extends Component {
 
   componentDidMount() {
     const { users, dispatch } = this.props;
-    const userName=localStorage.getItem("login") || "";
-    users.currentUser=users.currentUser?users.currentUser:userName;
+    const userName = localStorage.getItem('login') || '';
+    users.currentUser = users.currentUser ? users.currentUser : userName;
     const rsu = getAllUserinfo();
 
     if (Object.keys(users).length > 0) {
       rsu.then(response => {
         console.log('显示当前用户的所有个人信息');
         console.log(response);
-        if(Object.keys(response).length > 0){
+        if (Object.keys(response).length > 0) {
           const data = response;
           this.setState({
             locked: data.locked,
@@ -47,11 +47,9 @@ class BaseView extends Component {
             type: 'user/modifyUserInfo',
             payload: data,
           });
+        } else {
+          message.error('获取用户信息失败');
         }
-        else{
-          message.error("获取用户信息失败");
-        }
-        
       });
     } else {
       alert('认证失败，请重新登陆！');
@@ -83,16 +81,15 @@ class BaseView extends Component {
     const { locked } = this.state;
     const formValue = form.getFieldsValue();
     let bol = true;
-    if(locked){
-      message.error("用户已被锁定，不可修改信息");
-    }
-    else{
+    if (locked) {
+      message.error('用户已被锁定，不可修改信息');
+    } else {
       Object.keys(formValue).forEach(key => {
         if (!formValue[key]) {
           bol = false;
         }
       });
-  
+
       if (bol) {
         // 如果bol为true的话，就可以提交数据，否则不允许提交
         const rsu = updateUserInfo(formValue);
@@ -119,10 +116,9 @@ class BaseView extends Component {
         });
       } else {
         // 信息不完整 不允许提交
-        message.error("信息输入不完整，请按照要求完整输入!");
+        message.error('信息输入不完整，请按照要求完整输入!');
       }
     }
-    
   };
 
   render() {
@@ -144,7 +140,7 @@ class BaseView extends Component {
                   },
                 ],
               })(<Input readOnly />)}
-              <span className={styles.spanWarn}>（注意:不可修改）</span>
+              <span className={styles.spanWarn} />
             </FormItem>
 
             {/* 用户姓名 */}
@@ -156,10 +152,10 @@ class BaseView extends Component {
                     message: formatMessage({ id: 'app.settings.basic.name-message' }, {}),
                   },
                 ],
-              })(<Input />)}
+              })(<Input readOnly />)}
             </FormItem>
 
-            {/* 工号 */}
+            {/* 警号 */}
             <FormItem label={formatMessage({ id: 'app.settings.basic.userId' })}>
               {getFieldDecorator('userid', {
                 rules: [
@@ -168,7 +164,7 @@ class BaseView extends Component {
                     message: formatMessage({ id: 'app.settings.basic.userId-message' }, {}),
                   },
                 ],
-              })(<Input />)}
+              })(<Input readOnly maxLength="6" placeholder="请输入6位数字" />)}
             </FormItem>
             {/* 邮箱 */}
             <FormItem label={formatMessage({ id: 'app.settings.basic.email' })}>
@@ -190,7 +186,7 @@ class BaseView extends Component {
                     message: formatMessage({ id: 'app.settings.basic.address-message' }, {}),
                   },
                 ],
-              })(<Input />)}
+              })(<Input readOnly />)}
             </FormItem>
             {/* 手机号码 */}
             <FormItem label={formatMessage({ id: 'app.settings.basic.phone' })}>

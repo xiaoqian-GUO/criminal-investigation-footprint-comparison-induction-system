@@ -1,78 +1,95 @@
 .content {
-    background: white;
-    margin: -24px -24px 0px;
+  background: white;
+  margin: -24px -24px 0px;
 }
-.headerNav{
-    margin:0px 0px 0px 30px;
-    padding-top: 16px;
-    padding-bottom: 16px;
-    cursor:pointer;
+.headerNav {
+  margin: 0px 0px 0px 30px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  cursor: pointer;
 }
-.headerH{
-    margin:0px 0px 0px 30px;
-    padding-bottom: 1px;
+.headerH {
+  margin: 0px 0px 0px 30px;
+  padding-bottom: 1px;
 }
-.contentBody{
-    background: white;
-    margin-top: 24px;
-    padding-bottom: 20px;
+.contentBody {
+  background: white;
+  margin-top: 24px;
+  padding-bottom: 20px;
+  position: relative;
 }
-.flexBody{
-    display: flex;
-    justify-content: space-around;
-    align-items:center;
+.flexBody {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 .upload {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width:300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  height: 300px;
+  img {
+    width: 300px;
     height: 300px;
-    img {
-        width: 300px;
-        height: 300px;
-    }
+  }
 }
-.centerContent{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width:100px;
-    height:300px;
-    margin: 0 10px;
-    font-size:40px;
+.centerContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 300px;
+  margin: 0 10px;
+  font-size: 40px;
 }
-.rightContent{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 400px;
-    min-width: 400px;
+.rightContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  min-width: 400px;
 }
-.marginAuto{
-    margin-right: 8px;
-    text-align: center;
+.marginAuto {
+  margin-right: 8px;
+  text-align: center;
 }
-.marginRightAuto{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 70px;
+.marginRightAuto {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
 }
-.result{
-    min-height: 360px;
-    margin: 0 20px;
-    border: solid 2px #e0e0e0;
-    overflow: auto;
-    width:100%;
-    height: 100%;
+.result {
+  min-height: 360px;
+  margin: 0 20px;
+  border: solid 2px #e0e0e0;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
 }
-.imgStyle{
-    margin: 0;
-    width: 360px;
-    height: 355px;
-    overflow: hidden;
+.imgStyle {
+  margin: 0;
+  width: 360px;
+  height: 355px;
+  overflow: hidden;
 }
 .centerPara {
-    text-align: center;
+  text-align: center;
+}
+
+// 裁剪图片的样式
+.App {
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+.img {
+  width: 100px;
+  height: 100px;
 }

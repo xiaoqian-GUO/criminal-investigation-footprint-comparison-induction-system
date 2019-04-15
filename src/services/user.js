@@ -32,6 +32,7 @@ export async function lockUser(params) {
   });
 }
 
+// 管理员更新用户密码
 export async function updateUserPassword(params) {
   return request('/api/manage/updateuserpassword', {
     method: 'POST',
@@ -52,6 +53,7 @@ export function updateUserInfo(params) {
     body: body,
   });
 }
+
 export function updatePwd(params) {
   var url = '/api/user/changepassword';
   var body = getSearchUrl(params);
@@ -81,35 +83,43 @@ export async function queryCases() {
   });
 }
 // 根据caseid查询所有的相似案件
-export async function querySimilarCases( params ) {
+export async function querySimilarCases(params) {
   return request('/api/query/queryfootprint', {
     method: 'POST',
     body: getSearchUrl(params),
   });
 }
 // 根据caseid查询所属图片
-export async function queryCaseImg( params ) {
-  return request('/api/query/queryimg', {
-    method: 'POST',
-    body: getSearchUrl(params),
-  }, 'image');
+export async function queryCaseImg(params) {
+  return request(
+    '/api/query/queryimg',
+    {
+      method: 'POST',
+      body: getSearchUrl(params),
+    },
+    'image'
+  );
 }
 // 根据caseid查询所属图片--同步事件
-export function queryImg( params ) {
-  return request('/api/query/queryimg', {
-    method: 'POST',
-    body: getSearchUrl(params),
-  }, 'image');
+export function queryImg(params) {
+  return request(
+    '/api/query/queryimg',
+    {
+      method: 'POST',
+      body: getSearchUrl(params),
+    },
+    'image'
+  );
 }
 // 将数组内的cases进行案件合并，并返回新的cases
-export async function mergeCases( params ) {
+export async function mergeCases(params) {
   return request('/api/compare/casemerge', {
     method: 'POST',
     body: getSearchUrl(params),
   });
 }
 // 根据caseid查询案件详情
-export async function getDetails( params ) {
+export async function getDetails(params) {
   const { caseid } = params;
   const url = '/api/query/querycasedetail?caseid=' + caseid;
   return request(url);
@@ -131,6 +141,8 @@ function getSearchUrl(params) {
 //将blob对象转化为baseurl
 function getBase64Other(blob, callback) {
   var a = new FileReader();
-  a.onload = function(e) {callback(e.target.result);};
+  a.onload = function(e) {
+    callback(e.target.result);
+  };
   a.readAsDataURL(blob);
 }
