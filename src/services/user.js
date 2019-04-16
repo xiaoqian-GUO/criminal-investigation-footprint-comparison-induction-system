@@ -62,6 +62,45 @@ export function updatePwd(params) {
     body: body,
   });
 }
+
+// 下面是案件管理：查询案件、删除按钮、修改案件信息、新增按钮、获取案件列表
+// 获取案件列表
+export async function queryAllCases() {
+  return request('/api/manage/queryallcases');
+}
+// 新增按钮
+export async function addCase(params) {
+  return request('/api/manage/addcase', {
+    method: 'POST',
+    body: getSearchUrl(params),
+  });
+}
+// 删除按钮
+export async function delCase(params) {
+  return request('/api/manage/deletecase', {
+    method: 'POST',
+    body: getSearchUrl(params),
+  });
+}
+// 修改案件信息
+export function updateCaseInfo(params) {
+  var url = '/api/manage/updatecaseprofile';
+  var body = getSearchUrl(params);
+  return request(url, {
+    method: 'POST',
+    body: body,
+  });
+}
+// 查询案件
+export function queryCasesByInfo(params) {
+  var url = '/api/manage/querycases';
+  var body = getSearchUrl(params);
+  return request(url, {
+    method: 'POST',
+    body: body,
+  });
+}
+
 // 采集足迹信息
 export async function collectPrintInfo(params) {
   return request('/api/gather/entering', {

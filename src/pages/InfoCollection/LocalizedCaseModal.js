@@ -6,7 +6,7 @@
 import React from 'react';
 import { Button, Modal, Form, Input, Cascader } from 'antd';
 import { connect } from 'dva';
-import styles from './LocalizedModal.less';
+import styles from './LocalizedCaseModal.less';
 
 const FormItem = Form.Item;
 
@@ -63,7 +63,7 @@ const options = [
   },
 ];
 
-class LocalizedModal extends React.Component {
+class LocalizedCaseModal extends React.Component {
   state = { visible: false };
 
   handleClick = () => {
@@ -250,4 +250,4 @@ class LocalizedModal extends React.Component {
   }
 }
 
-export default connect()(Form.create()(LocalizedModal));
+export default connect()(Form.create()(LocalizedCaseModal));

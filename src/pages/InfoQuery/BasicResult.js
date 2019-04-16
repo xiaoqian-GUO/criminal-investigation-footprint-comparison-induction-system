@@ -65,11 +65,11 @@ class BasicResult extends React.Component {
             <Breadcrumb>
               <Breadcrumb.Item>首页</Breadcrumb.Item>
               <Breadcrumb.Item>足迹信息查询</Breadcrumb.Item>
-              <Breadcrumb.Item>查询所有管辖案件</Breadcrumb.Item>
+              <Breadcrumb.Item>查询所有足迹信息</Breadcrumb.Item>
             </Breadcrumb>
           </div>
           <div className={styles.headerH}>
-            <h2>所有管辖案件</h2>
+            <h2>足迹信息查询与导出</h2>
           </div>
         </div>
         <div className={styles.contentBody} id="allCases">

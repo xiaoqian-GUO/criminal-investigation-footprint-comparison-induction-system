@@ -172,12 +172,12 @@ class BasicInfo extends React.Component {
               <Breadcrumb.Item>
                 <a href="/infoquery/basic-info">首页</a>
               </Breadcrumb.Item>
-              <Breadcrumb.Item>足迹信息查询</Breadcrumb.Item>
-              <Breadcrumb.Item>查询案件所属足迹图片</Breadcrumb.Item>
+              <Breadcrumb.Item>足迹信息管理</Breadcrumb.Item>
+              <Breadcrumb.Item>管理案件所属足迹信息</Breadcrumb.Item>
             </Breadcrumb>
           </div>
           <div className={styles.headerH}>
-            <h2>足迹查询</h2>
+            <h2>足迹信息管理</h2>
           </div>
         </div>
         <div className={styles.contentBody}>

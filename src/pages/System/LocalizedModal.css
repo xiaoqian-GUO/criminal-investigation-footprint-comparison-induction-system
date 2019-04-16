@@ -17,3 +17,6 @@
 :global .ant-input {
   padding: 4px 3px;
 }
+:global .ant-modal {
+  top: 50px;
+}

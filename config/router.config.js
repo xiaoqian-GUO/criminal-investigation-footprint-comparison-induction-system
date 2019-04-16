@@ -26,6 +26,11 @@ export default [
         path: '/infocollection',
         routes: [
           {
+            path: '/infocollection/case-list',
+            name: 'caselist',
+            component: './InfoCollection/CaseList',
+          },
+          {
             path: '/infocollection/collect',
             name: 'collect',
             component: './InfoCollection/Collect',
