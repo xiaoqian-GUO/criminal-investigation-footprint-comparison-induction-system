@@ -1,11 +1,7 @@
-/**
- * @author:stanny
- * date:2018-11-02
- * @description: modify user password and authority
- */
 import React from 'react';
-import { 
-  Modal,
+import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
+import {
   Form,
   Breadcrumb,
   Input,
@@ -18,13 +14,11 @@ import {
   Select,
   Cascader
 } from 'antd';
-import { connect } from 'dva';
-import styles from './LocalizedCaseModal.less';
+import styles from './CollectCase.less';
 import moment from 'moment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-
 const options = [
   {
     value: '黑龙江省公安厅',
@@ -78,6 +72,15 @@ const options = [
   },
 ];
 
+
+function getRootPath() {
+  let url = location.href;
+  const pathname = window.location.pathname;
+  const index = url.indexOf(pathname);
+  let rootPath = url.slice(0, index);
+  return rootPath;
+}
+
 function getFormatTime(time) {
   var date = new Date(time.format());
   var currentTime =
@@ -90,169 +93,88 @@ function getFormatTime(time) {
   currentTime += ' ' + hour + ':' + minutes + ':' + seconds;
   return currentTime;
 }
-
-class LocalizedCaseModal extends React.Component {
-  state = { visible: false };
-
-  handleClick = () => {
-    // this.showModal();
-    const {
-      form: { setFieldsValue },
-      text,
-      data,
-    } = this.props;
-
-    if (text === '查看并编辑') {
-      const arr = data.institution.split(' / ');
-      setFieldsValue({
-        caseid: data.caseid,
-        caseStatus: data.caseStatus,
-        location: data.location,
-        institution: arr,
-        caseType: data.caseType,
-        enterType: data.enterType,
-        stolen: data.stolen,
-        persons: data.persons,
-        time: moment(data.time, 'YYYY-MM-DD HH:mm:ss'),
-        detail: data.detail
-      });
-    } else {
-      setFieldsValue({
-        caseid: "",
-        caseStatus: "",
-        location: "",
-        institution: ['黑龙江省公安厅', '哈尔滨市公安局', '南岗分局'],
-        caseType: "",
-        enterType: "",
-        stolen: "",
-        persons: "",
-        time: null,
-        detail: ''
-      });
+@connect(({ collect }) => ({
+  status: collect.status, //用来表示当前的上传状态， 如果上传成功就清空form表单
+}))
+@Form.create()
+class CollectCase extends React.Component {
+  handleSubmit = e => {
+    e.preventDefault();
+    const { dispatch } = this.props;
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('表单数据: ', values);
+        var form_data = new FormData();
+        form_data.append('caseid', values['caseid']);
+        form_data.append('caseStatus', values['caseStatus']);
+        form_data.append('time', getFormatTime(values['time']));
+        form_data.append('location', values['location']);
+        form_data.append('institution', values['institution'].join(' \/ '));
+        form_data.append('detail', values['detail']);
+        form_data.append('caseType', values['caseType']);
+        form_data.append('enterType', values['enterType']);
+        form_data.append('stolen', values['stolen']);
+        form_data.append('persons', values['persons']);
+        console.log(form_data.get('time'));
+        console.log('imageObj', form_data.get('footprintimage'));
+        dispatch({
+          type: 'collect/uploadCase',
+          payload: form_data,
+        });
+      } else {
+        message.error('信息不完整，不允许提交！');
+      }
+    });
+  };
+  normFile = e => {
+    console.log('Upload event:', e);
+    if (Array.isArray(e)) {
+      return e;
     }
+    return e && e.fileList;
   };
-
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
-
-  hideModal = () => {
-    this.setState({
-      visible: false,
-    });
-  };
-
-  submitEdit = () => {
-    const {
-      dispatch,
-      form: { validateFields },
-      data,
-    } = this.props;
-
-    validateFields((err, values) => {
-      if (!err) {
-        const { caseid, caseStatus, location, time, institution, detail, caseType, enterType, stolen, persons } = values;
-        dispatch({
-          type: 'caseManagement/editCaseInfo',
-          payload: {
-            caseid, 
-            caseStatus, 
-            location, 
-            detail, 
-            caseType, 
-            enterType, 
-            stolen, 
-            persons,
-            institution: institution.join(' / '),
-            time: getFormatTime(time)
-          },
-        });
-        // 重置 `visible` 属性为 false 以关闭对话框
-        this.setState({ visible: false });
-      }
-    });
-  };
-
-  submitNew = () => {
-    const {
-      dispatch,
-      form: { validateFields },
-      data,
-    } = this.props;
-
-    validateFields((err, values) => {
-      if (!err) {
-        var newValue = {
-          ...values,
-          institution: values.institution.join(' / '),
-          time: getFormatTime(values.time)
-        };
-        dispatch({
-          type: 'caseManagement/addCase',
-          payload: newValue,
-        });
-        // 重置 `visible` 属性为 false 以关闭对话框
-        this.setState({ visible: false });
-      }
-    });
-  };
-
   render() {
-    const { visible } = this.state;
+    const rootPath = getRootPath();
     const {
-      text,
-      form: { getFieldDecorator },
+      form: { setFieldsValue, getFieldDecorator },
+      status,
     } = this.props;
-
-    let modalConfig;
-    if (text === '查看并编辑') {
-      modalConfig = {
-        title: '修改案件信息',
-        onOk: this.submitEdit,
-        Input: <Input readOnly />,
-        label: '案件编号',
-      };
-    } else {
-      modalConfig = {
-        title: '新建案件',
-        onOk: this.submitNew,
-        Input: <Input maxLength="14"/>,
-        label: '案件编号',
-      };
-    }
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 8 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
     const config = {
       rules: [{ type: 'object', required: true, message: '请选择时间!' }],
     };
-
     return (
-      <span>
-        <Button
-          type="primary"
-          onClick={() => {
-            this.showModal();
-            this.handleClick();
-          }}
-        >
-          {text}
-        </Button>
-        <Modal
-          title={modalConfig.title}
-          visible={visible}
-          onOk={modalConfig.onOk}
-          onCancel={this.hideModal}
-          okText="提交"
-          cancelText="返回" 
-        >
-          <Form className={styles.userForm}>
-            <FormItem label={modalConfig.label}>
-              {getFieldDecorator('caseid', {
-                rules: [{ required: true }],
-              })(modalConfig.Input)}
-            </FormItem>
-
-            <FormItem label="案件状态">
+      <div>
+        <div className={styles.content}>
+          <div className={styles.headerNav}>
+            <Breadcrumb>
+              <Breadcrumb.Item>首页</Breadcrumb.Item>
+              <Breadcrumb.Item>案件信息采集</Breadcrumb.Item>
+              <Breadcrumb.Item>信息采集页</Breadcrumb.Item>
+            </Breadcrumb>
+          </div>
+          <div className={styles.headerH}>
+            <h2>案件信息采集</h2>
+          </div>
+        </div>
+        <div className={styles.contentBody}>
+          <div className={styles.contentMain}>
+            <Form id="form" onSubmit={this.handleSubmit} encType="multipart/form-data">
+              <FormItem {...formItemLayout} label="案件编号：">
+                {getFieldDecorator('caseid', {
+                  rules: [{ required: true }],
+                })(<Input maxLength="14" placeholder="编号规则：单位 + 年份 + 月份 + 序号"/>)}
+              </FormItem>
+              <FormItem {...formItemLayout} label="案件状态：">
                 {getFieldDecorator('caseStatus', {
                   initialValue: '未破案',
                   rules: [{ required: true }],
@@ -263,29 +185,29 @@ class LocalizedCaseModal extends React.Component {
                   </Select>
                 )}
               </FormItem>
-              <FormItem label="案发时间">
+              <FormItem {...formItemLayout} label="案发时间：">
                 {getFieldDecorator('time', config)(
                   <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />
                 )}
               </FormItem>
-              <FormItem label="案发地点">
+              <FormItem {...formItemLayout} label="案发地点：">
                 {getFieldDecorator('location', {
                   rules: [{ required: true }],
                 })(<Input />)}
               </FormItem>
-              <FormItem label="所属单位">
+              <FormItem {...formItemLayout} label="所属单位：">
                 {getFieldDecorator('institution', {
                   initialValue: ['黑龙江省公安厅', '哈尔滨市公安局', '南岗分局'],
                   rules: [{ type: 'array', required: true }],
                 })(<Cascader options={options} changeOnSelect placeholder="请选择所属单位" />)}
               </FormItem>
 
-              <FormItem label="简要案情">
+              <FormItem {...formItemLayout} label="简要案情：">
                 {getFieldDecorator('detail', {
                   rules: [{ required: true }],
                 })(<textarea rows={3} cols={60} className={styles.textareaStyle} />)}
               </FormItem>
-              <FormItem label="案件类别">
+              <FormItem {...formItemLayout} label="案件类别：">
                 {getFieldDecorator('caseType', {
                   initialValue: '入室盗窃案',
                   rules: [{ required: true }],
@@ -300,7 +222,7 @@ class LocalizedCaseModal extends React.Component {
                   </Select>
                 )}
               </FormItem>
-              <FormItem label="侵入方式">
+              <FormItem {...formItemLayout} label="侵入方式：">
                 {getFieldDecorator('enterType', {
                   initialValue: '技术开锁',
                   rules: [{ required: true }],
@@ -314,23 +236,29 @@ class LocalizedCaseModal extends React.Component {
                   </Select>
                 )}
               </FormItem>
-              <FormItem label="被盗物品">
+              <FormItem {...formItemLayout} label="被盗物品：">
                 {getFieldDecorator('stolen', {
                   rules: [{ required: true }],
                 })(<Input />)}
               </FormItem>
-              <FormItem label="作案人数">
+              <FormItem {...formItemLayout} label="作案人数：">
                 {getFieldDecorator('persons', {
                   rules: [{ required: true }],
                 })(<Input />)}
               </FormItem>
-            
-
-          </Form>
-        </Modal>
-      </span>
+              
+              <FormItem wrapperCol={{ span: 12, offset: 12 }}>
+                <Button type="primary" htmlType="submit">
+                  提交案件信息
+                </Button>
+              </FormItem>
+            </Form>
+          </div>
+          <br />
+        </div>
+      </div>
     );
   }
 }
 
-export default connect()(Form.create()(LocalizedCaseModal));
+export default CollectCase;

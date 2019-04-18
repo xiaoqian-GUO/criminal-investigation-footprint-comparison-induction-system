@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import {
@@ -12,66 +12,17 @@ import {
   message,
   DatePicker,
   Select,
-  Cascader
+  Cascader,
+  Modal
 } from 'antd';
+import ReactDOM from "react-dom";
+import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 import styles from './Collect.less';
 import moment from 'moment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const options = [
-  {
-    value: '黑龙江省公安厅',
-    label: '黑龙江省公安厅',
-    children: [
-      {
-        value: '哈尔滨市公安局',
-        label: '哈尔滨市公安局',
-        children: [
-          {
-            value: '南岗分局',
-            label: '南岗分局',
-          },
-          {
-            value: '道里分局',
-            label: '道里分局',
-          },
-          {
-            value: '道外分局',
-            label: '道外分局',
-          },
-          {
-            value: '香坊分局',
-            label: '香坊分局',
-          },
-        ],
-      },
-      {
-        value: '大庆市公安局',
-        label: '大庆市公安局',
-        children: [
-          {
-            value: '萨尔图区',
-            label: '萨尔图区',
-          },
-          {
-            value: '龙凤区',
-            label: '龙凤区',
-          },
-          {
-            value: '让胡路区',
-            label: '让胡路区',
-          },
-          {
-            value: '红岗区',
-            label: '红岗区',
-          },
-        ],
-      },
-    ],
-  },
-];
-
 
 function getRootPath() {
   let url = location.href;
@@ -98,30 +49,139 @@ function getFormatTime(time) {
 }))
 @Form.create()
 class Collect extends React.Component {
+  // 图片裁剪部分函数
+  state = {
+    src: null,
+    fileObj: null,
+    crop: {
+      aspect: 2.5,
+      width: 60,
+      x: 0,
+      y: 0
+    },
+    visible: false,
+  };
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  };
+
+  hideModal = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleFileClick = e => {
+    console.log('click');
+    console.log(e.target.files);
+    e.target.value = "";
+  }
+
+  onSelectFile = e => {
+    console.log('change');
+    if (e.target.files && e.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () =>{
+        console.log('load');
+        this.setState({ src: reader.result })
+        this.showModal();
+      });
+      console.log(reader.result);
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
+  onImageLoaded = (image, pixelCrop) => {
+    this.imageRef = image;
+  };
+
+  onCropComplete = (crop, pixelCrop) => {
+    this.makeClientCrop(crop, pixelCrop);
+  };
+
+  onCropChange = crop => {
+    this.setState({ crop });
+  };
+
+  async makeClientCrop(crop, pixelCrop) {
+    if (this.imageRef && crop.width && crop.height) {
+      const croppedImageUrl = await this.getCroppedImg(
+        this.imageRef,
+        pixelCrop,
+        "newFile.jpeg"
+      );
+      this.setState({ croppedImageUrl });
+    }
+  }
+
+  getCroppedImg(image, pixelCrop, fileName) {
+    const canvas = document.createElement("canvas");
+    canvas.width = pixelCrop.width;
+    canvas.height = pixelCrop.height;
+    const ctx = canvas.getContext("2d");
+
+    ctx.drawImage(
+      image,
+      pixelCrop.x,
+      pixelCrop.y,
+      pixelCrop.width,
+      pixelCrop.height,
+      0,
+      0,
+      pixelCrop.width,
+      pixelCrop.height
+    );
+
+    return new Promise((resolve, reject) => {
+      canvas.toBlob(blob => {
+        if (!blob) {
+          //reject(new Error('Canvas is empty'));
+          console.error("Canvas is empty");
+          return;
+        }
+        blob.name = fileName;
+        console.log(blob);
+        let imgFile = new window.File([blob], fileName, {type: "image/jpeg"});
+        console.log(imgFile);
+        this.setState({
+          fileObj: imgFile
+        })
+        window.URL.revokeObjectURL(this.fileUrl);
+        this.fileUrl = window.URL.createObjectURL(blob);
+        resolve(this.fileUrl);
+      }, "image/jpeg");
+    });
+  }
+  // end
+  handleClick = e => {
+    this.props.form.validateFields((err, values) => {
+      console.log(values);
+    });
+    this.props.form.setFieldsValue({
+      gatherMethod: '明胶提取'
+    });
+  }
   handleSubmit = e => {
     e.preventDefault();
     const { dispatch } = this.props;
+    const { fileObj } = this.state;
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('表单数据: ', values);
         var form_data = new FormData();
-        form_data.append('footprintimage', values['footprintimage'][0]['originFileObj']);
+        // form_data.append('footprintimage', values['footprintimage'][0]['originFileObj']);
+        form_data.append('footprintimage', fileObj);
         form_data.append('caseid', values['caseid']);
-        form_data.append('caseStatus', values['caseStatus']);
-        form_data.append('time', getFormatTime(values['time']));
-        form_data.append('location', values['location']);
-        form_data.append('institution', values['institution'].join(' \/ '));
-        form_data.append('detail', values['detail']);
-        form_data.append('caseType', values['caseType']);
-        form_data.append('enterType', values['enterType']);
-        form_data.append('stolen', values['stolen']);
-        form_data.append('persons', values['persons']);
         form_data.append('imageformat', values['imageformat']);
         form_data.append('leavePosition', values['leavePosition']);
         form_data.append('leaveMethod', values['leaveMethod']);
         form_data.append('gatherMethod', values['gatherMethod']);
         console.log(form_data.get('time'));
         console.log('imageObj', form_data.get('footprintimage'));
+        console.log(form_data);
         dispatch({
           type: 'collect/uploadPicture',
           payload: form_data,
@@ -139,6 +199,7 @@ class Collect extends React.Component {
     return e && e.fileList;
   };
   render() {
+    const { crop, croppedImageUrl, src, visible } = this.state;
     const rootPath = getRootPath();
     const {
       form: { setFieldsValue, getFieldDecorator },
@@ -174,6 +235,7 @@ class Collect extends React.Component {
         <div className={styles.contentBody}>
           <div className={styles.contentMain}>
             <Form id="form" onSubmit={this.handleSubmit} encType="multipart/form-data">
+            {/*
               <FormItem {...formItemLayout} label="上传图片">
                 {getFieldDecorator('footprintimage', {
                   valuePropName: 'fileList',
@@ -186,87 +248,29 @@ class Collect extends React.Component {
                   </Upload>
                 )}
               </FormItem>
-              <FormItem {...formItemLayout} label="案件编号：">
-                {getFieldDecorator('caseid', {
-                  rules: [{ required: true }],
-                })(<Input maxLength="14" placeholder="编号规则：单位 + 年份 + 月份 + 序号"/>)}
+          */}
+              {croppedImageUrl && (
+                <div className={styles.previewMain}>
+                  <img className="img" alt="Crop" style={{ maxWidth: "100%", width: 250, height: 100 }} src={croppedImageUrl} />
+                </div>
+              )}
+              <FormItem {...formItemLayout} label="上传图片：">
+                {getFieldDecorator('footprintimage', {
+                  getValueFromEvent: this.onSelectFile,
+                  rules: [{ required: false }],
+                })(<input type="file" onClick={this.handleFileClick}/>)}
               </FormItem>
-              <FormItem {...formItemLayout} label="案件状态：">
-                {getFieldDecorator('caseStatus', {
-                  initialValue: '1',
-                  rules: [{ required: true }],
-                })(
-                  <Select>
-                    <Option value="1">已破案</Option>
-                    <Option value="2">未破案</Option>
-                  </Select>
-                )}
-              </FormItem>
-              <FormItem {...formItemLayout} label="案发时间：">
-                {getFieldDecorator('time', config)(
-                  <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />
-                )}
-              </FormItem>
-              <FormItem {...formItemLayout} label="案发地点：">
-                {getFieldDecorator('location', {
-                  rules: [{ required: true }],
-                })(<Input />)}
-              </FormItem>
-              <FormItem {...formItemLayout} label="所属单位">
-                {getFieldDecorator('institution', {
-                  initialValue: ['黑龙江省公安厅', '哈尔滨市公安局', '南岗分局'],
-                  rules: [{ type: 'array', required: true }],
-                })(<Cascader options={options} changeOnSelect placeholder="请选择所属单位" />)}
-              </FormItem>
-
-              <FormItem {...formItemLayout} label="简要案情：">
-                {getFieldDecorator('detail', {
-                  rules: [{ required: true }],
-                })(<textarea rows={3} cols={60} className={styles.textareaStyle} />)}
-              </FormItem>
-              <FormItem {...formItemLayout} label="案件类别：">
-                {getFieldDecorator('caseType', {
-                  initialValue: '1',
-                  rules: [{ required: true }],
-                })(
-                  <Select>
-                    <Option value="1">入室盗窃案</Option>
-                    <Option value="2">扒窃案</Option>
-                    <Option value="3">故意杀人案</Option>
-                    <Option value="4">抢劫案</Option>
-                    <Option value="5">强奸案</Option>
-                    <Option value="6">其他盗窃案</Option>
-                  </Select>
-                )}
-              </FormItem>
-              <FormItem {...formItemLayout} label="侵入方式：">
-                {getFieldDecorator('enterType', {
-                  initialValue: '1',
-                  rules: [{ required: true }],
-                })(
-                  <Select>
-                    <Option value="1">技术开锁</Option>
-                    <Option value="2">撬门入室</Option>
-                    <Option value="3">和平入室</Option>
-                    <Option value="4">撬窗入室</Option>
-                    <Option value="5">翻窗入室</Option>
-                  </Select>
-                )}
-              </FormItem>
-              <FormItem {...formItemLayout} label="被盗物品：">
-                {getFieldDecorator('stolen', {
-                  rules: [{ required: true }],
-                })(<Input />)}
-              </FormItem>
-              <FormItem {...formItemLayout} label="作案人数：">
-                {getFieldDecorator('persons', {
-                  rules: [{ required: true }],
-                })(<Input />)}
-              </FormItem>
+              
               <FormItem {...formItemLayout} label="文件格式：">
                 {getFieldDecorator('imageformat', {
                   rules: [{ required: true }],
                 })(<Input />)}
+              </FormItem>
+
+              <FormItem {...formItemLayout} label="所属案件编号：">
+                {getFieldDecorator('caseid', {
+                  rules: [{ required: true }],
+                })(<Input maxLength="14" placeholder="编号规则：单位 + 年份 + 月份 + 序号"/>)}
               </FormItem>
              
               <FormItem {...formItemLayout} label="足迹遗留部位：">
@@ -276,28 +280,28 @@ class Collect extends React.Component {
               </FormItem>
              
               <FormItem {...formItemLayout} label="足迹遗留方式：">
-                {getFieldDecorator('enterType', {
-                  initialValue: '1',
+                {getFieldDecorator('leaveMethod', {
+                  initialValue: '灰尘足迹',
                   rules: [{ required: true }],
                 })(
                   <Select>
-                    <Option value="1">灰尘足迹</Option>
-                    <Option value="2">泥土足迹</Option>
-                    <Option value="3">水渍足迹</Option>
-                    <Option value="4">雪地足迹</Option>
+                    <Option value="灰尘足迹">灰尘足迹</Option>
+                    <Option value="泥土足迹">泥土足迹</Option>
+                    <Option value="水渍足迹">水渍足迹</Option>
+                    <Option value="雪地足迹">雪地足迹</Option>
                   </Select>
                 )}
               </FormItem>
               <FormItem {...formItemLayout} label="足迹提取方式：">
-                {getFieldDecorator('gatherMethod ', {
-                  initialValue: '1',
+                {getFieldDecorator('gatherMethod', {
+                  initialValue: '照相提取',
                   rules: [{ required: true }],
                 })(
                   <Select>
-                    <Option value="1">照相提取</Option>
-                    <Option value="2">明胶提取</Option>
-                    <Option value="3">静电吸附提取</Option>
-                    <Option value="4">足迹采集仪提取</Option>
+                    <Option value="照相提取">照相提取</Option>
+                    <Option value="明胶提取">明胶提取</Option>
+                    <Option value="静电吸附提取">静电吸附提取</Option>
+                    <Option value="足迹采集仪提取">足迹采集仪提取</Option>
                   </Select>
                 )}
               </FormItem>
@@ -311,6 +315,32 @@ class Collect extends React.Component {
           </div>
           <br />
         </div>
+        <Modal
+          title="编辑图片"
+          visible={visible}
+          onOk={this.hideModal}
+          onCancel={this.hideModal}
+          okText="确定"
+          cancelText="取消" 
+        >
+        {src && (
+          <div style={{textAlign: "center"}}>
+            <ReactCrop
+              src={src}
+              crop={crop}
+              onImageLoaded={this.onImageLoaded}
+              onComplete={this.onCropComplete}
+              onChange={this.onCropChange}
+              className={styles.centerModal}
+            />
+          </div>
+        )}
+        {croppedImageUrl && (
+          <div className={styles.preview}>
+            <img className="img" alt="Crop" style={{ maxWidth: "100%", width: 250, height: 100 }} src={croppedImageUrl} />
+          </div>
+        )}
+        </Modal>
       </div>
     );
   }

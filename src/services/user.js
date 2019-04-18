@@ -63,7 +63,7 @@ export function updatePwd(params) {
   });
 }
 
-// 下面是案件管理：查询案件、删除按钮、修改案件信息、新增按钮、获取案件列表
+// 下面是案件管理：查询案件、删除案件、修改案件信息、新增案件、获取案件列表
 // 获取案件列表
 export async function queryAllCases() {
   return request('/api/manage/queryallcases');
@@ -75,7 +75,7 @@ export async function addCase(params) {
     body: getSearchUrl(params),
   });
 }
-// 删除按钮
+// 删除案件
 export async function delCase(params) {
   return request('/api/manage/deletecase', {
     method: 'POST',
@@ -100,10 +100,50 @@ export function queryCasesByInfo(params) {
     body: body,
   });
 }
+//end
+
+// 下面是串并案管理：查询串并案、删除串并案、修改串并案信息、获取串并案列表
+// 获取串并案列表
+export async function queryAllMergeCases() {
+  return request('/api/manage/queryallmergecases');
+}
+// 删除串并案
+export async function delMergeCase(params) {
+  return request('/api/manage/deletemergecase', {
+    method: 'POST',
+    body: getSearchUrl(params),
+  });
+}
+// 修改串并案信息
+export function updateMergeCaseInfo(params) {
+  var url = '/api/manage/updatemergecaseprofile';
+  var body = getSearchUrl(params);
+  return request(url, {
+    method: 'POST',
+    body: body,
+  });
+}
+// 查询串并案
+export function queryMergeCasesByInfo(params) {
+  var url = '/api/manage/querymergecases';
+  var body = getSearchUrl(params);
+  return request(url, {
+    method: 'POST',
+    body: body,
+  });
+}
+//end
 
 // 采集足迹信息
 export async function collectPrintInfo(params) {
   return request('/api/gather/entering', {
+    method: 'POST',
+    body: params,
+  });
+}
+// 采集案件信息
+export async function collectCaseInfo(params) {
+  return request('/api/gather/enteringcaseinfo', {
     method: 'POST',
     body: params,
   });

@@ -26,14 +26,19 @@ export default [
         path: '/infocollection',
         routes: [
           {
-            path: '/infocollection/case-list',
-            name: 'caselist',
-            component: './InfoCollection/CaseList',
+            path: '/infocollection/collectCase',
+            name: 'collectCase',
+            component: './InfoCollection/CollectCase',
           },
           {
             path: '/infocollection/collect',
             name: 'collect',
             component: './InfoCollection/Collect',
+          },
+          {
+            path: '/infocollection/case-list',
+            name: 'caselist',
+            component: './InfoCollection/CaseList',
           },
           {
             path: '/infocollection/success',
@@ -71,10 +76,17 @@ export default [
           //   name: 'conclude',
           //   component: './InfoConclude/Conclude',
           // },
+          
           {
             path: '/infoconclude/concludecases',
             name: 'concludecases',
             component: './InfoConclude/ConcludeCases',
+          },
+          
+          {
+            path: '/infoconclude/mergecase-list',
+            name: 'mergecaselist',
+            component: './InfoConclude/MergeCaseList',
           },
         ],
       },

@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import { collectPrintInfo } from '@/services/user';
+import { collectPrintInfo, collectCaseInfo } from '@/services/user';
 
 export default {
   namespace: 'collect',
@@ -9,8 +9,8 @@ export default {
   },
 
   effects: {
-     // 采集足迹信息
-     *uploadPicture({ payload }, { call, put }) {
+      // 采集足迹信息
+      *uploadPicture({ payload }, { call, put }) {
         const response = yield call(collectPrintInfo, payload);
         if (response.status === 0) {
           message.success("足迹信息上传成功");
@@ -21,6 +21,16 @@ export default {
           location.href = "/#/infocollection/success";
         } else {
           message.error("足迹信息上传失败");
+        }
+      },
+      // 采集足迹信息
+      *uploadPicture({ payload }, { call, put }) {
+        const response = yield call(collectCaseInfo, payload);
+        if (response.status === 0) {
+          message.success("案件信息上传成功");
+          location.href = "/#/infocollection/success";
+        } else {
+          message.error("案件信息上传失败");
         }
       },
   },

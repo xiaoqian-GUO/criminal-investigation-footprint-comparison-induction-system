@@ -72,8 +72,7 @@ export default {
     },
     //案件查询
     *queryCases({ payload }, { call, put }) {
-      const response = yield call(queryAllCases, payload);
-
+      const response = yield call(queryCasesByInfo, payload);
       yield put({
         type: 'searchCase',
         payload: response,

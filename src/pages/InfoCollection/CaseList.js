@@ -3,6 +3,7 @@ import { Table, Button, Modal, Input } from 'antd';
 import { connect } from 'dva';
 import LocalizedCaseModal from './LocalizedCaseModal';
 import styles from './CaseList.less';
+import moment from 'moment';
 
 const { Search } = Input;
 
@@ -59,7 +60,7 @@ class CaseList extends Component {
       width: 200,
       render: (text, record) => (
         <span className={styles['override-ant-btn']}>
-          <LocalizedCaseModal text="编辑" data={record} />
+          <LocalizedCaseModal text="查看并编辑" data={record} />
           <Button type="danger" onClick={() => this.deleteConfirm(record.caseid)}>
             删除
           </Button>
