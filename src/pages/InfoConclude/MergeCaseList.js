@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
-import { Table, Button, Modal, Input } from 'antd';
+import { Table, Button, Modal, Input, Collapse } from 'antd';
 import { connect } from 'dva';
 import LocalizedMergeCaseModal from './LocalizedMergeCaseModal';
 import styles from './MergeCaseList.less';
+import 'antd/dist/antd.css';
 
 const { Search } = Input;
+const Panel = Collapse.Panel;
+
+const customPanelStyle = {
+  background: '#f7f7f7',
+  borderRadius: 4,
+  marginBottom: 24,
+  border: 1,
+  overflow: 'hidden',
+};
 
 @connect(({ mergecaseManagement, loading }) => ({
   filterData: mergecaseManagement.filterData,
@@ -104,6 +114,15 @@ class MergeCaseList extends Component {
         <div className={styles.searchInput}>
           <Search placeholder="根据并案号查询" enterButton="Search" onSearch={this.handleSearch} />
         </div>
+        <Collapse
+          bordered={true}
+          expandIcon={({ isActive }) => <Icon type="right-circle" rotate={isActive ? 90 : 0} />}
+        >
+          <Panel header="查询表单" key="1" style={customPanelStyle}>
+            <Button type="primary" size="small">点击</Button>
+          </Panel>
+        </Collapse>
+
         <Table
           columns={this.columns}
           bordered

@@ -24,6 +24,18 @@ import moment from 'moment';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
+var oc, pc, newImg, num=0, rate=1, haveRotate=0, zoomWidth=250, zoomHeight=100;   // 是否点击过旋转
+
+function dataURLtoFile(dataurl, filename) {
+  //将base64转换为文件
+  var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+  while(n--){
+      u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, {type:mime});
+}
+
 function getRootPath() {
   let url = location.href;
   const pathname = window.location.pathname;
@@ -60,6 +72,9 @@ class Collect extends React.Component {
       y: 0
     },
     visible: false,
+    isCrop: false,
+    finalSrc: null,
+    zoomImg: false
   };
 
   showModal = () => {
@@ -69,30 +84,171 @@ class Collect extends React.Component {
   };
 
   hideModal = () => {
+    // 将canvas换成img
+    const { croppedImageUrl } = this.state;
+    if(!croppedImageUrl){
+      var width = 100* zoomWidth/zoomHeight;
+      var height = 100;
+      console.log(width, height);
+      console.log(this.finalImg);
+      this.finalImg.style.width = width+"px";
+      this.finalImg.style.height = height+"px";
+    }
     this.setState({
       visible: false,
+      zoomImg: false,
+      isCrop: false
     });
+    haveRotate=0;  //点击次数归零
+    num=0;
+    rate=1;
   };
+
+  hideModalCrop = () => {
+    
+    var width = 100* zoomWidth/zoomHeight;
+    var height = 100;
+    console.log(width, height);
+    console.log(this.finalImg);
+    this.finalImg.style.width = width+"px";
+    this.finalImg.style.height = height+"px";
+    
+    this.setState({
+      visible: false,
+      zoomImg: false,
+      isCrop: false
+    });
+    haveRotate=0;  //点击次数归零
+    num=0;
+    rate=1;
+  };
+
+  handleOk = () => {
+    //关闭visible，并且修改src和finalSrc
+    const { croppedImageUrl } = this.state;
+    if(croppedImageUrl){
+      this.setState({
+        src: croppedImageUrl,
+        finalSrc: croppedImageUrl,
+        visible: false,
+        zoomImg: false,
+        isCrop: false
+      });
+    }
+    else{
+      var width = 100* zoomWidth/zoomHeight;
+      var height = 100;
+      console.log(width, height);
+      console.log(this.finalImg);
+      this.finalImg.style.width = width+"px";
+      this.finalImg.style.height = height+"px";
+
+      this.setState({
+        visible: false,
+        zoomImg: false,
+        isCrop: false
+      });
+    }
+  }
 
   handleFileClick = e => {
     console.log('click');
     console.log(e.target.files);
     e.target.value = "";
   }
+  // canvas和js结合实现图片旋转
+  change = (obj) => {
+    console.log(obj);
+    if(haveRotate == 0){
+      haveRotate = 1;
+      oc=document.createElement('canvas');
+      pc=oc.getContext('2d');
+      oc.width = obj.width;
+      oc.height = obj.height; 
+      pc.drawImage(obj,0,0);
+    }
+    console.log('num:', num);
+    switch(num){
+        case 1:
+            oc.width = obj.height;
+            oc.height = obj.width;
+            pc.rotate(90*Math.PI/180);
+            pc.drawImage(obj,0,-obj.height);
+            zoomWidth = obj.height;
+            zoomHeight = obj.width;
+        break;
+        case 2:
+            oc.width = obj.width ;
+            oc.height = obj.height;
+            pc.rotate(180*Math.PI/180);
+            pc.drawImage(obj,-obj.width,-obj.height);
+        break;
+        case 3:
+            oc.width = obj.height;
+            oc.height = obj.width;
+            pc.rotate(270*Math.PI/180);
+            pc.drawImage(obj,-obj.width,0);
+            zoomWidth = obj.height;
+            zoomHeight = obj.width;
+        break;
+        case 0:
+            oc.width = obj.width ;
+            oc.height = obj.height;
+            pc.rotate(360*Math.PI/180);
+            pc.drawImage(obj,0,0);
+        break;
+    }   
+  }
+  leftClick = (e) => {
+    var obj = this.Img;
+    num--;
+    if(num<0){
+        num=3;  
+    }
+    num=3;
+    this.change(obj); 
+    var dataURL = oc.toDataURL("image/jpeg");
+    //var file = dataURLtoFile(dataURL, 'left.jpeg');
+    this.setState({
+      src: dataURL,
+      finalSrc: dataURL
+    });
+  }
+  rightClick = (e) => {
+    var obj = this.Img;
+    num++;
+    if(num>3){
+        num=0;  
+    }
+    num=1;
+    this.change(obj);
+    var dataURL = oc.toDataURL("image/jpeg");
+    //var file = dataURLtoFile(dataURL, 'left.jpeg');
+    this.setState({
+      src: dataURL,
+      finalSrc: dataURL
+    });
+  }
+  // end
 
   onSelectFile = e => {
-    console.log('change');
+    const { src } = this.state;
     if (e.target.files && e.target.files.length > 0) {
       const reader = new FileReader();
       reader.addEventListener("load", () =>{
         console.log('load');
-        this.setState({ src: reader.result })
+        //console.log(reader.result );
+        this.setState({ src: reader.result, finalSrc: reader.result })
         this.showModal();
+        //处理canvas
       });
-      console.log(reader.result);
       reader.readAsDataURL(e.target.files[0]);
     }
   };
+
+  // canvas旋转
+
+  // end canvas旋转
 
   onImageLoaded = (image, pixelCrop) => {
     this.imageRef = image;
@@ -198,8 +354,46 @@ class Collect extends React.Component {
     }
     return e && e.fileList;
   };
+  // 点击裁剪，设置isCrop为true，并将旋转之后的图片设置为src，并在裁剪完成后，将croppedImageUrl赋给finalSrc
+  cropClick = (e) => {
+    this.setState({
+      isCrop: true
+    });
+  }
+
+  componentDidUpdate() {
+    // 发生更新时，执行的方法
+    // 只在每次第一次缩放图片时，调用，并且在hideModal时，将zoomImg置为false
+    const { src, zoomImg, visible } = this.state;
+    console.log('这是第几次更新');
+    if(src && visible && !zoomImg){
+      console.log('这是第几次符合要求');
+      setTimeout(() => {
+          console.log('这是第几次执行');
+          var obj = this.Img;
+          var height = 472;
+          var width = 472* obj.width/obj.height;
+          zoomWidth = width;
+          zoomHeight = height;
+          // 重新生成图片
+          var cvs = document.createElement('canvas');
+          cvs.width = width;
+          cvs.height = height;     //计算等比缩小后图片宽高
+          var ctx = cvs.getContext('2d');
+          ctx.drawImage(obj, 0, 0, cvs.width, cvs.height);
+          var newImageData = cvs.toDataURL('image/jpeg');
+          //console.log(newImageData);
+          this.setState({
+            src: newImageData,
+            finalSrc: newImageData,
+            zoomImg: true
+          });
+      },0);
+    }
+  }
+
   render() {
-    const { crop, croppedImageUrl, src, visible } = this.state;
+    const { crop, croppedImageUrl, src, visible, finalSrc, isCrop } = this.state;
     const rootPath = getRootPath();
     const {
       form: { setFieldsValue, getFieldDecorator },
@@ -218,6 +412,16 @@ class Collect extends React.Component {
     const config = {
       rules: [{ type: 'object', required: true, message: '请选择时间!' }],
     };
+    let modalConfig;
+    if (crop) {
+      modalConfig = {
+        onCancel: this.hideModalCrop,
+      };
+    } else {
+      modalConfig = {
+        onCancel: this.hideModal,
+      };
+    }
     return (
       <div>
         <div className={styles.content}>
@@ -249,9 +453,9 @@ class Collect extends React.Component {
                 )}
               </FormItem>
           */}
-              {croppedImageUrl && (
+              {finalSrc && (
                 <div className={styles.previewMain}>
-                  <img className="img" alt="Crop" style={{ maxWidth: "100%", width: 250, height: 100 }} src={croppedImageUrl} />
+                  <img className="img" alt="Crop" style={{ maxWidth: "100%", width: 250, height: 100 }} src={finalSrc} ref={node => this.finalImg = node}/>
                 </div>
               )}
               <FormItem {...formItemLayout} label="上传图片：">
@@ -318,12 +522,12 @@ class Collect extends React.Component {
         <Modal
           title="编辑图片"
           visible={visible}
-          onOk={this.hideModal}
-          onCancel={this.hideModal}
+          onOk={this.handleOk}
+          onCancel={modalConfig.onCancel}
           okText="确定"
           cancelText="取消" 
         >
-        {src && (
+        {isCrop && src && (
           <div style={{textAlign: "center"}}>
             <ReactCrop
               src={src}
@@ -335,9 +539,21 @@ class Collect extends React.Component {
             />
           </div>
         )}
-        {croppedImageUrl && (
+        {isCrop && croppedImageUrl && (
           <div className={styles.preview}>
             <img className="img" alt="Crop" style={{ maxWidth: "100%", width: 250, height: 100 }} src={croppedImageUrl} />
+          </div>
+        )}
+         {!isCrop && src && (
+          <div style={{textAlign: "center"}}>
+            <img className={styles.controlImg} src={src} ref={ node => this.Img=node}/>
+          </div>
+        )}
+        {!isCrop && src && (
+          <div className={styles.preview}>
+            <span onClick={this.cropClick} style={{marginRight: 20}}><a><Icon type="scissor" />裁剪</a></span>
+            <span onClick={this.leftClick} style={{marginRight: 20}}><a><Icon type="undo" />旋转</a></span>
+            <span onClick={this.rightClick} style={{}}><a>旋转<Icon type="redo" /></a></span>
           </div>
         )}
         </Modal>
