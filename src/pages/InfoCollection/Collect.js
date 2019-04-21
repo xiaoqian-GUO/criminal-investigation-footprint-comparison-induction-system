@@ -24,7 +24,7 @@ import moment from 'moment';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-var oc, pc, newImg, num=0, rate=1, haveRotate=0, zoomWidth=250, zoomHeight=100;   // 是否点击过旋转
+var oc, pc, newImg, num=0, rate=1, haveRotate=0, zoomWidth=250, zoomHeight=100, filename="newFile.jpg";   // 是否点击过旋转
 
 function dataURLtoFile(dataurl, filename) {
   //将base64转换为文件
@@ -234,6 +234,7 @@ class Collect extends React.Component {
   onSelectFile = e => {
     const { src } = this.state;
     if (e.target.files && e.target.files.length > 0) {
+      filename = e.target.files[0].name;
       const reader = new FileReader();
       reader.addEventListener("load", () =>{
         console.log('load');
@@ -323,13 +324,14 @@ class Collect extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     const { dispatch } = this.props;
-    const { fileObj } = this.state;
+    const { fileObj, finalSrc } = this.state;
+    const imageObj = dataURLtoFile(finalSrc, filename);
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('表单数据: ', values);
         var form_data = new FormData();
         // form_data.append('footprintimage', values['footprintimage'][0]['originFileObj']);
-        form_data.append('footprintimage', fileObj);
+        form_data.append('footprintimage', imageObj);
         form_data.append('caseid', values['caseid']);
         form_data.append('imageformat', values['imageformat']);
         form_data.append('leavePosition', values['leavePosition']);
