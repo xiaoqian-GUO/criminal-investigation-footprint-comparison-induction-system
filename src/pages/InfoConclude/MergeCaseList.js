@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Button, Modal, Input, Collapse } from 'antd';
+import { Table, Button, Modal, Input, Collapse, Icon } from 'antd';
 import { connect } from 'dva';
 import LocalizedMergeCaseModal from './LocalizedMergeCaseModal';
 import styles from './MergeCaseList.less';
@@ -21,6 +21,9 @@ const customPanelStyle = {
   loading: loading.effects['mergecaseManagement/fetchAllMergeCases'],
 }))
 class MergeCaseList extends Component {
+  state = {
+    isExpand: false
+  };
   // 表头数据
   columns = [
     {
@@ -104,9 +107,16 @@ class MergeCaseList extends Component {
       payload: value,
     });
   };
+  callback = (key) => {
+    var bol = key.length? true:false;
+    this.setState({
+      isExpand: bol
+    });
+  }
 
   render() {
     const { filterData, loading } = this.props;
+    const { isExpand } = this.state;
 
     return (
       <div className={styles.mainDiv}>
@@ -116,9 +126,10 @@ class MergeCaseList extends Component {
         </div>
         <Collapse
           bordered={true}
-          expandIcon={({ isActive }) => <Icon type="right-circle" rotate={isActive ? 90 : 0} />}
+          onChange={this.callback}
         >
-          <Panel header="查询表单" key="1" style={customPanelStyle}>
+          <Panel showArrow={false} header={isExpand?(<span><Icon type='down-circle' />&nbsp;&nbsp;查询表单</span>):
+            (<span><Icon type='right-circle' />&nbsp;&nbsp;查询表单</span>)} key="1" style={customPanelStyle}>
             <Button type="primary" size="small">点击</Button>
           </Panel>
         </Collapse>
